@@ -2,12 +2,11 @@
 
 use Livewire\Component;
 
-new class extends Component
-{
+new class extends Component {
     //
 };
 ?>
-@extends('layout.app')
+@extends('layouts.app')
 
 @section('content')
     <div>

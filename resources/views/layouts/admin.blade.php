@@ -1,7 +1,8 @@
 <html>
 
 <head>
-    ...
+
+    <title>Boost</title>
 
     {{-- Add this  --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])

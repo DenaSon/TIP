@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'components.⚡home-page')->name('home');
+Route::livewire('/', 'pages::sources.index')->name('source.index');
 
 
 
