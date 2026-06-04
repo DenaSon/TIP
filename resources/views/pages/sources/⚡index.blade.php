@@ -13,12 +13,15 @@ class extends Component {
 
     public string $url = '';
 
+    public ?int $editingId = null;
+
     public function save(): void
     {
-        $this->validate([
-            'name' => ['required', 'string'],
-            'url' => ['required', 'url'],
-        ]);
+        if ($this->editingId) {
+            $this->update();
+
+            return;
+        }
 
         app(SourceAction::class)->create([
             'name' => $this->name,
@@ -29,10 +32,7 @@ class extends Component {
             ],
         ]);
 
-        $this->reset([
-            'name',
-            'url',
-        ]);
+        $this->resetForm();
     }
 
 
@@ -43,12 +43,68 @@ class extends Component {
         app(SourceAction::class)->toggleStatus($source);
     }
 
+    public function edit(int $sourceId): void
+    {
+        $source = Source::findOrFail($sourceId);
+
+        $this->editingId = $source->id;
+
+        $this->name = $source->name;
+        $this->url = $source->url;
+    }
+
+    public function update(): void
+    {
+        $this->validate([
+            'name' => ['required', 'string'],
+            'url' => ['required', 'url'],
+        ]);
+
+        $source = Source::findOrFail($this->editingId);
+
+        app(SourceAction::class)->update(
+            $source,
+            [
+                'name' => $this->name,
+                'type' => $source->type,
+                'status' => $source->status,
+                'config' => [
+                    'url' => $this->url,
+                ],
+            ]
+        );
+
+        $this->resetForm();
+    }
+
+    protected function resetForm(): void
+    {
+        $this->reset([
+            'editingId',
+            'name',
+            'url',
+        ]);
+    }
+
     public function delete(int $sourceId): void
     {
         $source = Source::findOrFail($sourceId);
 
         app(SourceAction::class)->delete($source);
     }
+
+
+    public function restore(int $sourceId): void
+    {
+        $source = Source::withTrashed()
+            ->findOrFail($sourceId);
+
+        app(SourceAction::class)->restore($source);
+    }
+
+
+
+
 
 
 };
@@ -66,7 +122,7 @@ class extends Component {
         subtitle="Manage RSS sources"
     />
 
-    <x-card title="Create Source">
+    <x-card title="Create Source"    :title="$editingId ? 'Edit Source' : 'Create Source'">
 
         <div class="grid gap-4">
 
@@ -81,16 +137,25 @@ class extends Component {
             />
 
             <x-button
-                label="Create Source"
                 wire:click="save"
+                :label="$editingId ? 'Update Source' : 'Create Source'"
                 class="btn-primary"
             />
+
+            @if($editingId)
+
+                <x-button
+                    label="Cancel"
+                    link="{{ route('source.index') }}"
+                />
+
+            @endif
 
         </div>
 
     </x-card>
 
-    <x-card title="Sources List">
+    <x-card title="Sources List" >
 
         <div class="overflow-x-auto">
 
@@ -119,7 +184,7 @@ class extends Component {
                         <td>{{ $source->url }}</td>
                         <td>
 
-                            <x-button spinner class="btn btn-xs {{ $source->isActive() ? 'btn-warning ' : 'btn-success ' }}"
+                            <x-button spinner class="btn btn-xs btn-outline {{ $source->isActive() ? 'btn-warning ' : 'btn-success ' }}"
                                 wire:click="toggle({{ $source->id }})"
                                 size="sm"
                                 label="{{ $source->isActive() ? 'Deactivate' : 'Activate' }}"
@@ -132,7 +197,14 @@ class extends Component {
                                 icon="o-trash"
                                 wire:click="delete({{ $source->id }})"
                                 wire:confirm="Delete this source?"
-                                class="btn-error btn-xs"
+                                class="btn-error btn-xs btn-outline"
+                            />
+
+                            <x-button
+                                label="Edit"
+                                icon="o-pencil"
+                                wire:click="edit({{ $source->id }})"
+                                class="btn-info btn-xs btn-outline"
                             />
 
 

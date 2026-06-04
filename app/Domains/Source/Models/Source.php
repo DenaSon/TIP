@@ -3,9 +3,10 @@
 namespace Domains\Source\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Source extends Model
 {
+    use SoftDeletes;
     public const string TYPE_RSS = 'rss';
 
     public const string TYPE_TELEGRAM = 'telegram';
@@ -64,5 +65,11 @@ class Source extends Model
             self::STATUS_INACTIVE,
         ];
     }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted_at !== null;
+    }
+
 
 }

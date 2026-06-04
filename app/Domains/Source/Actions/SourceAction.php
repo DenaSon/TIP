@@ -35,6 +35,13 @@ class SourceAction
         return (bool) $source->delete();
     }
 
+    public function restore(Source $source): Source
+    {
+        $source->restore();
+
+        return $source->fresh();
+    }
+
     public function toggleStatus(Source $source): Source
     {
         $source->toggleStatus();
