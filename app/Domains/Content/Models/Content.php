@@ -2,6 +2,7 @@
 
 namespace Domains\Content\Models;
 
+use Domains\Cluster\Models\Cluster;
 use Domains\Source\Models\Source;
 use Domains\Topic\Models\Topic;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +41,15 @@ class Content extends Model
         return $this->belongsToMany(
             Topic::class
         );
+    }
+
+    public function clusters(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Cluster::class,
+            'cluster_content'
+        )
+            ->withTimestamps();
     }
 
 }

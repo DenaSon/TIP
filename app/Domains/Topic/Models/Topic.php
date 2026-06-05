@@ -2,9 +2,11 @@
 
 namespace Domains\Topic\Models;
 
+use Domains\Cluster\Models\Cluster;
 use Domains\Content\Models\Content;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Topic extends Model
 {
@@ -21,6 +23,13 @@ class Topic extends Model
     {
         return $this->belongsToMany(
             Content::class
+        );
+    }
+
+    public function clusters(): HasMany
+    {
+        return $this->hasMany(
+            Cluster::class
         );
     }
 }
