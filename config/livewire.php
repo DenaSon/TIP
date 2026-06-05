@@ -157,7 +157,7 @@ return [
 
     /*
     |---------------------------------------------------------------------------
-    | Eloquent Model Binding
+    | Eloquent Models Binding
     |---------------------------------------------------------------------------
     |
     | Previous versions of Livewire supported binding directly to eloquent model
