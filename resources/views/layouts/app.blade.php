@@ -50,12 +50,12 @@
 
         {{-- Activates the menu item when a route matches the `link` property --}}
         <x-menu activate-by-route>
-            <x-menu-item title="Home" icon="o-home" link="###" />
-            <x-menu-item title="Messages" icon="o-envelope" link="###" />
-            <x-menu-sub title="Settings" icon="o-cog-6-tooth">
-                <x-menu-item title="Wifi" icon="o-wifi" link="####" />
-                <x-menu-item title="Archives" icon="o-archive-box" link="####" />
-            </x-menu-sub>
+            <x-menu-item title="Sources" icon="o-home" link="{{ route('sources.index') }}" />
+            <x-menu-item title="Contents" icon="o-envelope" link="{{ route('contents.index') }}" />
+{{--            <x-menu-sub title="Settings" icon="o-cog-6-tooth">--}}
+{{--                <x-menu-item title="Wifi" icon="o-wifi" link="####" />--}}
+{{--                <x-menu-item title="Archives" icon="o-archive-box" link="####" />--}}
+{{--            </x-menu-sub>--}}
         </x-menu>
     </x-slot:sidebar>
 

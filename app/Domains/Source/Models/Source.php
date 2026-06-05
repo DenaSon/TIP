@@ -2,11 +2,14 @@
 
 namespace Domains\Source\Models;
 
+use Domains\Content\Models\Content;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 class Source extends Model
 {
     use SoftDeletes;
+
     public const string TYPE_RSS = 'rss';
 
     public const string TYPE_TELEGRAM = 'telegram';
@@ -71,5 +74,14 @@ class Source extends Model
         return $this->deleted_at !== null;
     }
 
+    public function contents(): HasMany
+    {
+        return $this->hasMany(Content::class);
 
+    }
+
+    public function feedUrl(): ?string
+    {
+        return $this->config['url'] ?? null;
+    }
 }
