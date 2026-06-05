@@ -52,6 +52,8 @@
         <x-menu activate-by-route>
             <x-menu-item title="Sources" icon="o-home" link="{{ route('sources.index') }}" />
             <x-menu-item title="Contents" icon="o-envelope" link="{{ route('contents.index') }}" />
+            <x-menu-item title="Topics" icon="o-envelope" link="{{ route('topics.index') }}" />
+            <x-menu-item title="Trends" icon="o-envelope" link="{{ route('trends.index') }}" />
 {{--            <x-menu-sub title="Settings" icon="o-cog-6-tooth">--}}
 {{--                <x-menu-item title="Wifi" icon="o-wifi" link="####" />--}}
 {{--                <x-menu-item title="Archives" icon="o-archive-box" link="####" />--}}

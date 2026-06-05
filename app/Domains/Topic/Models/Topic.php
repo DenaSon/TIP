@@ -15,6 +15,8 @@ class Topic extends Model
         'is_active',
     ];
 
+
+
     public function contents(): BelongsToMany
     {
         return $this->belongsToMany(
