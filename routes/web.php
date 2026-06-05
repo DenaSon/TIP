@@ -23,6 +23,11 @@ Route::livewire(
     'pages::trends.index'
 )->name('trends.index');
 
+Route::livewire(
+    '/dashboard',
+    'pages::dashboard.index'
+)->name('dashboard.index');
+
 Route::get('test', function () {
 
     CalculateTrendJob::dispatch(

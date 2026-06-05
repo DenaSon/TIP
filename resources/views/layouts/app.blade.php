@@ -50,6 +50,7 @@
 
         {{-- Activates the menu item when a route matches the `link` property --}}
         <x-menu activate-by-route>
+            <x-menu-item title="Dashboard" icon="o-home" link="{{ route('dashboard.index') }}" />
             <x-menu-item title="Sources" icon="o-home" link="{{ route('sources.index') }}" />
             <x-menu-item title="Contents" icon="o-envelope" link="{{ route('contents.index') }}" />
             <x-menu-item title="Topics" icon="o-envelope" link="{{ route('topics.index') }}" />
