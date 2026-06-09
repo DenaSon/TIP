@@ -2,6 +2,7 @@
 
 namespace Domains\Topic\Models;
 
+use App\Domains\Topic\Models\TopicKeyword;
 use Domains\Cluster\Models\Cluster;
 use Domains\Content\Models\Content;
 use Illuminate\Database\Eloquent\Model;
@@ -32,4 +33,11 @@ class Topic extends Model
             Cluster::class
         );
     }
-}
+    public function keywords()
+    {
+        return $this->hasMany(
+            TopicKeyword::class
+        );
+        }
+
+    }
