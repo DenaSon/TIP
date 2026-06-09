@@ -4,43 +4,55 @@ namespace Domains\Cluster\Actions;
 
 use Domains\Cluster\Models\Cluster;
 use Domains\Topic\Models\Topic;
-use Illuminate\Support\Facades\DB;
-use Throwable;
+use Illuminate\Support\Collection;
 
 class RebuildClustersAction
 {
     public function execute(): void
     {
-        DB::transaction(function () {
+        Cluster::query()->delete();
 
-            DB::table('cluster_content')
-                ->truncate();
+        Topic::query()
+            ->select([
+                'id',
+                'name',
+            ])
+            ->chunkById(
+                100,
+                function ($topics): void {
 
-            Cluster::query()
-                ->delete();
+                    foreach ($topics as $topic) {
 
-            Topic::query()
-                ->with('contents')
-                ->chunkById(
-                    100,
-                    function ($topics) {
-
-                        foreach ($topics as $topic) {
-
-                            $this->buildCluster(
-                                $topic
-                            );
-                        }
+                        $this->buildCluster(
+                            $topic->id
+                        );
                     }
-                );
-        });
+                }
+            );
     }
 
     private function buildCluster(
-        Topic $topic
+        int $topicId
     ): void {
 
-        $contents = $topic->contents;
+        $topic = Topic::query()
+            ->select([
+                'id',
+                'name',
+            ])
+            ->find($topicId);
+
+        if (! $topic) {
+            return;
+        }
+
+        $contents = $topic
+            ->contents()
+            ->select([
+                'contents.id',
+                'contents.published_at',
+            ])
+            ->get();
 
         if ($contents->isEmpty()) {
             return;
@@ -49,15 +61,20 @@ class RebuildClustersAction
         $cluster = Cluster::query()
             ->create([
                 'topic_id' => $topic->id,
+
                 'name' => $topic->name,
+
                 'content_count' => $contents->count(),
+
                 'last_content_at' => $contents
                     ->max('published_at'),
             ]);
 
         $cluster->contents()
-            ->syncWithoutDetaching(
-                $contents->pluck('id')
+            ->sync(
+                $contents
+                    ->pluck('id')
+                    ->all()
             );
     }
 }

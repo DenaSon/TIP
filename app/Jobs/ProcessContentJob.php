@@ -4,35 +4,35 @@ namespace App\Jobs;
 
 use Domains\Content\Actions\StoreContentAction;
 use Domains\DTOs\ContentData;
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
 class ProcessContentJob implements ShouldQueue
 {
-    use Queueable;
+    use Batchable, Queueable;
 
-    public int $tries = 3;
+    public int $tries = 2;
 
-    public int $timeout = 30;
+    public int $timeout = 60;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(
         public ContentData $contentData
     ) {}
 
-    /**
-     * Execute the job.
-     */
     public function handle(
         StoreContentAction $storeContentAction
     ): void {
+        if ($this->batch()?->cancelled()) {
+            return;
+        }
+
         $content = $storeContentAction->execute(
             $this->contentData
         );
-        AssignTopicsJob::dispatch(
-            $content
-        );
+
+        // fan-out controlled
+        AssignTopicsJob::dispatch($content->id)
+            ->onQueue('topic-assignment');
     }
 }

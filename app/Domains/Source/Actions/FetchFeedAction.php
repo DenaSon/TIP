@@ -3,11 +3,15 @@
 namespace Domains\Source\Actions;
 
 use Domains\Source\Models\Source;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
 class FetchFeedAction
 {
+    /**
+     * @throws ConnectionException
+     */
     public function execute(Source $source): string
     {
         $url = $source->url;
@@ -18,7 +22,7 @@ class FetchFeedAction
             );
         }
 
-        $response = Http::timeout(30)
+        $response = Http::timeout(20)
             ->accept('application/rss+xml')
             ->retry(3)
             ->get($url);

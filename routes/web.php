@@ -27,6 +27,10 @@ Route::livewire(
     '/dashboard',
     'pages::dashboard.index'
 )->name('dashboard.index');
+Route::livewire(
+    '/clusters',
+    'pages::clusters.index'
+)->name('clusters.index');
 
 Route::get('test', function () {
 

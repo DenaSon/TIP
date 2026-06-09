@@ -39,7 +39,7 @@ class RebuildTopicsCommand extends Command
                     foreach ($contents as $content) {
 
                         AssignTopicsJob::dispatch(
-                            $content
+                            $content->id
                         );
                     }
                 }

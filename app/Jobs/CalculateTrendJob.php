@@ -6,6 +6,7 @@ use Domains\Topic\Models\Topic;
 use Domains\Trend\Actions\CalculateTrendAction;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Throwable;
 
 class CalculateTrendJob implements ShouldQueue
 {
@@ -20,7 +21,7 @@ class CalculateTrendJob implements ShouldQueue
     ) {}
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(
         CalculateTrendAction $action

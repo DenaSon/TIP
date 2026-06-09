@@ -146,7 +146,7 @@ class extends Component {
 
                 <x-button
                     label="Cancel"
-                    link="{{ route('source.index') }}"
+                    link="{{ route('sources.index') }}"
                 />
 
             @endif

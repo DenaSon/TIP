@@ -1,5 +1,6 @@
 <?php
 
+use Domains\Cluster\Models\Cluster;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
@@ -93,7 +94,7 @@ new class extends Component {
     public function getMaxTopicCountProperty(): int
     {
         return max(
-            (int) $this->topTopics->max('contents_count'),
+            (int)$this->topTopics->max('contents_count'),
             1
         );
     }
@@ -101,9 +102,18 @@ new class extends Component {
     public function getMaxTrendScoreProperty(): int
     {
         return max(
-            (int) $this->topTrends->max('score'),
+            (int)$this->topTrends->max('score'),
             1
         );
+    }
+
+    public function getTopClustersProperty(): Collection
+    {
+        return Cluster::query()
+            ->with('topic')
+            ->orderByDesc('content_count')
+            ->limit(10)
+            ->get();
     }
 
 
@@ -306,6 +316,42 @@ new class extends Component {
 
         </x-card>
 
+        <x-card title="Top Clusters">
+
+            <div class="space-y-3">
+
+                @foreach($this->topClusters as $cluster)
+
+                    <div
+                        class="flex items-center justify-between
+                       p-3 rounded-lg bg-base-200"
+                    >
+
+                        <div>
+
+                            <div class="font-semibold">
+                                {{ $cluster->name }}
+                            </div>
+
+                            <div class="text-xs opacity-70">
+                                {{ $cluster->topic?->name }}
+                            </div>
+
+                        </div>
+
+                        <x-badge
+                            :value="$cluster->content_count"
+                            class="badge-primary"
+                        />
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+        </x-card>
+
     </div>
 
     <x-card
@@ -438,89 +484,89 @@ new class extends Component {
 
     </x-card>
 
-{{--    <x-card--}}
-{{--        title="Pipeline Monitoring"--}}
-{{--        class="shadow-lg"--}}
-{{--    >--}}
+    {{--    <x-card--}}
+    {{--        title="Pipeline Monitoring"--}}
+    {{--        class="shadow-lg"--}}
+    {{--    >--}}
 
-{{--        <div--}}
-{{--            class="grid grid-cols-1 md:grid-cols-4 gap-4"--}}
-{{--        >--}}
+    {{--        <div--}}
+    {{--            class="grid grid-cols-1 md:grid-cols-4 gap-4"--}}
+    {{--        >--}}
 
-{{--            <div--}}
-{{--                class="stat bg-base-200 rounded-xl"--}}
-{{--            >--}}
-{{--                <div class="stat-title">--}}
-{{--                    Active Sources--}}
-{{--                </div>--}}
+    {{--            <div--}}
+    {{--                class="stat bg-base-200 rounded-xl"--}}
+    {{--            >--}}
+    {{--                <div class="stat-title">--}}
+    {{--                    Active Sources--}}
+    {{--                </div>--}}
 
-{{--                <div class="stat-value text-primary">--}}
-{{--                    {{ $this->monitoring['active_sources'] }}--}}
-{{--                </div>--}}
-{{--            </div>--}}
+    {{--                <div class="stat-value text-primary">--}}
+    {{--                    {{ $this->monitoring['active_sources'] }}--}}
+    {{--                </div>--}}
+    {{--            </div>--}}
 
-{{--            <div--}}
-{{--                class="stat bg-base-200 rounded-xl"--}}
-{{--            >--}}
-{{--                <div class="stat-title">--}}
-{{--                    Last Crawl--}}
-{{--                </div>--}}
+    {{--            <div--}}
+    {{--                class="stat bg-base-200 rounded-xl"--}}
+    {{--            >--}}
+    {{--                <div class="stat-title">--}}
+    {{--                    Last Crawl--}}
+    {{--                </div>--}}
 
-{{--                <div class="stat-desc">--}}
+    {{--                <div class="stat-desc">--}}
 
-{{--                    {{--}}
-{{--                        $this->monitoring['last_crawl']--}}
-{{--                            ? \Carbon\Carbon::parse(--}}
-{{--                                $this->monitoring['last_crawl']--}}
-{{--                            )->diffForHumans()--}}
-{{--                            : 'Never'--}}
-{{--                    }}--}}
+    {{--                    {{--}}
+    {{--                        $this->monitoring['last_crawl']--}}
+    {{--                            ? \Carbon\Carbon::parse(--}}
+    {{--                                $this->monitoring['last_crawl']--}}
+    {{--                            )->diffForHumans()--}}
+    {{--                            : 'Never'--}}
+    {{--                    }}--}}
 
-{{--                </div>--}}
-{{--            </div>--}}
+    {{--                </div>--}}
+    {{--            </div>--}}
 
-{{--            <div--}}
-{{--                class="stat bg-base-200 rounded-xl"--}}
-{{--            >--}}
-{{--                <div class="stat-title">--}}
-{{--                    Last Content--}}
-{{--                </div>--}}
+    {{--            <div--}}
+    {{--                class="stat bg-base-200 rounded-xl"--}}
+    {{--            >--}}
+    {{--                <div class="stat-title">--}}
+    {{--                    Last Content--}}
+    {{--                </div>--}}
 
-{{--                <div class="stat-desc">--}}
+    {{--                <div class="stat-desc">--}}
 
-{{--                    {{--}}
-{{--                        $this->monitoring['last_content']--}}
-{{--                            ? \Carbon\Carbon::parse(--}}
-{{--                                $this->monitoring['last_content']--}}
-{{--                            )->diffForHumans()--}}
-{{--                            : 'Never'--}}
-{{--                    }}--}}
+    {{--                    {{--}}
+    {{--                        $this->monitoring['last_content']--}}
+    {{--                            ? \Carbon\Carbon::parse(--}}
+    {{--                                $this->monitoring['last_content']--}}
+    {{--                            )->diffForHumans()--}}
+    {{--                            : 'Never'--}}
+    {{--                    }}--}}
 
-{{--                </div>--}}
-{{--            </div>--}}
+    {{--                </div>--}}
+    {{--            </div>--}}
 
-{{--            <div--}}
-{{--                class="stat bg-base-200 rounded-xl"--}}
-{{--            >--}}
-{{--                <div class="stat-title">--}}
-{{--                    Last Trend Calc--}}
-{{--                </div>--}}
+    {{--            <div--}}
+    {{--                class="stat bg-base-200 rounded-xl"--}}
+    {{--            >--}}
+    {{--                <div class="stat-title">--}}
+    {{--                    Last Trend Calc--}}
+    {{--                </div>--}}
 
-{{--                <div class="stat-desc">--}}
+    {{--                <div class="stat-desc">--}}
 
-{{--                    {{--}}
-{{--                        $this->monitoring['last_trend']--}}
-{{--                            ? \Carbon\Carbon::parse(--}}
-{{--                                $this->monitoring['last_trend']--}}
-{{--                            )->diffForHumans()--}}
-{{--                            : 'Never'--}}
-{{--                    }}--}}
+    {{--                    {{--}}
+    {{--                        $this->monitoring['last_trend']--}}
+    {{--                            ? \Carbon\Carbon::parse(--}}
+    {{--                                $this->monitoring['last_trend']--}}
+    {{--                            )->diffForHumans()--}}
+    {{--                            : 'Never'--}}
+    {{--                    }}--}}
 
-{{--                </div>--}}
-{{--            </div>--}}
+    {{--                </div>--}}
+    {{--            </div>--}}
 
-{{--        </div>--}}
+    {{--        </div>--}}
 
-{{--    </x-card>--}}
+    {{--    </x-card>--}}
 
 </div>
