@@ -23,6 +23,7 @@ class Source extends Model
         'type',
         'status',
         'config',
+        'authority_score',
         'last_crawled_at',
     ];
 
@@ -84,6 +85,17 @@ class Source extends Model
     {
         return $this->config['url'] ?? null;
     }
+
+    public function isTrusted(): bool
+    {
+        return $this->authority_score >= 80;
+    }
+
+    public function isLowQuality(): bool
+    {
+        return $this->authority_score < 40;
+    }
+
 
 
 }

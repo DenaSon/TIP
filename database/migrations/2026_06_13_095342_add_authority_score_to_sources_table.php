@@ -6,23 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('sources', function (Blueprint $table) {
-            //
+        Schema::table('sources', function (
+            Blueprint $table
+        ) {
+
+            $table
+                ->unsignedTinyInteger(
+                    'authority_score'
+                )
+                ->default(50)
+                ->after('type');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('sources', function (Blueprint $table) {
-            //
+        Schema::table('sources', function (
+            Blueprint $table
+        ) {
+
+            $table->dropColumn(
+                'authority_score'
+            );
         });
     }
 };

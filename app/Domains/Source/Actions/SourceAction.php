@@ -12,6 +12,7 @@ class SourceAction
             'name' => $data['name'],
             'type' => $data['type'],
             'status' => $data['status'] ?? Source::STATUS_ACTIVE,
+            'authority_score' => $data['authority_score'],
             'config' => $data['config'],
         ]);
     }
@@ -24,6 +25,7 @@ class SourceAction
             'name' => $data['name'],
             'type' => $data['type'],
             'status' => $data['status'],
+            'authority_score' => $data['authority_score'],
             'config' => $data['config'],
         ]);
 
