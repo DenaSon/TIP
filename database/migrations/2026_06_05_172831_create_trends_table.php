@@ -6,12 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('trends', function (Blueprint $table) {
+        Schema::create('trends', function (
+            Blueprint $table
+        ) {
 
             $table->id();
 
@@ -19,24 +18,38 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->integer('score')
-                ->default(0);
+            $table->decimal(
+                'growth_rate',
+                10,
+                2
+            )->default(0);
 
-            $table->integer('contents_count')
-                ->default(0);
+            $table->decimal(
+                'authority_score',
+                10,
+                2
+            )->default(0);
 
-            $table->timestamp('calculated_at')
-                ->nullable();
+            $table->decimal(
+                'score',
+                10,
+                2
+            )->default(0);
+
+            $table->timestamp(
+                'calculated_at'
+            );
 
             $table->timestamps();
+
+            $table->unique('topic_id');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('trends');
+        Schema::dropIfExists(
+            'trends'
+        );
     }
 };

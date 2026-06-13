@@ -1,6 +1,7 @@
 <?php
 
-use App\Domains\Topic\Repositories\TopicKeywordRepository;
+use Domains\Topic\Models\Topic;
+use Domains\Trend\Services\TrendScoreService;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/sources', 'pages::sources.index')
@@ -32,11 +33,11 @@ Route::livewire(
 
 Route::get('test', function () {
 
-    $repo = app(
-        TopicKeywordRepository::class
-    );
+    $topic = Topic::find(2);
 
-    return $repo->all()->count();
+    return app(
+        TrendScoreService::class
+    )->calculateGrowth($topic);
 
 });
 

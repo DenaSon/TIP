@@ -17,7 +17,7 @@ class CalculateTrendJob implements ShouldQueue
     public int $timeout = 30;
 
     public function __construct(
-        public Topic $topic
+        public int $topicId
     ) {}
 
     /**
@@ -26,6 +26,14 @@ class CalculateTrendJob implements ShouldQueue
     public function handle(
         CalculateTrendAction $action
     ): void {
+
+        $topic = Topic::find(
+            $this->topicId
+        );
+        if (! $topic) {
+            return;
+        }
+
 
         $action->execute(
             $this->topic

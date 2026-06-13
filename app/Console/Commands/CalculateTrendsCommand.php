@@ -8,34 +8,27 @@ use Illuminate\Console\Command;
 
 class CalculateTrendsCommand extends Command
 {
-    protected $signature = 'trends:calculate';
+    protected $signature = 'trends:rebuild';
 
     protected $description =
         'Calculate all trends';
 
     public function handle(): int
     {
-        $topics = Topic::query()
-            ->select([
-                'id',
-                'name',
-            ])
-            ->get();
+        Topic::query()
+            ->select('id')
+            ->chunkById(
+                100,
+                function ($topics) {
 
-        $this->info(
-            "Dispatching {$topics->count()} topics..."
-        );
+                    foreach ($topics as $topic) {
 
-        foreach ($topics as $topic) {
-
-            CalculateTrendJob::dispatch(
-                $topic
+                        CalculateTrendJob::dispatch(
+                            $topic->id
+                        );
+                    }
+                }
             );
-
-            $this->line(
-                "Queued: {$topic->name}"
-            );
-        }
 
         $this->info('Done.');
 

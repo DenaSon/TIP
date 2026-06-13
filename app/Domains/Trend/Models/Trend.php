@@ -10,14 +10,18 @@ class Trend extends Model
 {
     protected $fillable = [
         'topic_id',
+        'growth_rate',
+        'authority_score',
         'score',
-        'contents_count',
         'calculated_at',
     ];
 
     protected function casts(): array
     {
         return [
+            'growth_rate' => 'float',
+            'authority_score' => 'float',
+            'score' => 'float',
             'calculated_at' => 'datetime',
         ];
     }

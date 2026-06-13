@@ -4,49 +4,47 @@ namespace Domains\Trend\Actions;
 
 use Domains\Topic\Models\Topic;
 use Domains\Trend\Models\Trend;
-use Throwable;
+use Domains\Trend\Services\TrendScoreService;
 
 class CalculateTrendAction
 {
-    /**
-     * @throws Throwable
-     */
+    public function __construct(
+        private readonly TrendScoreService $service
+    ) {
+    }
+
     public function execute(
         Topic $topic
-    ): Trend {
+    ): void {
 
-        try {
+        $growthRate =
+            $this->service
+                ->calculateGrowth($topic);
 
-            $contentsCount = $topic
-                ->contents()
-                ->count();
+        $authorityScore =
+            $this->service
+                ->calculateAuthority($topic);
 
-            return Trend::updateOrCreate(
+        $score =
+            $growthRate +
+            ($authorityScore * 0.5);
 
-                [
-                    'topic_id' => $topic->id,
-                ],
+        Trend::updateOrCreate(
+            [
+                'topic_id' => $topic->id,
+            ],
+            [
+                'growth_rate' => $growthRate,
 
-                [
-                    'score' => $contentsCount,
+                'authority_score' => $authorityScore,
 
-                    'contents_count' => $contentsCount,
+                'score' => round(
+                    $score,
+                    2
+                ),
 
-                    'calculated_at' => now(),
-                ]
-            );
-
-        } catch (Throwable $e) {
-
-            logger()->error(
-                'Trend calculation failed',
-                [
-                    'topic_id' => $topic->id,
-                    'message' => $e->getMessage(),
-                ]
-            );
-
-            throw $e;
-        }
+                'calculated_at' => now(),
+            ]
+        );
     }
 }

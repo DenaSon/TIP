@@ -5,10 +5,12 @@ namespace Domains\Topic\Models;
 use App\Domains\Topic\Models\TopicKeyword;
 use Domains\Cluster\Models\Cluster;
 use Domains\Content\Models\Content;
+use Domains\Trend\Models\Trend;
 use Domains\Trend\Models\TrendSnapshot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Topic extends Model
 {
@@ -26,6 +28,13 @@ class Topic extends Model
         );
     }
 
+    public function trend(): HasOne
+    {
+        return $this->hasOne(
+            Trend::class
+        );
+    }
+
     public function clusters(): HasMany
     {
         return $this->hasMany(
@@ -33,7 +42,7 @@ class Topic extends Model
         );
     }
 
-    public function keywords()
+    public function keywords(): HasMany
     {
         return $this->hasMany(
             TopicKeyword::class
