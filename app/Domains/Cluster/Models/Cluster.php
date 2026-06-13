@@ -24,7 +24,6 @@ class Cluster extends Model
         ];
     }
 
-
     public function topic(): BelongsTo
     {
         return $this->belongsTo(

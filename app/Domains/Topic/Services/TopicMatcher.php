@@ -2,10 +2,8 @@
 
 namespace Domains\Topic\Services;
 
-
 use App\Domains\Topic\Repositories\TopicKeywordRepository;
 use App\Domains\Topic\Services\TextNormalizer;
-
 
 readonly class TopicMatcher
 {

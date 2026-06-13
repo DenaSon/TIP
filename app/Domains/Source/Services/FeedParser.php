@@ -11,6 +11,7 @@ class FeedParser
 {
     /**
      * @return array<ContentData>
+     *
      * @throws Exception
      */
     public function parse(
@@ -38,7 +39,7 @@ class FeedParser
 
                 $externalId = md5(
                     (string) ($item->title ?? '')
-                    . (string) ($item->pubDate ?? '')
+                    .(string) ($item->pubDate ?? '')
                 );
             }
 
@@ -56,9 +57,9 @@ class FeedParser
                 content: (string) ($item->description ?? ''),
 
                 rawPayload: json_decode(
-                json_encode($item),
-                true
-            ) ?? [],
+                    json_encode($item),
+                    true
+                ) ?? [],
 
                 publishedAt: (string) ($item->pubDate ?? ''),
             );

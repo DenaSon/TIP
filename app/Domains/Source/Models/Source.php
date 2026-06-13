@@ -6,6 +6,7 @@ use Domains\Content\Models\Content;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Source extends Model
 {
     use SoftDeletes;
@@ -95,7 +96,4 @@ class Source extends Model
     {
         return $this->authority_score < 40;
     }
-
-
-
 }

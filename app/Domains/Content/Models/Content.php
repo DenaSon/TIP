@@ -30,7 +30,6 @@ class Content extends Model
         ];
     }
 
-
     public function source(): BelongsTo
     {
         return $this->belongsTo(Source::class);
@@ -51,5 +50,4 @@ class Content extends Model
         )
             ->withTimestamps();
     }
-
 }

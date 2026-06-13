@@ -20,5 +20,4 @@ class TopicKeyword extends Model
             Topic::class
         );
     }
-
 }

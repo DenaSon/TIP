@@ -2,8 +2,6 @@
 
 namespace Domains\Cluster\Services;
 
-
-
 use App\Domains\Topic\Services\TextNormalizer;
 
 readonly class ClusterSignatureService
