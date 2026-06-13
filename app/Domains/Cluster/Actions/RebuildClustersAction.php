@@ -3,11 +3,15 @@
 namespace Domains\Cluster\Actions;
 
 use Domains\Cluster\Models\Cluster;
+use Domains\Cluster\Services\ClusterBuilder;
 use Domains\Topic\Models\Topic;
-use Illuminate\Support\Collection;
 
-class RebuildClustersAction
+readonly class RebuildClustersAction
 {
+    public function __construct(
+        private ClusterBuilder $builder,
+    ) {}
+
     public function execute(): void
     {
         Cluster::query()->delete();
@@ -23,58 +27,11 @@ class RebuildClustersAction
 
                     foreach ($topics as $topic) {
 
-                        $this->buildCluster(
-                            $topic->id
+                        $this->builder->build(
+                            $topic
                         );
                     }
                 }
-            );
-    }
-
-    private function buildCluster(
-        int $topicId
-    ): void {
-
-        $topic = Topic::query()
-            ->select([
-                'id',
-                'name',
-            ])
-            ->find($topicId);
-
-        if (! $topic) {
-            return;
-        }
-
-        $contents = $topic
-            ->contents()
-            ->select([
-                'contents.id',
-                'contents.published_at',
-            ])
-            ->get();
-
-        if ($contents->isEmpty()) {
-            return;
-        }
-
-        $cluster = Cluster::query()
-            ->create([
-                'topic_id' => $topic->id,
-
-                'name' => $topic->name,
-
-                'content_count' => $contents->count(),
-
-                'last_content_at' => $contents
-                    ->max('published_at'),
-            ]);
-
-        $cluster->contents()
-            ->sync(
-                $contents
-                    ->pluck('id')
-                    ->all()
             );
     }
 }

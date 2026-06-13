@@ -18,8 +18,6 @@ class Topic extends Model
         'is_active',
     ];
 
-
-
     public function contents(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -33,11 +31,11 @@ class Topic extends Model
             Cluster::class
         );
     }
+
     public function keywords()
     {
         return $this->hasMany(
             TopicKeyword::class
         );
-        }
-
     }
+}

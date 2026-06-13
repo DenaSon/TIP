@@ -20,13 +20,12 @@ class RebuildTopicsCommand extends Command
             'Clearing existing topic assignments...'
         );
 
-        DB::table('content_topic')->truncate();
+        DB::table('content_topic')->delete();
 
         $count = Content::count();
 
-        $this->info(
-            "Dispatching {$count} contents..."
-        );
+        $this->info("Contents: {$count}");
+        $this->info('Queueing jobs...');
 
         Content::query()
 
@@ -46,7 +45,7 @@ class RebuildTopicsCommand extends Command
             );
 
         $this->info(
-            'Topic rebuild queued successfully.'
+            "{$count} topic assignment jobs queued."
         );
 
         return self::SUCCESS;

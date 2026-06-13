@@ -2,64 +2,54 @@
 
 namespace Domains\Topic\Services;
 
-use Domains\Content\Models\Content;
-use Domains\Topic\Models\Topic;
-use Domains\Topic\Support\TopicDictionary;
 
-class TopicMatcher
+use App\Domains\Topic\Repositories\TopicKeywordRepository;
+use App\Domains\Topic\Services\TextNormalizer;
+
+
+readonly class TopicMatcher
 {
-    protected array $topics;
+    public function __construct(
+        private TopicKeywordRepository $repository,
+        private TextNormalizer $normalizer,
+    ) {}
 
-    public function __construct()
+    public function match(string $text): array
     {
-        $this->topics = Topic::query()
-            ->pluck('id', 'name')
-            ->toArray();
-    }
+        $text = $this->normalizer->normalize($text);
 
-    public function match(
-        Content $content
-    ): array {
+        $topics = $this->repository->all();
 
-        $text = mb_strtolower(
-            implode(' ', array_filter([
-                $content->title,
-                $content->excerpt,
-                $content->content,
-            ]))
-        );
+        $scores = [];
 
-        $matched = [];
+        foreach ($topics as $topic) {
 
-        foreach (
-            TopicDictionary::all() as $topicName => $keywords
-        ) {
+            $score = 0;
 
-            foreach ($keywords as $keyword) {
+            foreach ($topic->keywords as $keyword) {
 
-                if (
-                    str_contains(
-                        $text,
-                        mb_strtolower($keyword)
-                    )
-                ) {
+                $keywordText = $this->normalizer->normalize(
+                    $keyword->keyword
+                );
 
-                    if (
-                        isset(
-                            $this->topics[$topicName]
-                        )
-                    ) {
-                        $matched[] =
-                            $this->topics[$topicName];
-                    }
-
-                    break;
+                if (str_contains($text, $keywordText)) {
+                    $score += $keyword->weight;
                 }
+            }
+
+            if ($score > 0) {
+                $scores[] = [
+                    'topic_id' => $topic->id,
+                    'score' => $score,
+                ];
             }
         }
 
-        return array_unique(
-            $matched
+        usort(
+            $scores,
+            fn ($a, $b) => $b['score'] <=> $a['score']
         );
+
+        return $scores;
     }
 }

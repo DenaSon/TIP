@@ -21,6 +21,8 @@ class TopicSeeder extends Seeder
             'OpenAI',
             'Anthropic',
             'Hugging Face',
+            'موشک',
+            'تاکسی پرنده',
 
             // توسعه نرم‌افزار
             'برنامه‌نویسی',

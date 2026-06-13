@@ -1,8 +1,6 @@
 <?php
 
-use App\Jobs\CalculateTrendJob;
-use Domains\Topic\Models\Topic;
-use Domains\Trend\Actions\CalculateTrendAction;
+use App\Domains\Topic\Repositories\TopicKeywordRepository;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/sources', 'pages::sources.index')
@@ -34,9 +32,11 @@ Route::livewire(
 
 Route::get('test', function () {
 
-    CalculateTrendJob::dispatch(
-        Topic::first()
+    $repo = app(
+        TopicKeywordRepository::class
     );
+
+    return $repo->all()->count();
 
 });
 

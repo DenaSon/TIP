@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Domains\Topic\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             TopicSeeder::class,
+            TopicKeywordSeeder::class,
         ]);
 
         User::factory()->create([

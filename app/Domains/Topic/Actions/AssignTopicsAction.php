@@ -11,20 +11,25 @@ class AssignTopicsAction
         protected TopicMatcher $topicMatcher,
     ) {}
 
-    public function execute(
-        Content $content
-    ): void {
+    public function execute(Content $content): void
+    {
+        $text = implode(' ', [
+            $content->title,
+            $content->excerpt,
+            $content->content,
+        ]);
 
-        $topicIds = $this->topicMatcher
-            ->match($content);
+        $matches = $this->topicMatcher->match($text);
 
-        if (empty($topicIds)) {
+        if (empty($matches)) {
             return;
         }
 
+        $topicIds = collect($matches)
+            ->pluck('topic_id')
+            ->all();
+
         $content->topics()
-            ->syncWithoutDetaching(
-                $topicIds
-            );
+            ->syncWithoutDetaching($topicIds);
     }
 }
