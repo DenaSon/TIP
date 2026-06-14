@@ -1,7 +1,10 @@
 <?php
 
+use Domains\Opportunity\Models\Opportunity;
+use Domains\Opportunity\Services\OpportunityReasonService;
+use Domains\Opportunity\Services\OpportunityScoreService;
 use Domains\Topic\Models\Topic;
-use Domains\Trend\Services\TrendScoreService;
+use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/sources', 'pages::sources.index')
@@ -33,11 +36,16 @@ Route::livewire(
 
 Route::get('test', function () {
 
-    $topic = Topic::find(2);
+    $trend = Trend::first();
 
-    return app(
-        TrendScoreService::class
-    )->calculateGrowth($topic);
+     app(
+        \Domains\Opportunity\Actions\DetectOpportunityAction::class
+    )->execute(
+        $trend
+    );
+
+     return Opportunity::first();
+
 
 });
 

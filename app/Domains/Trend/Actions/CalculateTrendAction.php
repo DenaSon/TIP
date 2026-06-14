@@ -6,12 +6,11 @@ use Domains\Topic\Models\Topic;
 use Domains\Trend\Models\Trend;
 use Domains\Trend\Services\TrendScoreService;
 
-class CalculateTrendAction
+readonly class CalculateTrendAction
 {
     public function __construct(
-        private readonly TrendScoreService $service
-    ) {
-    }
+        private TrendScoreService $service
+    ) {}
 
     public function execute(
         Topic $topic
@@ -25,26 +24,37 @@ class CalculateTrendAction
             $this->service
                 ->calculateAuthority($topic);
 
-        $score =
+        $score = $this->calculateScore(
+            growthRate: $growthRate,
+            authorityScore: $authorityScore
+        );
+
+        Trend::query()
+            ->updateOrCreate(
+                [
+                    'topic_id' => $topic->id,
+                ],
+                [
+                    'growth_rate' => $growthRate,
+
+                    'authority_score' => $authorityScore,
+
+                    'score' => $score,
+
+                    'calculated_at' => now(),
+                ]
+            );
+    }
+
+    private function calculateScore(
+        float $growthRate,
+        float $authorityScore
+    ): float {
+
+        return round(
             $growthRate +
-            ($authorityScore * 0.5);
-
-        Trend::updateOrCreate(
-            [
-                'topic_id' => $topic->id,
-            ],
-            [
-                'growth_rate' => $growthRate,
-
-                'authority_score' => $authorityScore,
-
-                'score' => round(
-                    $score,
-                    2
-                ),
-
-                'calculated_at' => now(),
-            ]
+            ($authorityScore * 0.5),
+            2
         );
     }
 }

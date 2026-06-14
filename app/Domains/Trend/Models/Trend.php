@@ -2,9 +2,11 @@
 
 namespace Domains\Trend\Models;
 
+use Domains\Opportunity\Models\Opportunity;
 use Domains\Topic\Models\Topic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Trend extends Model
 {
@@ -39,4 +41,12 @@ class Trend extends Model
             Trend::class
         );
     }
+
+    public function opportunity(): HasOne
+    {
+        return $this->hasOne(
+            Opportunity::class
+        );
+    }
+
 }

@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use Domains\Topic\Models\Topic;
-use Domains\Trend\Actions\CalculateTrendAction;
+use Domains\Opportunity\Actions\DetectOpportunityAction;
+use Domains\Trend\Models\Trend;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,7 +12,7 @@ use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use Throwable;
 
-class CalculateTrendJob implements ShouldQueue
+class DetectOpportunityJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -26,9 +26,8 @@ class CalculateTrendJob implements ShouldQueue
     public int $backoff = 10;
 
     public function __construct(
-        public readonly int $topicId
-    ) {
-    }
+        public readonly int $trendId
+    ) {}
 
     public function middleware(): array
     {
@@ -41,17 +40,18 @@ class CalculateTrendJob implements ShouldQueue
     }
 
     public function handle(
-        CalculateTrendAction $action
+        DetectOpportunityAction $action
     ): void {
 
-        $topic = Topic::query()
-            ->find($this->topicId);
+        $trend = Trend::query()
+            ->with('topic')
+            ->find($this->trendId);
 
-        if (! $topic) {
+        if (! $trend) {
             return;
         }
 
-        $action->execute($topic);
+        $action->execute($trend);
     }
 
     public function failed(
@@ -59,9 +59,9 @@ class CalculateTrendJob implements ShouldQueue
     ): void {
 
         logger()->error(
-            'Trend calculation failed',
+            'Opportunity detection failed',
             [
-                'topic_id' => $this->topicId,
+                'trend_id' => $this->trendId,
                 'error' => $e->getMessage(),
             ]
         );

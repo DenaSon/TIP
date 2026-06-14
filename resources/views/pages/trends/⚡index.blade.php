@@ -1,12 +1,12 @@
 <?php
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 use Domains\Trend\Models\Trend;
 
-new class extends Component
-{
+new class extends Component {
     use WithPagination;
 
     public string $search = '';
@@ -30,10 +30,6 @@ new class extends Component
                 'label' => 'Score',
             ],
 
-            [
-                'key' => 'contents_count',
-                'label' => 'Contents',
-            ],
 
             [
                 'key' => 'calculated_at',
@@ -42,29 +38,25 @@ new class extends Component
         ];
     }
 
-    public function getTrendsProperty()
+    public function getTrendsProperty(): LengthAwarePaginator
     {
         return Trend::query()
-
             ->with('topic')
-
             ->whereHas('topic', function ($query) {
 
                 $query->when(
                     $this->search,
-                    fn ($q) => $q->where(
+                    fn($q) => $q->where(
                         'name',
                         'like',
                         "%{$this->search}%"
                     )
                 );
             })
-
             ->orderBy(
                 $this->sortBy['column'],
                 $this->sortBy['direction']
             )
-
             ->paginate(20);
     }
 

@@ -5,6 +5,7 @@ namespace Domains\Topic\Models;
 use App\Domains\Topic\Models\TopicKeyword;
 use Domains\Cluster\Models\Cluster;
 use Domains\Content\Models\Content;
+use Domains\Opportunity\Models\Opportunity;
 use Domains\Trend\Models\Trend;
 use Domains\Trend\Models\TrendSnapshot;
 use Illuminate\Database\Eloquent\Model;
@@ -53,6 +54,13 @@ class Topic extends Model
     {
         return $this->hasMany(
             TrendSnapshot::class
+        );
+    }
+
+    public function opportunities(): HasMany
+    {
+        return $this->hasMany(
+            Opportunity::class
         );
     }
 }
