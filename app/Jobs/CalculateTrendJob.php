@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Domains\Topic\Models\Topic;
 use Domains\Trend\Actions\CalculateTrendAction;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,6 +15,7 @@ use Throwable;
 
 class CalculateTrendJob implements ShouldQueue
 {
+    use Batchable;
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
@@ -27,8 +29,7 @@ class CalculateTrendJob implements ShouldQueue
 
     public function __construct(
         public readonly int $topicId
-    ) {
-    }
+    ) {}
 
     public function middleware(): array
     {

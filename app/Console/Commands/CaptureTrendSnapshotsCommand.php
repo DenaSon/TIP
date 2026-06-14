@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Domains\Topic\Models\Topic;
-use Domains\Trend\Models\TrendSnapshot;
+use Domains\Trend\Actions\CaptureTrendSnapshotsAction;
 use Illuminate\Console\Command;
 
 class CaptureTrendSnapshotsCommand extends Command
@@ -14,39 +13,14 @@ class CaptureTrendSnapshotsCommand extends Command
     protected $description =
         'Capture topic trend snapshots';
 
-    public function handle(): int
-    {
-        $created = 0;
+    public function handle(
+        CaptureTrendSnapshotsAction $action
+    ): int {
 
-        Topic::query()
-
-            ->withCount('contents')
-
-            ->chunkById(
-                100,
-                function ($topics)
-                use (&$created) {
-
-                    foreach ($topics as $topic) {
-
-                        TrendSnapshot::create([
-                            'topic_id' =>
-                                $topic->id,
-
-                            'content_count' =>
-                                $topic->contents_count,
-
-                            'captured_at' =>
-                                now(),
-                        ]);
-
-                        $created++;
-                    }
-                }
-            );
+        $count = $action->execute();
 
         $this->info(
-            "{$created} snapshots created."
+            "{$count} snapshots created."
         );
 
         return self::SUCCESS;

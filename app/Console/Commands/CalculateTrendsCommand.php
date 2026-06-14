@@ -2,35 +2,26 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\CalculateTrendJob;
-use Domains\Topic\Models\Topic;
+use Domains\Trend\Actions\RebuildTrendsAction;
 use Illuminate\Console\Command;
 
 class CalculateTrendsCommand extends Command
 {
-    protected $signature = 'trends:rebuild';
+    protected $signature =
+        'trends:rebuild';
 
     protected $description =
-        'Calculate all trends';
+        'Rebuild all trends';
 
-    public function handle(): int
-    {
-        Topic::query()
-            ->select('id')
-            ->chunkById(
-                100,
-                function ($topics) {
+    public function handle(
+        RebuildTrendsAction $action
+    ): int {
 
-                    foreach ($topics as $topic) {
+        $batch = $action->execute();
 
-                        CalculateTrendJob::dispatch(
-                            $topic->id
-                        );
-                    }
-                }
-            );
-
-        $this->info('Done.');
+        $this->info(
+            "Trend batch queued: {$batch->id}"
+        );
 
         return self::SUCCESS;
     }

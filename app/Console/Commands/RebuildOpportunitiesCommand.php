@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\DetectOpportunityJob;
-use Domains\Opportunity\Models\Opportunity;
-use Domains\Trend\Models\Trend;
+use Domains\Opportunity\Actions\RebuildOpportunitiesAction;
 use Illuminate\Console\Command;
 
 class RebuildOpportunitiesCommand extends Command
@@ -15,39 +13,14 @@ class RebuildOpportunitiesCommand extends Command
     protected $description =
         'Rebuild all opportunities';
 
-    public function handle(): int
-    {
-        $this->info(
-            'Clearing opportunities...'
-        );
+    public function handle(
+        RebuildOpportunitiesAction $action
+    ): int {
 
-        Opportunity::query()->delete();
-
-        $count = Trend::query()->count();
+        $batch = $action->execute();
 
         $this->info(
-            "Dispatching {$count} trends..."
-        );
-
-        Trend::query()
-            ->select('id')
-            ->chunkById(
-                100,
-                function ($trends): void {
-
-                    foreach (
-                        $trends as $trend
-                    ) {
-
-                        DetectOpportunityJob::dispatch(
-                            $trend->id
-                        );
-                    }
-                }
-            );
-
-        $this->info(
-            'Opportunity rebuild queued.'
+            "Opportunity batch queued: {$batch->id}"
         );
 
         return self::SUCCESS;
