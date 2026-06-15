@@ -1,9 +1,7 @@
 <?php
 
+use Domains\Opportunity\Actions\DetectOpportunityAction;
 use Domains\Opportunity\Models\Opportunity;
-use Domains\Opportunity\Services\OpportunityReasonService;
-use Domains\Opportunity\Services\OpportunityScoreService;
-use Domains\Topic\Models\Topic;
 use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
 
@@ -38,14 +36,13 @@ Route::get('test', function () {
 
     $trend = Trend::first();
 
-     app(
-        \Domains\Opportunity\Actions\DetectOpportunityAction::class
+    app(
+        DetectOpportunityAction::class
     )->execute(
         $trend
     );
 
-     return Opportunity::first();
-
+    return Opportunity::first();
 
 });
 

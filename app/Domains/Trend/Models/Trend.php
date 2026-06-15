@@ -48,5 +48,4 @@ class Trend extends Model
             Opportunity::class
         );
     }
-
 }

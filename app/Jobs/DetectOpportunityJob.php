@@ -15,8 +15,8 @@ use Throwable;
 
 class DetectOpportunityJob implements ShouldQueue
 {
-    use Dispatchable;
     use Batchable;
+    use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
