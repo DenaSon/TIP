@@ -1,4 +1,5 @@
 <?php
+
 namespace Domains\Opportunity\Actions;
 
 use App\Jobs\DetectOpportunityJob;
@@ -11,10 +12,9 @@ class RebuildOpportunitiesAction
 {
     public function execute(
         ?callable $then = null
-    ): Batch
-    {
+    ): Batch {
 
-        Opportunity::query()->delete();
+        // Opportunity::query()->delete();
 
         $jobs = [];
 

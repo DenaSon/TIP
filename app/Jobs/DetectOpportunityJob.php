@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Domains\Opportunity\Actions\DetectOpportunityAction;
 use Domains\Trend\Models\Trend;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,6 +16,7 @@ use Throwable;
 class DetectOpportunityJob implements ShouldQueue
 {
     use Dispatchable;
+    use Batchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;

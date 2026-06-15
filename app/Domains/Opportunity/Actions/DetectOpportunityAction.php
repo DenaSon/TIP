@@ -10,10 +10,9 @@ use Domains\Trend\Models\Trend;
 readonly class DetectOpportunityAction
 {
     public function __construct(
-        private OpportunityScoreService  $scoreService,
+        private OpportunityScoreService $scoreService,
         private OpportunityReasonService $reasonService,
-    ) {
-    }
+    ) {}
 
     public function execute(
         Trend $trend
