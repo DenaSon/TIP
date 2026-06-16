@@ -15,6 +15,7 @@ class TopicKeywordRepository
                 'name',
                 'slug',
             ])
+            ->where('is_active', true)
             ->with([
                 'keywords:id,topic_id,keyword,weight',
             ])

@@ -29,6 +29,11 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('type');
+            $table
+                ->unsignedTinyInteger(
+                    'authority_score'
+                )
+                ->default(50);
             $table->index('status');
         });
     }

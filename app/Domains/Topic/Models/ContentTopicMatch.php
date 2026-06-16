@@ -1,4 +1,5 @@
 <?php
+
 namespace Domains\Topic\Models;
 
 use Domains\Content\Models\Content;

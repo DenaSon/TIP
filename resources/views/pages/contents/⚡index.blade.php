@@ -150,7 +150,9 @@ new class extends Component {
             <div class="max-w-xl">
 
 
-                {{ $content->title }}
+               <a href="{{ route('contents.show',['content'=>$content->id]) }}">
+                   {{ $content->title }}
+               </a>
 
 
             </div>

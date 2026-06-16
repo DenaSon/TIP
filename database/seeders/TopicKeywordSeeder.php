@@ -8,640 +8,156 @@ use Illuminate\Database\Seeder;
 
 class TopicKeywordSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        foreach ($this->dictionary() as $topicName => $keywords) {
+        $keywords = [
 
-            $topic = Topic::query()
-                ->where('name', $topicName)
-                ->first();
+            'artificial-intelligence' => [
+                ['artificial intelligence', 100],
+                ['ai', 90],
+                ['generative ai', 95],
+                ['ai model', 80],
+                ['ai system', 70],
+                ['machine intelligence', 75],
+                ['ai technology', 70],
+                ['ai research', 70],
+                ['ai development', 65],
+                ['foundation model', 85],
+            ],
+
+            'large-language-models' => [
+                ['large language model', 100],
+                ['large language models', 100],
+                ['llm', 95],
+                ['language model', 90],
+                ['foundation model', 85],
+                ['generative model', 80],
+                ['transformer model', 80],
+                ['multimodal model', 75],
+                ['reasoning model', 75],
+                ['open weight model', 70],
+            ],
+
+            'openai' => [
+                ['openai', 100],
+                ['chatgpt', 95],
+                ['gpt', 90],
+                ['gpt-4', 95],
+                ['gpt-5', 100],
+                ['o3', 85],
+                ['openai api', 95],
+                ['openai model', 90],
+                ['openai release', 80],
+                ['sam altman', 80],
+            ],
+
+            'ai-agents' => [
+                ['ai agent', 100],
+                ['ai agents', 100],
+                ['autonomous agent', 90],
+                ['agentic ai', 95],
+                ['agent workflow', 85],
+                ['agent framework', 85],
+                ['multi-agent', 90],
+                ['ai assistant', 75],
+                ['autonomous system', 70],
+                ['task automation agent', 80],
+            ],
+
+            'anthropic' => [
+                ['anthropic', 100],
+                ['claude', 100],
+                ['claude ai', 95],
+                ['claude opus', 95],
+                ['claude sonnet', 95],
+                ['claude model', 90],
+                ['anthropic api', 90],
+                ['anthropic release', 85],
+                ['dario amodei', 80],
+                ['constitutional ai', 80],
+            ],
+
+            'google-ai' => [
+                ['google ai', 100],
+                ['gemini', 100],
+                ['gemini ai', 95],
+                ['gemini model', 95],
+                ['google deepmind', 100],
+                ['deepmind', 95],
+                ['project astra', 90],
+                ['veo', 90],
+                ['gemma', 90],
+                ['demis hassabis', 80],
+            ],
+
+            'ai-infrastructure' => [
+                ['ai infrastructure', 100],
+                ['ai hardware', 90],
+                ['ai compute', 95],
+                ['ai accelerator', 90],
+                ['data center', 85],
+                ['inference infrastructure', 95],
+                ['model serving', 90],
+                ['gpu cluster', 95],
+                ['ai training infrastructure', 100],
+                ['inference engine', 85],
+            ],
+
+            'cybersecurity' => [
+                ['cybersecurity', 100],
+                ['cyber security', 100],
+                ['security breach', 95],
+                ['data breach', 95],
+                ['ransomware', 95],
+                ['malware', 90],
+                ['phishing', 90],
+                ['cyber attack', 95],
+                ['vulnerability', 85],
+                ['zero day', 100],
+            ],
+
+            'nvidia' => [
+                ['nvidia', 100],
+                ['jensen huang', 100],
+                ['h100', 95],
+                ['h200', 95],
+                ['b200', 95],
+                ['blackwell', 100],
+                ['dgx', 90],
+                ['cuda', 95],
+                ['nvidia gpu', 95],
+                ['ai chip', 85],
+                ['nvidia data center', 90],
+                ['nvlink', 90],
+                ['grace blackwell', 95],
+                ['nvidia earnings', 80],
+            ],
+
+        ];
+
+        foreach ($keywords as $slug => $items) {
+
+            $topic = Topic::where('slug', $slug)->first();
 
             if (! $topic) {
                 continue;
             }
 
-            foreach ($keywords as $keyword => $weight) {
+            foreach ($items as [$keyword, $weight]) {
 
-                TopicKeyword::query()
-                    ->firstOrCreate(
-                        [
-                            'topic_id' => $topic->id,
-                            'keyword' => $keyword,
-                        ],
-                        [
-                            'weight' => $weight,
-                        ]
-                    );
+                TopicKeyword::updateOrCreate(
+                    [
+                        'topic_id' => $topic->id,
+                        'keyword' => strtolower($keyword),
+                    ],
+                    [
+                        'weight' => $weight,
+                    ]
+                );
             }
         }
-    }
-
-    private function dictionary(): array
-    {
-        return [
-
-            /*
-            |--------------------------------------------------------------------------
-            | Artificial Intelligence
-            |--------------------------------------------------------------------------
-            */
-
-            'هوش مصنوعی' => [
-                'هوش مصنوعی' => 10,
-                'هوش مصنوعی چیست' => 8,
-                'کاربردهای هوش مصنوعی' => 7,
-                'آینده هوش مصنوعی' => 7,
-                'هوش ماشینی' => 8,
-                'هوش مصنوعی فارسی' => 9,
-                'هوش مصنوعی ایرانی' => 8,
-                'هوش مصنوعی رایگان' => 8,
-                'بهترین هوش مصنوعی' => 8,
-                'هوش مصنوعی برای کار' => 7,
-                'هوش مصنوعی در ایران' => 7,
-                'هوش مصنوعی چگونه کار می کند' => 6,
-                'انقلاب هوش مصنوعی' => 7,
-                'هوش مصنوعی و انسان' => 6,
-                'تهدیدات هوش مصنوعی' => 6,
-                'هوش مصنوعی عمومی' => 7,
-                'agi' => 7,
-                'ai' => 10,
-                'artificial intelligence' => 10,
-                'machine intelligence' => 5,
-                'what is ai' => 6,
-                'ai technology' => 6,
-                'future of ai' => 6,
-                'general artificial intelligence' => 5,
-            ],
-
-            'هوش مصنوعی مولد' => [
-                'هوش مصنوعی مولد' => 10,
-                'هوش مصنوعی تولیدی' => 9,
-                'مدل زبانی بزرگ' => 8,
-                'generative ai' => 10,
-                'gen ai' => 8,
-                'llm' => 8,
-                'large language model' => 8,
-            ],
-
-            'یادگیری ماشین' => [
-                'یادگیری ماشین' => 10,
-                'یادگیری عمیق' => 9,
-                'شبکه عصبی' => 8,
-                'شبکه عصبی مصنوعی' => 7,
-                'آموزش ماشین' => 7,
-                'machine learning' => 10,
-                'ml' => 8,
-                'deep learning' => 8,
-                'neural network' => 5,
-            ],
-
-            'پردازش زبان طبیعی' => [
-                'پردازش زبان طبیعی' => 10,
-                'پردازش متن' => 8,
-                'تحلیل متن' => 7,
-                'تشخیص گفتار' => 7,
-                'ترجمه ماشینی' => 7,
-                'nlp' => 10,
-                'natural language processing' => 10,
-                'text mining' => 6,
-                'speech recognition' => 6,
-            ],
-
-            'بینایی ماشین' => [
-                'بینایی ماشین' => 10,
-                'پردازش تصویر' => 9,
-                'تشخیص تصویر' => 8,
-                'تشخیص چهره' => 7,
-                'computer vision' => 10,
-                'image recognition' => 8,
-                'object detection' => 7,
-                'cv' => 5,
-            ],
-
-            'OpenAI' => [
-                'openai' => 10,
-                'chatgpt' => 10,
-                'چت جی پی تی' => 9,
-                'gpt' => 8,
-                'gpt-4' => 8,
-                'gpt-4o' => 8,
-                'gpt-5' => 8,
-                'سام التمن' => 6,
-                'sam altman' => 5,
-                'sora' => 6,
-                'dall-e' => 5,
-            ],
-
-            'Anthropic' => [
-                'anthropic' => 10,
-                'claude' => 10,
-                'claude ai' => 8,
-                'کلود' => 9,
-                'کلود هوش مصنوعی' => 8,
-                'claude 4' => 5,
-                'claude 5' => 5,
-                'claude sonnet' => 6,
-                'claude opus' => 6,
-            ],
-
-            'Google AI' => [
-                'گوگل هوش مصنوعی' => 10,
-                'هوش مصنوعی گوگل' => 10,
-                'جمینای' => 9,
-                'google ai' => 10,
-                'gemini' => 10,
-                'google gemini' => 9,
-                'deepmind' => 7,
-                'google deepmind' => 7,
-                'bard' => 5,
-            ],
-
-            'Hugging Face' => [
-                'hugging face' => 10,
-                'huggingface' => 10,
-                'transformers' => 8,
-                'inference api' => 5,
-                'مدل متن باز' => 6,
-            ],
-
-            'AI Agents' => [
-                'ایجنت هوش مصنوعی' => 10,
-                'عامل هوش مصنوعی' => 9,
-                'هوش مصنوعی خودکار' => 8,
-                'ai agent' => 10,
-                'ai agents' => 10,
-                'agentic ai' => 10,
-                'autonomous agent' => 8,
-                'multi agent' => 8,
-                'ai automation' => 7,
-            ],
-
-            'ابزارهای هوش مصنوعی' => [
-                'ابزارهای هوش مصنوعی' => 10,
-                'نرم افزار هوش مصنوعی' => 9,
-                'اپلیکیشن هوش مصنوعی' => 8,
-                'هوش مصنوعی رایگان' => 8,
-                'بهترین هوش مصنوعی' => 7,
-                'ai tools' => 10,
-                'ai software' => 8,
-                'ai apps' => 7,
-            ],
-
-            'هوش مصنوعی تصویری' => [
-                'هوش مصنوعی تصویری' => 10,
-                'ساخت تصویر با هوش مصنوعی' => 9,
-                'تولید تصویر هوش مصنوعی' => 9,
-                'هوش مصنوعی عکس' => 8,
-                'image generation ai' => 10,
-                'ai image generator' => 9,
-                'midjourney' => 8,
-                'stable diffusion' => 8,
-                'dall-e' => 7,
-                'flux' => 6,
-            ],
-
-            'هوش مصنوعی در کسب و کار' => [
-                'هوش مصنوعی در کسب و کار' => 10,
-                'هوش مصنوعی برای کار' => 9,
-                'اتوماسیون هوش مصنوعی' => 8,
-                'هوش مصنوعی سازمانی' => 8,
-                'چت بات هوش مصنوعی' => 7,
-                'ai for business' => 10,
-                'enterprise ai' => 8,
-                'ai automation' => 7,
-                'ai chatbot' => 7,
-            ],
-
-            'اخلاق هوش مصنوعی' => [
-                'اخلاق هوش مصنوعی' => 10,
-                'خطرات هوش مصنوعی' => 9,
-                'هوش مصنوعی و انسان' => 8,
-                'هوش مصنوعی ایمن' => 8,
-                'ai ethics' => 10,
-                'ai safety' => 9,
-                'responsible ai' => 8,
-                'ai bias' => 6,
-            ],
-
-            /*
-            |--------------------------------------------------------------------------
-            | Software Development
-            |--------------------------------------------------------------------------
-            */
-
-            'برنامه‌نویسی' => [
-                'برنامه نویسی' => 10,
-                'برنامه‌نویسی چیست' => 7,
-                'یادگیری برنامه نویسی' => 8,
-                'آموزش برنامه نویسی' => 8,
-                'کدنویسی' => 9,
-                'توسعه نرم افزار' => 8,
-                'مهندسی نرم افزار' => 7,
-                'programming' => 10,
-                'coding' => 8,
-                'developer' => 8,
-                'software development' => 8,
-                'software engineer' => 6,
-            ],
-
-            'Laravel' => [
-                'laravel' => 10,
-                'لاراول' => 10,
-                'آموزش لاراول' => 8,
-                'فریمورک php' => 7,
-                'eloquent' => 8,
-                'livewire' => 8,
-                'artisan' => 8,
-                'laracon' => 5,
-                'filament' => 6,
-                'inertia' => 5,
-            ],
-
-            'PHP' => [
-                'php' => 10,
-                'پی اچ پی' => 9,
-                'آموزش php' => 8,
-                'php 8' => 7,
-                'composer' => 7,
-                'symfony' => 6,
-                'wordpress' => 6,
-            ],
-
-            'JavaScript' => [
-                'javascript' => 10,
-                'جاوااسکریپت' => 9,
-                'آموزش جاوااسکریپت' => 8,
-                'js' => 8,
-                'typescript' => 8,
-                'nodejs' => 8,
-                'node.js' => 8,
-                'react' => 7,
-                'vue' => 7,
-                'next.js' => 6,
-                'nuxt' => 5,
-                'svelte' => 5,
-            ],
-
-            'Python' => [
-                'python' => 10,
-                'پایتون' => 10,
-                'آموزش پایتون' => 9,
-                'python برای هوش مصنوعی' => 8,
-                'django' => 7,
-                'flask' => 7,
-                'fastapi' => 6,
-                'pandas' => 6,
-                'numpy' => 5,
-            ],
-
-            'توسعه موبایل' => [
-                'توسعه موبایل' => 10,
-                'برنامه نویسی موبایل' => 10,
-                'اپلیکیشن موبایل' => 9,
-                'برنامه نویسی اندروید' => 8,
-                'برنامه نویسی ios' => 8,
-                'flutter' => 8,
-                'react native' => 7,
-                'kotlin' => 6,
-                'swift' => 6,
-                'mobile development' => 7,
-            ],
-
-            'GitHub' => [
-                'github' => 10,
-                'گیت هاب' => 9,
-                'git' => 8,
-                'گیت' => 8,
-                'کنترل نسخه' => 7,
-                'مخزن کد' => 6,
-                'repository' => 5,
-                'pull request' => 5,
-                'open source' => 5,
-                'gitlab' => 6,
-                'version control' => 5,
-            ],
-
-            'ابزارهای توسعه‌دهنده' => [
-                'ابزار برنامه نویسی' => 10,
-                'محیط توسعه' => 8,
-                'ویرایشگر کد' => 8,
-                'vscode' => 9,
-                'visual studio code' => 8,
-                'cursor' => 7,
-                'jetbrains' => 6,
-                'docker' => 8,
-                'kubernetes' => 6,
-                'linux' => 6,
-            ],
-
-            /*
-            |--------------------------------------------------------------------------
-            | Security
-            |--------------------------------------------------------------------------
-            */
-
-            'امنیت سایبری' => [
-                'امنیت سایبری' => 10,
-                'امنیت اطلاعات' => 9,
-                'هک و نفوذ' => 8,
-                'هکر' => 8,
-                'هکر کلاه سفید' => 7,
-                'تست نفوذ' => 8,
-                'فیشینگ' => 7,
-                'بدافزار' => 7,
-                'cybersecurity' => 10,
-                'cyber security' => 10,
-                'penetration testing' => 7,
-                'vulnerability' => 8,
-                'ransomware' => 8,
-                'security breach' => 8,
-                'malware' => 7,
-                'phishing' => 7,
-                'ethical hacking' => 7,
-            ],
-
-            'امنیت وب' => [
-                'امنیت وب' => 10,
-                'آسیب پذیری وب' => 9,
-                'sql injection' => 8,
-                'xss' => 8,
-                'csrf' => 7,
-                'owasp' => 7,
-                'web security' => 9,
-                'web vulnerability' => 7,
-                'ssl' => 6,
-                'https' => 6,
-            ],
-
-            /*
-            |--------------------------------------------------------------------------
-            | Crypto
-            |--------------------------------------------------------------------------
-            */
-
-            'ارز دیجیتال' => [
-                'ارز دیجیتال' => 10,
-                'رمز ارز' => 9,
-                'خرید ارز دیجیتال' => 8,
-                'قیمت ارز دیجیتال' => 8,
-                'بازار ارز دیجیتال' => 8,
-                'سرمایه گذاری ارز دیجیتال' => 7,
-                'کیف پول دیجیتال' => 7,
-                'crypto' => 10,
-                'cryptocurrency' => 10,
-                'bitcoin' => 8,
-                'بیت کوین' => 9,
-                'ethereum' => 8,
-                'اتریوم' => 8,
-                'btc' => 8,
-                'eth' => 8,
-                'altcoin' => 6,
-                'defi' => 6,
-            ],
-
-            'بلاکچین' => [
-                'بلاکچین' => 10,
-                'فناوری بلاکچین' => 9,
-                'قرارداد هوشمند' => 8,
-                'دیفای' => 8,
-                'کیف پول رمزارز' => 7,
-                'blockchain' => 10,
-                'smart contract' => 8,
-                'web3' => 8,
-                'nft' => 7,
-                'defi' => 7,
-                'distributed ledger' => 5,
-                'dao' => 5,
-            ],
-
-            'صرافی ارز دیجیتال' => [
-                'صرافی ارز دیجیتال' => 10,
-                'خرید بیت کوین' => 9,
-                'ترید ارز دیجیتال' => 9,
-                'ترید' => 8,
-                'معامله ارز دیجیتال' => 8,
-                'binance' => 9,
-                'بایننس' => 9,
-                'coinbase' => 7,
-                'exchange' => 6,
-                'crypto exchange' => 7,
-                'crypto trading' => 7,
-            ],
-            /*
-            |--------------------------------------------------------------------------
-            | Hardware
-            |--------------------------------------------------------------------------
-            */
-            'گوشی موبایل' => [
-                'گوشی موبایل' => 10,
-                'گوشی هوشمند' => 10,
-                'بهترین گوشی' => 8,
-                'خرید گوشی' => 8,
-                'گوشی ارزان' => 7,
-                'مقایسه گوشی' => 7,
-                'iphone' => 10,
-                'آیفون' => 10,
-                'ios' => 10,
-                'android' => 10,
-                'اندروید' => 9,
-                'smartphone' => 8,
-                'mobile phone' => 5,
-            ],
-
-            'اپل' => [
-                'اپل' => 10,
-                'آیفون' => 10,
-                'آیپد' => 9,
-                'مک بوک' => 9,
-                'اپل واچ' => 8,
-                'اپ استور' => 7,
-                'apple' => 10,
-                'iphone' => 10,
-                'ipad' => 9,
-                'macbook' => 9,
-                'mac' => 8,
-                'apple watch' => 8,
-                'airpods' => 7,
-                'macos' => 7,
-                'tim cook' => 5,
-            ],
-
-            'سامسونگ' => [
-                'سامسونگ' => 10,
-                'گلکسی' => 10,
-                'samsung' => 10,
-                'galaxy' => 10,
-                'galaxy s' => 8,
-                'galaxy z fold' => 7,
-                'galaxy tab' => 7,
-                'one ui' => 5,
-            ],
-
-            'شیائومی و برندهای چینی' => [
-                'شیائومی' => 10,
-                'هواوی' => 9,
-                'وان پلاس' => 8,
-                'اوپو' => 8,
-                'ریلمی' => 7,
-                'xiaomi' => 10,
-                'huawei' => 9,
-                'oneplus' => 8,
-                'oppo' => 8,
-                'realme' => 7,
-                'honor' => 6,
-            ],
-
-            'غول‌های فناوری' => [
-                'غول های فناوری' => 10,
-                'شرکت های بزرگ تکنولوژی' => 8,
-                'بزرگترین شرکت های تکنولوژی' => 7,
-                'google' => 10,
-                'گوگل' => 10,
-                'apple' => 10,
-                'اپل' => 10,
-                'microsoft' => 10,
-                'مایکروسافت' => 10,
-                'amazon' => 10,
-                'آمازون' => 9,
-                'meta' => 10,
-                'متا' => 9,
-                'alphabet' => 5,
-                'nvidia' => 8,
-                'انویدیا' => 8,
-                'tesla' => 7,
-                'تسلا' => 7,
-            ],
-
-            'گوگل' => [
-                'گوگل' => 10,
-                'جستجوی گوگل' => 9,
-                'گوگل کروم' => 8,
-                'گوگل درایو' => 8,
-                'گوگل مپ' => 8,
-                'گوگل پلی' => 8,
-                'یوتیوب' => 8,
-                'google' => 10,
-                'google search' => 9,
-                'google chrome' => 8,
-                'google drive' => 8,
-                'google maps' => 8,
-                'youtube' => 8,
-                'gmail' => 7,
-                'sundar pichai' => 5,
-            ],
-
-            'مایکروسافت' => [
-                'مایکروسافت' => 10,
-                'ویندوز' => 10,
-                'آفیس' => 9,
-                'ایکس باکس' => 8,
-                'microsoft' => 10,
-                'windows' => 10,
-                'windows 11' => 8,
-                'microsoft 365' => 8,
-                'office' => 8,
-                'azure' => 7,
-                'xbox' => 7,
-                'bing' => 6,
-                'copilot' => 7,
-                'satya nadella' => 5,
-            ],
-
-            'متا' => [
-                'متا' => 10,
-                'فیسبوک' => 10,
-                'اینستاگرام' => 10,
-                'واتساپ' => 9,
-                'تردز' => 7,
-                'واقعیت مجازی' => 7,
-                'meta' => 10,
-                'facebook' => 10,
-                'instagram' => 10,
-                'whatsapp' => 9,
-                'threads' => 7,
-                'oculus' => 6,
-                'quest' => 6,
-                'mark zuckerberg' => 6,
-                'zuckerberg' => 6,
-            ],
-
-            'آمازون' => [
-                'آمازون' => 10,
-                'آمازون پرایم' => 8,
-                'amazon' => 10,
-                'amazon prime' => 8,
-                'aws' => 9,
-                'amazon web services' => 8,
-                'alexa' => 7,
-                'kindle' => 6,
-                'jeff bezos' => 5,
-            ],
-
-            'لپ تاپ و کامپیوتر' => [
-                'لپ تاپ' => 10,
-                'کامپیوتر' => 10,
-                'بهترین لپ تاپ' => 9,
-                'خرید لپ تاپ' => 9,
-                'لپ تاپ گیمینگ' => 8,
-                'کامپیوتر شخصی' => 7,
-                'laptop' => 10,
-                'computer' => 9,
-                'pc' => 8,
-                'gaming laptop' => 7,
-                'ultrabook' => 6,
-            ],
-
-            'سخت افزار و تراشه' => [
-                'پردازنده' => 10,
-                'کارت گرافیک' => 10,
-                'رم' => 8,
-                'حافظه' => 8,
-                'تراشه' => 9,
-                'انویدیا' => 9,
-                'nvidia' => 10,
-                'gpu' => 10,
-                'cpu' => 9,
-                'intel' => 8,
-                'amd' => 8,
-                'arm' => 7,
-                'processor' => 7,
-            ],
-
-            /*
-            |--------------------------------------------------------------------------
-            | Iran Ecosystem
-            |--------------------------------------------------------------------------
-            */
-            'فناوری ایران' => [
-                'فناوری ایران' => 10,
-                'تکنولوژی ایران' => 10,
-                'اکوسیستم فناوری ایران' => 8,
-                'صنعت فناوری ایران' => 8,
-                'شرکت های فناوری ایران' => 8,
-                'دیجیتال ایران' => 7,
-                'تحول دیجیتال ایران' => 7,
-                'نوآوری ایران' => 7,
-                'iran tech' => 10,
-                'iran technology' => 10,
-                'iranian technology' => 8,
-                'tech iran' => 7,
-            ],
-
-            'استارتاپ ایرانی' => [
-                'استارتاپ ایرانی' => 10,
-                'استارتاپ های ایرانی' => 10,
-                'کارآفرینی ایران' => 9,
-                'کارآفرینان ایرانی' => 8,
-                'شرکت های نوپا' => 8,
-                'اکوسیستم استارتاپی ایران' => 8,
-                'سرمایه گذاری استارتاپ ایران' => 7,
-                'شتاب دهنده ایران' => 7,
-                'iran startup' => 10,
-                'iranian startup' => 10,
-                'startup iran' => 8,
-                'iran entrepreneurship' => 7,
-            ],
-
-        ];
     }
 }

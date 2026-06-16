@@ -17,6 +17,7 @@ readonly class RebuildClustersAction
         Cluster::query()->delete();
 
         Topic::query()
+            ->where('is_active', true)
             ->select([
                 'id',
                 'name',

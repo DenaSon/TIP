@@ -58,6 +58,4 @@ class Content extends Model
             ContentTopicMatch::class
         );
     }
-
-
 }

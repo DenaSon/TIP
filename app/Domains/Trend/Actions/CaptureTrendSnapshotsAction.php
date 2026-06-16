@@ -12,6 +12,7 @@ class CaptureTrendSnapshotsAction
         $created = 0;
 
         Topic::query()
+            ->where('is_active', true)
             ->withCount('contents')
             ->chunkById(
                 100,

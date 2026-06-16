@@ -222,7 +222,9 @@ new class extends Component
                         <td>{{ $source->name }}</td>
                         <td>{{ $source->type }}</td>
                         <td>{{ $source->status }}</td>
-                        <td>{{ $source->url }}</td>
+                        <td>
+                            <a target="_blank" href="{{ $source->url }}"> {{ $source->url }} </a>
+                        </td>
                         <td>
                             {{ $source->authority_score }}
                         </td>

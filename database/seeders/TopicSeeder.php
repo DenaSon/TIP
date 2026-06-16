@@ -11,96 +11,75 @@ class TopicSeeder extends Seeder
     {
         $topics = [
 
-            // هوش مصنوعی
-            'هوش مصنوعی',
-            'هوش مصنوعی مولد',
-            'یادگیری ماشین',
-            'پردازش زبان طبیعی',
-            'چت‌بات',
-            'هوش مصنوعی در ایران',
-            'OpenAI',
-            'Anthropic',
-            'Hugging Face',
-            'موشک',
-            'تاکسی پرنده',
+            [
+                'name' => 'Artificial Intelligence',
+                'slug' => 'artificial-intelligence',
+                'description' => 'General artificial intelligence news, research, products and ecosystem.',
+            ],
 
-            // توسعه نرم‌افزار
-            'برنامه‌نویسی',
-            'توسعه وب',
-            'توسعه موبایل',
-            'دواپس',
-            'پایگاه داده',
-            'متن‌باز',
-            'Laravel',
-            'JavaScript',
-            'GitHub',
+            [
+                'name' => 'Large Language Models',
+                'slug' => 'large-language-models',
+                'description' => 'LLMs, foundation models, multimodal models and language model advancements.',
+            ],
 
-            // استارتاپ و کسب‌وکار
-            'استارتاپ',
-            'سرمایه‌گذاری',
-            'کسب‌وکار دیجیتال',
-            'اکوسیستم فناوری ایران',
-            'فین‌تک',
-            'تجارت الکترونیک',
+            [
+                'name' => 'OpenAI',
+                'slug' => 'openai',
+                'description' => 'OpenAI products, models, announcements and ecosystem.',
+            ],
 
-            // امنیت
-            'امنیت سایبری',
-            'حریم خصوصی',
-            'هک و نفوذ',
+            [
+                'name' => 'AI Agents',
+                'slug' => 'ai-agents',
+                'description' => 'Autonomous agents, agentic systems and multi-agent workflows.',
+            ],
 
-            // کریپتو و بلاکچین
-            'ارز دیجیتال',
-            'بلاکچین',
-            'دیفای',
-            'Web3',
+            [
+                'name' => 'Anthropic',
+                'slug' => 'anthropic',
+                'description' => 'Anthropic, Claude models and company related developments.',
+            ],
 
-            // سئو و مارکتینگ
-            'سئو',
-            'بازاریابی محتوا',
-            'شبکه‌های اجتماعی',
-            'دیجیتال مارکتینگ',
+            [
+                'name' => 'Google AI',
+                'slug' => 'google-ai',
+                'description' => 'Google AI, DeepMind, Gemini and related products.',
+            ],
 
-            // طراحی و محصول
-            'طراحی UX',
-            'طراحی UI',
-            'مدیریت محصول',
+            [
+                'name' => 'AI Infrastructure',
+                'slug' => 'ai-infrastructure',
+                'description' => 'AI compute, inference, hardware and infrastructure ecosystem.',
+            ],
 
-            // سخت‌افزار و گجت
-            'گوشی موبایل',
-            'لپ‌تاپ',
-            'گجت',
-            'اینترنت اشیا',
-            'سخت‌افزار',
+            [
+                'name' => 'Cybersecurity',
+                'slug' => 'cybersecurity',
+                'description' => 'Cyber attacks, vulnerabilities, malware and security incidents.',
+            ],
 
-            // علم و سلامت
-            'فناوری سلامت',
-            'فضا و نجوم',
-            'محیط زیست و انرژی',
-            'علم و فناوری',
-
-            // شرکت‌های بزرگ و روندها
-            'غول‌های فناوری',
-            'رباتیک',
-            'واقعیت مجازی',
-            'واقعیت افزوده',
-            'ابر و زیرساخت',
-            'AI Agents',
-
-            // ایران
-            'فناوری ایران',
-            'استارتاپ ایرانی',
-            'دیجیتال ایران',
+            [
+                'name' => 'NVIDIA',
+                'slug' => 'nvidia',
+                'description' => 'NVIDIA products, GPUs, AI hardware and company developments.',
+            ],
 
         ];
 
         foreach ($topics as $topic) {
-            Topic::firstOrCreate(
-                ['slug' => str($topic)->slug()],
+
+            Topic::updateOrCreate(
                 [
-                    'name' => $topic,
+                    'slug' => $topic['slug'],
+                ],
+                [
+                    'name' => $topic['name'],
+                    'description' => $topic['description'],
                     'is_active' => true,
                 ]
             );
+
         }
     }
 }

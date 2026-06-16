@@ -7,7 +7,7 @@ use Domains\Opportunity\Actions\DetectOpportunityAction;
 use Domains\Topic\Models\Topic;
 use Domains\Trend\Actions\CalculateTrendAction;
 use Domains\Trend\Models\TrendSnapshot;
-use Domains\Topic\Actions\RefreshTopicMatchesAction;
+
 readonly class RebuildTopicAction
 {
     public function __construct(

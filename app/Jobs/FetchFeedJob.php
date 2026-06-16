@@ -22,7 +22,7 @@ class FetchFeedJob implements ShouldQueue
     /**
      * فقط یک retry layer نگه داشته شده
      */
-    public int $tries = 3;
+    public int $tries = 1;
 
     public int $timeout = 20;
 

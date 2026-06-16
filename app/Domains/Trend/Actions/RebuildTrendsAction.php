@@ -16,6 +16,7 @@ class RebuildTrendsAction
         $jobs = [];
 
         Topic::query()
+            ->where('is_active', true)
             ->select('id')
             ->chunkById(
                 100,
