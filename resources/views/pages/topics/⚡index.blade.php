@@ -39,6 +39,15 @@ new class extends Component {
                 'key' => 'is_active',
                 'label' => 'Status',
             ],
+            [
+                'key' => 'keywords_count',
+                'label' => 'Keywords',
+            ],
+
+            [
+                'key' => 'actions',
+                'label' => '',
+            ]
 
         ];
     }
@@ -59,6 +68,10 @@ new class extends Component {
                 $this->sortBy['column'],
                 $this->sortBy['direction']
             )
+            ->withCount([
+                'contents',
+                'keywords',
+            ])
             ->paginate(20);
     }
 
@@ -76,6 +89,13 @@ new class extends Component {
         title="Topics"
         subtitle="Detected topics from contents"
         separator
+    />
+
+    <x-button
+        label="Create Topic"
+        icon="o-plus"
+        link="/topics/create"
+        class="btn-primary"
     />
 
     <x-input
@@ -130,6 +150,33 @@ new class extends Component {
                     </span>
 
             @endif
+
+            @endscope
+            @scope('cell_keywords_count', $topic)
+
+            <span class="badge badge-secondary">
+    {{ $topic->keywords_count }}
+</span>
+
+            @endscope
+
+            @scope('cell_actions', $topic)
+
+            <div class="flex gap-1">
+
+                <x-button
+                    icon="o-pencil"
+                    link="/topics/{{ $topic->id }}/edit"
+                    class="btn-xs btn-outline"
+                />
+
+                <x-button
+                    icon="o-key"
+                    link="/topics/{{ $topic->id }}/keywords"
+                    class="btn-xs btn-outline"
+                />
+
+            </div>
 
             @endscope
 

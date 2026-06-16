@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TopicKeyword extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'weight' => 'integer',
+        ];
+    }
+
     protected $fillable = [
         'topic_id',
         'keyword',

@@ -1,8 +1,5 @@
 <?php
 
-use Domains\Opportunity\Actions\DetectOpportunityAction;
-use Domains\Opportunity\Models\Opportunity;
-use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/sources', 'pages::sources.index')
@@ -32,18 +29,10 @@ Route::livewire(
     'pages::clusters.index'
 )->name('clusters.index');
 
-Route::get('test', function () {
-
-    $trend = Trend::first();
-
-    app(
-        DetectOpportunityAction::class
-    )->execute(
-        $trend
-    );
-
-    return Opportunity::first();
-
-});
+Route::livewire('topics/create', 'pages::topics.create');
+Route::livewire('topics/{topic}/edit', 'pages::topics.edit');
+Route::livewire('topics/{topic}/keywords', 'pages::topics.keywords');
+Route::livewire('/topics/{topic}',
+    'livewire.pages.topic.show');
 
 require __DIR__.'/settings.php';
