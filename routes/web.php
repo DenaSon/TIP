@@ -30,9 +30,12 @@ Route::livewire(
 )->name('clusters.index');
 
 Route::livewire('topics/create', 'pages::topics.create');
-Route::livewire('topics/{topic}/edit', 'pages::topics.edit');
+Route::livewire('topics/{topic}/edit', 'pages::topics.edit')->name('topics.edit');
 Route::livewire('topics/{topic}/keywords', 'pages::topics.keywords');
-Route::livewire('/topics/{topic}',
-    'livewire.pages.topic.show');
+Route::livewire('/topics/{topic}/show', 'pages::topics.show')->name('topics.show');
+Route::livewire(
+    '/contents/{content}',
+    'pages::contents.show'
+)->name('contents.show');
 
 require __DIR__.'/settings.php';

@@ -4,6 +4,7 @@ namespace Domains\Content\Models;
 
 use Domains\Cluster\Models\Cluster;
 use Domains\Source\Models\Source;
+use Domains\Topic\Models\ContentTopicMatch;
 use Domains\Topic\Models\Topic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,4 +51,13 @@ class Content extends Model
         )
             ->withTimestamps();
     }
+
+    public function topicMatches()
+    {
+        return $this->hasMany(
+            ContentTopicMatch::class
+        );
+    }
+
+
 }

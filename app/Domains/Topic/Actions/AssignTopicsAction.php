@@ -3,6 +3,7 @@
 namespace Domains\Topic\Actions;
 
 use Domains\Content\Models\Content;
+use Domains\Topic\Models\ContentTopicMatch;
 use Domains\Topic\Services\TopicMatcher;
 
 class AssignTopicsAction
@@ -30,6 +31,28 @@ class AssignTopicsAction
             ->all();
 
         $content->topics()
-            ->syncWithoutDetaching($topicIds);
+            ->sync($topicIds);
+
+        ContentTopicMatch::query()
+            ->where(
+                'content_id',
+                $content->id
+            )
+            ->delete();
+
+        foreach ($matches as $match) {
+
+            ContentTopicMatch::updateOrCreate(
+                [
+                    'content_id' => $content->id,
+                    'topic_id' => $match['topic_id'],
+                ],
+                [
+                    'score' => $match['score'],
+                    'matched_keywords' => $match['matched_keywords'],
+                ]
+            );
+        }
+
     }
 }

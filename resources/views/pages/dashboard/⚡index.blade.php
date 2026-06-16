@@ -55,6 +55,10 @@ new class extends Component {
             'top_trend' => $topTrend?->topic?->name,
 
             'top_trend_score' => $topTrend?->score ?? 0,
+
+            'topic_match_threshold' => config(
+                'tip.topic_match_threshold'
+            ),
         ];
 
         $topOpportunity = Opportunity::query()
@@ -258,7 +262,7 @@ new class extends Component {
 
     <x-hr></x-hr>
 
-    {{-- Stats --}}
+
     {{-- Stats --}}
     <div class="stats shadow w-full bg-base-100">
 
@@ -404,6 +408,8 @@ new class extends Component {
 
         <div class="card-body">
 
+
+
             <div class="flex items-center justify-between mb-6">
                 <h2 class="card-title text-lg">
                     Pipeline Monitoring
@@ -415,6 +421,29 @@ new class extends Component {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+
+                <div class="p-4 rounded-xl bg-base-200/40 border border-base-200">
+
+
+                    <div class="text-xs text-base-content/60">
+                        Match Threshold
+
+                    </div>
+
+                    <div class="text-3xl font-bold text-info mt-1">
+                        {{
+          config(
+              'tip.topic_match_threshold'
+          )
+      }}
+                    </div>
+
+
+
+
+                </div>
+
 
                 <!-- Active Sources (KEEP) -->
                 <div class="p-4 rounded-xl bg-base-200/40 border border-base-200">
@@ -434,6 +463,7 @@ new class extends Component {
 
 
                 </div>
+
 
                 <!-- Last Content (KEEP) -->
                 <div class="p-4 rounded-xl bg-base-200/40 border border-base-200">

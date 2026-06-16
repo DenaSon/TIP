@@ -10,6 +10,7 @@ new class extends Component {
     use WithPagination;
 
     public string $search = '';
+    public string $status = 'all';
 
     public array $sortBy = [
         'column' => 'contents_count',
@@ -55,29 +56,54 @@ new class extends Component {
     public function getTopicsProperty(): LengthAwarePaginator
     {
         return Topic::query()
-            ->withCount('contents')
+
+            ->withCount([
+                'contents',
+                'keywords',
+            ])
+
             ->when(
                 $this->search,
-                fn($query) => $query->where(
+                fn ($query) => $query->where(
                     'name',
                     'like',
                     "%{$this->search}%"
                 )
             )
+
             ->orderBy(
                 $this->sortBy['column'],
                 $this->sortBy['direction']
             )
-            ->withCount([
-                'contents',
-                'keywords',
-            ])
+            ->when(
+                $this->status === 'active',
+                fn ($q) => $q->where('is_active', true)
+            )
+
+            ->when(
+                $this->status === 'inactive',
+                fn ($q) => $q->where('is_active', false)
+            )
+
             ->paginate(20);
     }
 
     public function updatedSearch(): void
     {
         $this->resetPage();
+    }
+
+    public function toggle(
+        int $topicId
+    ): void {
+
+        $topic = Topic::findOrFail(
+            $topicId
+        );
+
+        $topic->update([
+            'is_active' => ! $topic->is_active,
+        ]);
     }
 };
 
@@ -104,6 +130,14 @@ new class extends Component {
         wire:model.live.debounce.300ms="search"
         placeholder="Search topic..."
     />
+    <x-select
+        wire:model.live="status"
+        :options="[
+        ['id' => 'all', 'name' => 'All'],
+        ['id' => 'active', 'name' => 'Active'],
+        ['id' => 'inactive', 'name' => 'Inactive'],
+    ]"
+    />
 
     <x-card>
 
@@ -116,9 +150,10 @@ new class extends Component {
 
             @scope('cell_name', $topic)
 
-            <x-badge
-                :value="$topic->name"
-                class="badge-primary"
+            <x-button link="{{ route('topics.show',['topic' => $topic->id]) }}"
+                :label="$topic->name"
+                class="btn btn-link"
+
             />
 
             @endscope
@@ -174,6 +209,13 @@ new class extends Component {
                     icon="o-key"
                     link="/topics/{{ $topic->id }}/keywords"
                     class="btn-xs btn-outline"
+                />
+
+                <x-button
+                    title="Active/Deactivate"
+                    wire:click="toggle({{ $topic->id }})"
+                    icon="{{ $topic->is_active ? 'o-pause' : 'o-play' }}"
+                    class="btn-xs {{ $topic->is_active ? 'btn-warning' : 'btn-success' }}"
                 />
 
             </div>

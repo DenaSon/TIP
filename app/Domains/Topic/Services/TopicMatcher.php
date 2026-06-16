@@ -18,36 +18,65 @@ readonly class TopicMatcher
 
         $topics = $this->repository->all();
 
-        $scores = [];
+        $results = [];
 
         foreach ($topics as $topic) {
 
             $score = 0;
 
+            $matchedKeywords = [];
+
             foreach ($topic->keywords as $keyword) {
 
-                $keywordText = $this->normalizer->normalize(
-                    $keyword->keyword
-                );
+                $keywordText =
+                    $this->normalizer->normalize(
+                        $keyword->keyword
+                    );
 
-                if (str_contains($text, $keywordText)) {
-                    $score += $keyword->weight;
+                if (
+                    str_contains(
+                        $text,
+                        $keywordText
+                    )
+                ) {
+
+                    $score +=
+                        $keyword->weight;
+
+                    $matchedKeywords[] = [
+
+                        'keyword' => $keyword->keyword,
+
+                        'weight' => $keyword->weight,
+                    ];
                 }
             }
 
-            if ($score > 0) {
-                $scores[] = [
+            if (
+                $score >=
+                config(
+                    'tip.topic_match_threshold',
+                    5
+                )
+            ) {
+
+                $results[] = [
+
                     'topic_id' => $topic->id,
+
                     'score' => $score,
+
+                    'matched_keywords' => $matchedKeywords,
                 ];
             }
         }
 
         usort(
-            $scores,
-            fn ($a, $b) => $b['score'] <=> $a['score']
+            $results,
+            fn ($a, $b) => $b['score']
+                <=> $a['score']
         );
 
-        return $scores;
+        return $results;
     }
 }
