@@ -3,39 +3,19 @@
 namespace Domains\Topic\Services;
 
 use Domains\Topic\Data\StrategicSignalData;
+use Domains\Topic\Data\TopicMetricsData;
 use Domains\Topic\Enums\StrategicSignal;
-use Domains\Trend\Models\Trend;
-use Domains\Trend\Services\MomentumService;
 
 readonly class StrategicSignalService
 {
-    public function __construct(
-        private MomentumService $momentumService,
-    ) {}
-
     /**
      * @return StrategicSignalData[]
      */
     public function generate(
-        Trend $trend
+        TopicMetricsData $metrics
     ): array {
 
         $signals = [];
-
-        $topic =
-            $trend->topic;
-
-        $contentCount =
-            $topic
-                ->contents()
-                ->count();
-
-        $momentum =
-            $this->momentumService
-                ->calculate(
-                    $trend->growth_rate,
-                    $trend->velocity
-                );
 
         /*
         |--------------------------------------------------------------------------
@@ -43,7 +23,7 @@ readonly class StrategicSignalService
         |--------------------------------------------------------------------------
         */
 
-        if ($trend->growth_rate >= 50) {
+        if ($metrics->growthRate >= 50) {
 
             $signals[] =
                 new StrategicSignalData(
@@ -62,7 +42,7 @@ readonly class StrategicSignalService
         |--------------------------------------------------------------------------
         */
 
-        if ($momentum >= 50) {
+        if ($metrics->momentum >= 50) {
 
             $signals[] =
                 new StrategicSignalData(
@@ -81,7 +61,7 @@ readonly class StrategicSignalService
         |--------------------------------------------------------------------------
         */
 
-        if ($trend->authority_score >= 85) {
+        if ($metrics->authorityScore >= 85) {
 
             $signals[] =
                 new StrategicSignalData(
@@ -101,9 +81,9 @@ readonly class StrategicSignalService
         */
 
         if (
-            $trend->growth_rate >= 20
+            $metrics->growthRate >= 20
             &&
-            $contentCount < 50
+            $metrics->contentCount < 50
         ) {
 
             $signals[] =

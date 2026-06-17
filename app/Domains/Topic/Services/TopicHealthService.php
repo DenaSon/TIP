@@ -2,65 +2,67 @@
 
 namespace Domains\Topic\Services;
 
-use Domains\Opportunity\Services\OpportunityScoreService;
 use Domains\Topic\Data\TopicHealthData;
+use Domains\Topic\Data\TopicMetricsData;
 use Domains\Topic\Enums\TopicHealth;
-use Domains\Trend\Models\Trend;
-use Domains\Trend\Services\MomentumService;
 
 readonly class TopicHealthService
 {
-    public function __construct(
-        private MomentumService $momentumService,
-        private OpportunityScoreService $opportunityScoreService,
-    ) {}
-
     public function calculate(
-        Trend $trend
+        TopicMetricsData $metrics
     ): TopicHealthData {
-
-        $momentum =
-            $this->momentumService
-                ->calculate(
-                    $trend->growth_rate,
-                    $trend->velocity
-                );
-
-        $opportunity =
-            $this->opportunityScoreService
-                ->calculate($trend);
 
         $health = TopicHealth::Poor;
 
         if (
-            $trend->growth_rate >= 25
+            $metrics->growthRate >= 25
             &&
-            $momentum >= 20
+            $metrics->momentum >= 20
             &&
-            $opportunity >= 50
+            $metrics->opportunityScore >= 50
         ) {
-            $health = TopicHealth::Excellent;
+
+            $health =
+                TopicHealth::Excellent;
+
         } elseif (
-            $trend->growth_rate >= 10
+
+            $metrics->growthRate >= 10
             &&
-            $momentum >= 10
+            $metrics->momentum >= 10
             &&
-            $opportunity >= 30
+            $metrics->opportunityScore >= 30
+
         ) {
-            $health = TopicHealth::Good;
+
+            $health =
+                TopicHealth::Good;
+
         } elseif (
-            $trend->growth_rate >= 0
+
+            $metrics->growthRate >= 0
             &&
-            $opportunity >= 10
+            $metrics->opportunityScore >= 10
+
         ) {
-            $health = TopicHealth::Fair;
+
+            $health =
+                TopicHealth::Fair;
         }
 
         return new TopicHealthData(
-            health: $health,
-            growthRate: $trend->growth_rate,
-            momentum: $momentum,
-            opportunityScore: $opportunity,
+
+            health:
+            $health,
+
+            growthRate:
+            $metrics->growthRate,
+
+            momentum:
+            $metrics->momentum,
+
+            opportunityScore:
+            $metrics->opportunityScore,
         );
     }
 }

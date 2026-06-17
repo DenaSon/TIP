@@ -4,14 +4,13 @@ namespace Domains\Topic\Services;
 
 use Domains\Topic\Data\TopicProfileData;
 use Domains\Trend\Models\Trend;
-use Domains\Trend\Services\MomentumService;
 
 readonly class TopicProfileService
 {
     public function __construct(
+        private TopicMetricsService $metricsService,
         private TopicHealthService $healthService,
         private TopicLifecycleService $lifecycleService,
-        private MomentumService $momentumService,
         private StrategicSignalService $signalService,
         private TopicNarrativeService $narrativeService,
     ) {}
@@ -23,22 +22,9 @@ readonly class TopicProfileService
         $topic =
             $trend->topic;
 
-        $contentCount =
-            $topic
-                ->contents()
-                ->count();
-
-        $clusterCount =
-            $topic
-                ->clusters()
-                ->count();
-
-        $momentum =
-            $this->momentumService
-                ->calculate(
-                    $trend->growth_rate,
-                    $trend->velocity
-                );
+        $metrics =
+            $this->metricsService
+                ->build($trend);
 
         $signals =
             $this->signalService
@@ -50,29 +36,40 @@ readonly class TopicProfileService
 
         return new TopicProfileData(
 
-            topic: $topic->name,
+            topic:
+            $topic->name,
 
-            growthRate: $trend->growth_rate,
+            growthRate:
+            $metrics->growthRate,
 
-            velocity: $trend->velocity,
+            velocity:
+            $metrics->velocity,
 
-            momentum: $momentum,
+            momentum:
+            $metrics->momentum,
 
-            authorityScore: $trend->authority_score,
+            authorityScore:
+            $metrics->authorityScore,
 
-            contentCount: $contentCount,
+            contentCount:
+            $metrics->contentCount,
 
-            clusterCount: $clusterCount,
+            clusterCount:
+            $metrics->clusterCount,
 
-            health: $this->healthService
-                ->calculate($trend),
+            health:
+            $this->healthService
+                ->calculate($metrics),
 
-            lifecycle: $this->lifecycleService
-                ->calculate($trend),
+            lifecycle:
+            $this->lifecycleService
+                ->calculate($metrics),
 
-            signals: $signals,
+            signals:
+            $signals,
 
-            narrative: $narrative,
+            narrative:
+            $narrative,
         );
     }
 }

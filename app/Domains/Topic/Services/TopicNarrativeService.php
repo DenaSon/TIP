@@ -2,9 +2,9 @@
 
 namespace Domains\Topic\Services;
 
+use Domains\Topic\Data\TopicMetricsData;
 use Domains\Topic\Data\TopicNarrativeData;
 use Domains\Topic\Enums\TopicLifecycle;
-use Domains\Trend\Models\Trend;
 
 readonly class TopicNarrativeService
 {
@@ -14,14 +14,14 @@ readonly class TopicNarrativeService
     ) {}
 
     public function generate(
-        Trend $trend
+        TopicMetricsData $metrics
     ): TopicNarrativeData {
 
         $insights = [];
 
         $lifecycle =
             $this->lifecycleService
-                ->calculate($trend);
+                ->calculate($metrics);
 
         /*
         |--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ readonly class TopicNarrativeService
 
         foreach (
             $this->signalService
-                ->generate($trend) as $signal
+                ->generate($metrics) as $signal
         ) {
 
             switch ($signal->signal->value) {
