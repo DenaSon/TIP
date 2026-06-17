@@ -1,5 +1,6 @@
 <?php
 
+use Domains\Topic\Services\TopicNarrativeService;
 use Domains\Topic\Services\TopicProfileService;
 use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
@@ -43,16 +44,27 @@ Route::livewire(
 
 require __DIR__.'/settings.php';
 
+
+
+
 Route::get('/test', function (
-    TopicProfileService $service
+    TopicNarrativeService $service
 ) {
 
     return Trend::query()
         ->with('topic')
         ->get()
-        ->map(
-            fn ($trend) => $service
-                ->build($trend)
-                ->toArray()
-        );
+        ->map(function ($trend) use ($service) {
+
+            return [
+
+                'topic' =>
+                    $trend->topic->name,
+
+                'narrative' =>
+                    $service
+                        ->generate($trend)
+                        ->toArray(),
+            ];
+        });
 });
