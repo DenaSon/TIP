@@ -30,10 +30,6 @@ readonly class CalculateTrendAction
             $this->service
                 ->calculateAuthority($topic);
 
-        $score = $this->calculateScore(
-            growthRate: $growthRate,
-            authorityScore: $authorityScore
-        );
 
         $velocity =
             $this->velocityCalculator
@@ -42,6 +38,13 @@ readonly class CalculateTrendAction
         $acceleration =
             $this->accelerationCalculator
                 ->calculate($topic);
+        $score =
+            $this->service
+                ->calculateTrendScore(
+                    growthRate: $growthRate,
+                    velocity: $velocity,
+                    authorityScore: $authorityScore
+                );
 
         Trend::query()
             ->updateOrCreate(
@@ -64,15 +67,5 @@ readonly class CalculateTrendAction
             );
     }
 
-    private function calculateScore(
-        float $growthRate,
-        float $authorityScore
-    ): float {
 
-        return round(
-            $growthRate +
-            ($authorityScore * 0.5),
-            2
-        );
-    }
 }

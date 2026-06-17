@@ -36,35 +36,51 @@ new class extends Component {
 
     public function getStatsProperty(): array
     {
-
-
         $topTrend = Trend::query()
             ->with('topic')
             ->orderByDesc('score')
             ->first();
 
-        return [
-            'sources' => Source::query()->count(),
-
-            'contents' => Content::query()->count(),
-
-            'topics' => Topic::query()->count(),
-
-            'trends' => Trend::query()->count(),
-
-            'top_trend' => $topTrend?->topic?->name,
-
-            'top_trend_score' => $topTrend?->score ?? 0,
-
-            'topic_match_threshold' => config(
-                'tip.topic_match_threshold'
-            ),
-        ];
-
-        $topOpportunity = Opportunity::query()
-            ->orderByDesc('score')
+        $topMomentum = $this->topMomentumTopics
             ->first();
 
+        $topMomentumScore = 0;
+
+        if ($topMomentum) {
+
+            $topMomentumScore = app(
+                \Domains\Trend\Services\MomentumService::class
+            )->calculate(
+                $topMomentum->growth_rate,
+                $topMomentum->velocity
+            );
+        }
+
+        return [
+
+            'sources' => Source::count(),
+
+            'contents' => Content::count(),
+
+            'topics' => Topic::count(),
+
+            'trends' => Trend::count(),
+
+            'top_trend' =>
+                $topTrend?->topic?->name,
+
+            'top_trend_score' =>
+                $topTrend?->score ?? 0,
+
+            'top_momentum' =>
+                $topMomentum?->topic?->name,
+
+            'top_momentum_score' =>
+                $topMomentumScore,
+
+            'topic_match_threshold' =>
+                config('tip.topic_match_threshold'),
+        ];
     }
 
     public function getMonitoringProperty(): array
@@ -126,6 +142,9 @@ new class extends Component {
             'system_freshness_score' => $this->calculateFreshnessScore(),
 
             'data_velocity_score' => $this->calculateVelocityScore(),
+
+
+
         ];
     }
 
@@ -179,6 +198,48 @@ new class extends Component {
             ->limit(10)
             ->get();
     }
+
+    public function getTopMomentumTopicsProperty(): Collection
+    {
+        $momentumService = app(
+            \Domains\Trend\Services\MomentumService::class
+        );
+
+        return Trend::query()
+            ->with('topic')
+            ->get()
+            ->sortByDesc(
+                fn ($trend) =>
+                $momentumService->calculate(
+                    $trend->growth_rate,
+                    $trend->velocity
+                )
+            )
+            ->take(10);
+    }
+
+    public function getMaxMomentumScoreProperty(): float
+    {
+        $service = app(
+            \Domains\Trend\Services\MomentumService::class
+        );
+
+        return max(
+
+            (float) $this->topMomentumTopics
+                ->map(
+                    fn ($trend) =>
+                    $service->calculate(
+                        $trend->growth_rate,
+                        $trend->velocity
+                    )
+                )
+                ->max(),
+
+            1
+        );
+    }
+
 
     public function getTopClustersProperty(): Collection
     {
@@ -361,6 +422,10 @@ new class extends Component {
             <div class="stat-desc">
                 {{ $this->stats['top_trend'] ?? 'No trend detected' }}
             </div>
+
+
+
+
         </div>
 
     </div>
@@ -557,6 +622,7 @@ new class extends Component {
                                 class="badge-warning"
                             />
 
+
                         </div>
 
                         <div
@@ -588,6 +654,24 @@ new class extends Component {
             <div class="space-y-3">
 
                 @foreach($this->topTrends as $trend)
+                    <div class="text-xs opacity-70">
+
+                        Growth:
+                        {{ number_format(
+                            $trend->growth_rate,
+                            1
+                        ) }}
+
+                        |
+
+                        Velocity:
+                        {{ number_format(
+                            $trend->velocity,
+                            1
+                        ) }}
+
+                    </div>
+
 
                     <div
                         class="p-3 rounded-xl bg-base-200"
@@ -615,6 +699,74 @@ new class extends Component {
                             value="{{ $trend->score }}"
                             max="{{ $this->maxTrendScore }}"
                         ></progress>
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+        </x-card>
+
+
+        <x-card
+            title="Top Momentum"
+            class="shadow-lg"
+        >
+
+            <div class="space-y-3">
+
+                @foreach(
+                    $this->topMomentumTopics
+                    as $trend
+                )
+
+                    @php
+
+                        $momentum = app(
+                            \Domains\Trend\Services\MomentumService::class
+                        )->calculate(
+                            $trend->growth_rate,
+                            $trend->velocity
+                        );
+
+                    @endphp
+
+                    <div
+                        class="p-3 rounded-xl bg-base-200"
+                    >
+
+                        <div
+                            class="flex justify-between items-center mb-2"
+                        >
+
+                    <span class="font-semibold">
+                        {{ $trend->topic?->name }}
+                    </span>
+
+                            <x-badge
+                                :value="'Momentum: '.number_format(
+                            $momentum,
+                            1
+                        )"
+                                class="badge-info"
+                            />
+
+                        </div>
+
+                        <div
+                            class="text-xs opacity-70"
+                        >
+
+                            Growth:
+                            {{ number_format($trend->growth_rate,1) }}
+
+                            |
+
+                            Velocity:
+                            {{ number_format($trend->velocity,1) }}
+
+                        </div>
 
                     </div>
 

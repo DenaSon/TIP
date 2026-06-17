@@ -22,7 +22,7 @@ class FetchFeedJob implements ShouldQueue
     /**
      * فقط یک retry layer نگه داشته شده
      */
-    public int $tries = 1;
+    //    public int $tries = 1;
 
     public int $timeout = 20;
 
@@ -63,23 +63,36 @@ class FetchFeedJob implements ShouldQueue
         FetchFeedAction $fetchFeedAction,
         FeedParser $feedParser,
     ): void {
+
         if ($this->batch()?->cancelled()) {
             return;
         }
 
-        try {
-            $xml = $fetchFeedAction->execute($this->source);
-            $items = $feedParser->parse($this->source, $xml);
-        } catch (Throwable $e) {
-            /**
-             * فقط network / runtime fail اینجا retry میشه
-             * parsing fail وارد retry storm نمیشه
-             */
-            throw $e;
+        $xml = $fetchFeedAction->execute($this->source);
+
+        /**
+         * Source unavailable
+         */
+        if ($xml === null) {
+
+            $this->source->updateQuietly([
+                'last_failed_at' => now(),
+                'ingestion_status' => 'unreachable',
+            ]);
+
+            return;
         }
 
-        // empty feed = valid state (NOT failure)
+        /**
+         * Parser failures are real failures
+         */
+        $items = $feedParser->parse(
+            $this->source,
+            $xml
+        );
+
         if (empty($items)) {
+
             $this->source->updateQuietly([
                 'last_crawled_at' => now(),
                 'last_item_count' => 0,
@@ -91,7 +104,9 @@ class FetchFeedJob implements ShouldQueue
 
         $batch = Bus::batch(
             collect($items)
-                ->map(fn ($item) => new ProcessContentJob($item))
+                ->map(
+                    fn ($item) => new ProcessContentJob($item)
+                )
                 ->toArray()
         )
             ->name("source:{$this->source->id}:content-ingestion")

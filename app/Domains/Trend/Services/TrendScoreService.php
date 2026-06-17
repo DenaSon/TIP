@@ -6,6 +6,28 @@ use Domains\Topic\Models\Topic;
 
 class TrendScoreService
 {
+    public function calculateTrendScore(
+        float $growthRate,
+        float $velocity,
+        float $authorityScore,
+    ): float {
+
+        return round(
+
+            ($growthRate * 0.7)
+
+            +
+
+            (max($velocity, 0) * 0.2)
+
+            +
+
+            ($authorityScore * 0.1),
+
+            2
+        );
+    }
+
     public function calculateAuthority(
         Topic $topic
     ): float {

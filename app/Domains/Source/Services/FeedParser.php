@@ -6,6 +6,7 @@ use Domains\DTOs\ContentData;
 use Domains\Source\Models\Source;
 use Exception;
 use SimpleXMLElement;
+use Throwable;
 
 class FeedParser
 {
@@ -19,7 +20,39 @@ class FeedParser
         string $xml
     ): array {
 
-        $feed = new SimpleXMLElement($xml);
+        try {
+
+            $feed = new SimpleXMLElement($xml);
+
+        } catch (Throwable $e) {
+
+            logger()->error(
+                'Invalid XML feed',
+                [
+                    'source_id' => $source->id,
+                    'source_name' => $source->name,
+                    'error' => $e->getMessage(),
+                ]
+            );
+
+            return [];
+        }
+
+        if (
+            ! isset($feed->channel) ||
+            ! isset($feed->channel->item)
+        ) {
+
+            logger()->warning(
+                'Feed contains no RSS items',
+                [
+                    'source_id' => $source->id,
+                    'source_name' => $source->name,
+                ]
+            );
+
+            return [];
+        }
 
         $items = [];
 
@@ -39,7 +72,7 @@ class FeedParser
 
                 $externalId = md5(
                     (string) ($item->title ?? '')
-                    .(string) ($item->pubDate ?? '')
+                    . (string) ($item->pubDate ?? '')
                 );
             }
 
@@ -57,9 +90,9 @@ class FeedParser
                 content: (string) ($item->description ?? ''),
 
                 rawPayload: json_decode(
-                    json_encode($item),
-                    true
-                ) ?? [],
+                json_encode($item),
+                true
+            ) ?? [],
 
                 publishedAt: (string) ($item->pubDate ?? ''),
             );

@@ -94,6 +94,12 @@ new class extends Component {
                         ->trend?->score ?? 0,
                     2
                 ),
+            'momentum' => app(
+                \Domains\Trend\Services\MomentumService::class
+            )->calculate(
+                $this->topic->trend?->growth_rate ?? 0,
+                $this->topic->trend?->velocity ?? 0
+            ),
         ];
     }
 
@@ -134,6 +140,8 @@ new class extends Component {
 
                     2
                 ),
+
+
         ];
     }
 
@@ -263,6 +271,12 @@ new class extends Component {
             title="Opportunities"
             :value="$this->health['opportunities']"
             icon="o-light-bulb"
+        />
+
+        <x-stat
+            title="Momentum"
+            :value="$this->health['momentum']"
+            icon="o-bolt"
         />
 
     </div>

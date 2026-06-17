@@ -20,13 +20,25 @@ class CaptureTrendSnapshotsAction
 
                     foreach ($topics as $topic) {
 
+                        $lastSnapshot = $topic
+                            ->snapshots()
+                            ->latest('captured_at')
+                            ->first();
+
+                        if (
+                            $lastSnapshot &&
+                            $lastSnapshot->content_count === $topic->contents_count
+                        ) {
+                            continue;
+                        }
+
                         TrendSnapshot::create([
                             'topic_id' => $topic->id,
-
                             'content_count' => $topic->contents_count,
-
                             'captured_at' => now(),
                         ]);
+
+                        $created++;
 
                         $created++;
                     }
