@@ -1,6 +1,6 @@
 <?php
 
-use Domains\Topic\Services\TopicProfileService;
+use Domains\Topic\Services\StrategicSignalService;
 use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
 
@@ -43,16 +43,27 @@ Route::livewire(
 require __DIR__.'/settings.php';
 
 Route::get('/test', function (
-    TopicProfileService $service
+    StrategicSignalService $service
 ) {
 
     return Trend::query()
         ->with('topic')
         ->get()
-        ->map(
-            fn ($trend)
-            => $service
-                ->build($trend)
-                ->toArray()
-        );
+        ->map(function ($trend) use ($service) {
+
+            return [
+
+                'topic' => $trend->topic->name,
+
+                'signals' => collect(
+                    $service
+                        ->generate($trend)
+                )
+                    ->map(
+                        fn ($signal) => $signal->toArray()
+                    )
+                    ->values(),
+            ];
+        });
+
 });
