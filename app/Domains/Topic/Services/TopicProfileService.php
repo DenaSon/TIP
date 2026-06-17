@@ -36,40 +36,29 @@ readonly class TopicProfileService
 
         return new TopicProfileData(
 
-            topic:
-            $topic->name,
+            topic: $topic->name,
 
-            growthRate:
-            $metrics->growthRate,
+            growthRate: $metrics->growthRate,
 
-            velocity:
-            $metrics->velocity,
+            velocity: $metrics->velocity,
 
-            momentum:
-            $metrics->momentum,
+            momentum: $metrics->momentum,
 
-            authorityScore:
-            $metrics->authorityScore,
+            authorityScore: $metrics->authorityScore,
 
-            contentCount:
-            $metrics->contentCount,
+            contentCount: $metrics->contentCount,
 
-            clusterCount:
-            $metrics->clusterCount,
+            clusterCount: $metrics->clusterCount,
 
-            health:
-            $this->healthService
+            health: $this->healthService
                 ->calculate($metrics),
 
-            lifecycle:
-            $this->lifecycleService
+            lifecycle: $this->lifecycleService
                 ->calculate($metrics),
 
-            signals:
-            $signals,
+            signals: $signals,
 
-            narrative:
-            $narrative,
+            narrative: $narrative,
         );
     }
 }

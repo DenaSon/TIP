@@ -52,17 +52,13 @@ readonly class TopicHealthService
 
         return new TopicHealthData(
 
-            health:
-            $health,
+            health: $health,
 
-            growthRate:
-            $metrics->growthRate,
+            growthRate: $metrics->growthRate,
 
-            momentum:
-            $metrics->momentum,
+            momentum: $metrics->momentum,
 
-            opportunityScore:
-            $metrics->opportunityScore,
+            opportunityScore: $metrics->opportunityScore,
         );
     }
 }
