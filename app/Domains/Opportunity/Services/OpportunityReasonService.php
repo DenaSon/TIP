@@ -14,26 +14,26 @@ class OpportunityReasonService
 
         $reasons = [];
 
-        if ($trend->growth_rate > 50) {
+        if ($trend->growth_rate > 20) {
+
             $reasons[] =
-                'High growth rate detected';
+                'Growing topic activity';
         }
 
-        if ($trend->authority_score > 50) {
+        if ($trend->velocity > 0) {
+
             $reasons[] =
-                'Strong source authority';
+                'Positive growth velocity';
         }
 
-        if (
-            $topic->contents()->count() > 10
-        ) {
+        if ($trend->authority_score > 80) {
+
             $reasons[] =
-                'High content activity';
+                'Trusted source coverage';
         }
 
-        return implode(
-            ', ',
-            $reasons
-        );
+        return empty($reasons)
+            ? 'Stable topic activity'
+            : implode(', ', $reasons);
     }
 }
