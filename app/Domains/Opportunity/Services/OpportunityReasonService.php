@@ -2,38 +2,83 @@
 
 namespace Domains\Opportunity\Services;
 
-use Domains\Topic\Models\Topic;
+use Domains\Opportunity\Data\OpportunityReasonData;
 use Domains\Trend\Models\Trend;
 
-class OpportunityReasonService
+readonly class OpportunityReasonService
 {
+    public function __construct(
+        private OpportunityBreakdownService $breakdownService,
+    ) {}
+
+    /**
+     * @return OpportunityReasonData[]
+     */
     public function generate(
-        Topic $topic,
         Trend $trend
-    ): string {
+    ): array {
 
         $reasons = [];
 
-        if ($trend->growth_rate > 20) {
+        $breakdown =
+            $this->breakdownService
+                ->calculate($trend);
+
+        if ($breakdown->trendContribution >= 30) {
 
             $reasons[] =
-                'Growing topic activity';
+                new OpportunityReasonData(
+                    code: 'rapid_growth',
+                    title: 'Rapid Growth',
+                    description:
+                    'High trend contribution detected'
+                );
         }
 
-        if ($trend->velocity > 0) {
+        if ($breakdown->momentumContribution >= 20) {
 
             $reasons[] =
-                'Positive growth velocity';
+                new OpportunityReasonData(
+                    code: 'positive_momentum',
+                    title: 'Positive Momentum',
+                    description:
+                    'Strong momentum contribution detected'
+                );
         }
 
-        if ($trend->authority_score > 80) {
+        if ($breakdown->authorityContribution >= 7) {
 
             $reasons[] =
-                'Trusted source coverage';
+                new OpportunityReasonData(
+                    code: 'strong_authority',
+                    title: 'Strong Source Coverage',
+                    description:
+                    'Trusted sources are covering this topic'
+                );
         }
 
-        return empty($reasons)
-            ? 'Stable topic activity'
-            : implode(', ', $reasons);
+        if ($breakdown->opportunityScore >= 80) {
+
+            $reasons[] =
+                new OpportunityReasonData(
+                    code: 'high_opportunity',
+                    title: 'High Opportunity Score',
+                    description:
+                    'Overall opportunity score is exceptionally high'
+                );
+        }
+
+        if (empty($reasons)) {
+
+            $reasons[] =
+                new OpportunityReasonData(
+                    code: 'stable_activity',
+                    title: 'Stable Activity',
+                    description:
+                    'No strong opportunity signals detected'
+                );
+        }
+
+        return $reasons;
     }
 }

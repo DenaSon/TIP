@@ -1,5 +1,7 @@
 <?php
 
+use Domains\Topic\Services\TopicHealthService;
+use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/sources', 'pages::sources.index')
@@ -39,3 +41,17 @@ Route::livewire(
 )->name('contents.show');
 
 require __DIR__.'/settings.php';
+
+Route::get('/test', function (
+    TopicHealthService $service
+) {
+
+    $trend =
+        Trend::find(5);
+
+    return response()->json(
+        $service
+            ->calculate($trend)
+            ->toArray()
+    );
+});
