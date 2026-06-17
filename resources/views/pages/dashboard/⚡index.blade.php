@@ -33,6 +33,54 @@ new class extends Component {
         );
     }
 
+    public function getEmergingTopicsProperty(): Collection
+    {
+        $service = app(
+            \Domains\Trend\Services\EmergingScoreService::class
+        );
+
+        return Trend::query()
+            ->with('topic')
+            ->get()
+            ->sortByDesc(
+                fn ($trend) =>
+
+                $service->calculate(
+                    $trend->topic,
+                    $trend
+                )
+            )
+            ->take(10);
+    }
+
+    public function getMaxEmergingScoreProperty(): float
+    {
+        $service = app(
+            \Domains\Trend\Services\EmergingScoreService::class
+        );
+
+        return max(
+
+            (float)
+
+            $this->emergingTopics
+
+                ->map(
+
+                    fn ($trend) =>
+
+                    $service->calculate(
+                        $trend->topic,
+                        $trend
+                    )
+                )
+
+                ->max(),
+
+            1
+        );
+    }
+
 
     public function getStatsProperty(): array
     {
@@ -765,6 +813,86 @@ new class extends Component {
 
                             Velocity:
                             {{ number_format($trend->velocity,1) }}
+
+                        </div>
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+        </x-card>
+
+        <x-card
+            title="Emerging Topics"
+            class="shadow-lg"
+        >
+
+            @php
+
+                $service = app(
+                    \Domains\Trend\Services\EmergingScoreService::class
+                );
+
+            @endphp
+
+            <div class="space-y-3">
+
+                @foreach(
+                    $this->emergingTopics
+                    as $trend
+                )
+
+                    @php
+
+                        $score =
+                            $service->calculate(
+                                $trend->topic,
+                                $trend
+                            );
+
+                    @endphp
+
+                    <div
+                        class="p-3 rounded-xl bg-base-200"
+                    >
+
+                        <div
+                            class="flex justify-between items-center"
+                        >
+
+                    <span class="font-semibold">
+
+                        {{ $trend->topic?->name }}
+
+                    </span>
+
+                            <x-badge
+                                :value="number_format(
+                            $score,
+                            1
+                        )"
+                                class="badge-warning"
+                            />
+
+                        </div>
+
+                        <progress
+                            class="progress progress-warning w-full mt-2"
+                            value="{{ $score }}"
+                            max="{{ $this->maxEmergingScore }}"
+                        ></progress>
+
+                        <div
+                            class="text-xs opacity-70 mt-1"
+                        >
+
+                            Growth:
+                            {{ number_format(
+                                $trend->growth_rate,
+                                1
+                            ) }}
 
                         </div>
 

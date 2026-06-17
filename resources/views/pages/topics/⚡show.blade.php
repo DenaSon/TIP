@@ -4,6 +4,8 @@
 use Domains\Topic\Actions\RebuildTopicAction;
 use Domains\Topic\Models\Topic;
 use Domains\Trend\Models\TrendSnapshot;
+use Domains\Trend\Services\EmergingScoreService;
+use Domains\Trend\Services\MomentumService;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 use Domains\Topic\Actions\RefreshTopicMatchesAction;
@@ -95,11 +97,23 @@ new class extends Component {
                     2
                 ),
             'momentum' => app(
-                \Domains\Trend\Services\MomentumService::class
+                MomentumService::class
             )->calculate(
                 $this->topic->trend?->growth_rate ?? 0,
                 $this->topic->trend?->velocity ?? 0
             ),
+
+            'emerging_score' =>
+
+                app(
+                    EmergingScoreService::class
+                )
+                    ->calculate(
+
+                        $this->topic,
+
+                        $this->topic->trend
+                    ),
         ];
     }
 
@@ -277,6 +291,14 @@ new class extends Component {
             title="Momentum"
             :value="$this->health['momentum']"
             icon="o-bolt"
+        />
+
+        <x-stat
+            title="Emerging"
+            :value="number_format(
+        $this->health['emerging_score'],
+        2
+    )"
         />
 
     </div>
