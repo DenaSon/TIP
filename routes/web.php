@@ -1,6 +1,6 @@
 <?php
 
-use Domains\Topic\Services\StrategicSignalService;
+use Domains\Topic\Services\TopicProfileService;
 use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +35,7 @@ Route::livewire('topics/create', 'pages::topics.create');
 Route::livewire('topics/{topic}/edit', 'pages::topics.edit')->name('topics.edit');
 Route::livewire('topics/{topic}/keywords', 'pages::topics.keywords');
 Route::livewire('/topics/{topic}/show', 'pages::topics.show')->name('topics.show');
+
 Route::livewire(
     '/contents/{content}',
     'pages::contents.show'
@@ -43,27 +44,15 @@ Route::livewire(
 require __DIR__.'/settings.php';
 
 Route::get('/test', function (
-    StrategicSignalService $service
+    TopicProfileService $service
 ) {
 
     return Trend::query()
         ->with('topic')
         ->get()
-        ->map(function ($trend) use ($service) {
-
-            return [
-
-                'topic' => $trend->topic->name,
-
-                'signals' => collect(
-                    $service
-                        ->generate($trend)
-                )
-                    ->map(
-                        fn ($signal) => $signal->toArray()
-                    )
-                    ->values(),
-            ];
-        });
-
+        ->map(
+            fn ($trend) => $service
+                ->build($trend)
+                ->toArray()
+        );
 });

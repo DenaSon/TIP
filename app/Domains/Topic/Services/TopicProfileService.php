@@ -12,13 +12,15 @@ readonly class TopicProfileService
         private TopicHealthService $healthService,
         private TopicLifecycleService $lifecycleService,
         private MomentumService $momentumService,
+        private StrategicSignalService $signalService,
     ) {}
 
     public function build(
         Trend $trend
     ): TopicProfileData {
 
-        $topic = $trend->topic;
+        $topic =
+            $trend->topic;
 
         $contentCount =
             $topic
@@ -36,6 +38,10 @@ readonly class TopicProfileService
                     $trend->growth_rate,
                     $trend->velocity
                 );
+
+        $signals =
+            $this->signalService
+                ->generate($trend);
 
         return new TopicProfileData(
 
@@ -67,6 +73,9 @@ readonly class TopicProfileService
             lifecycle:
             $this->lifecycleService
                 ->calculate($trend),
+
+            signals:
+            $signals,
         );
     }
 }

@@ -1,9 +1,12 @@
 <?php
 
 namespace Domains\Topic\Data;
-
+use Domains\Topic\Data\StrategicSignalData;
 readonly class TopicProfileData
 {
+    /**
+     * @param StrategicSignalData[] $signals
+     */
     public function __construct(
 
         public string $topic,
@@ -26,6 +29,8 @@ readonly class TopicProfileData
         public TopicHealthData $health,
 
         public TopicLifecycleData $lifecycle,
+
+        public array $signals,
 
     ) {}
 
@@ -50,6 +55,12 @@ readonly class TopicProfileData
             'health' => $this->health->toArray(),
 
             'lifecycle' => $this->lifecycle->toArray(),
+
+            'signals' => array_map(
+                fn (StrategicSignalData $signal)
+                => $signal->toArray(),
+                $this->signals
+            ),
         ];
     }
 }
