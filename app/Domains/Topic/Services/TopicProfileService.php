@@ -4,26 +4,68 @@ namespace Domains\Topic\Services;
 
 use Domains\Topic\Data\TopicProfileData;
 use Domains\Trend\Models\Trend;
+use Domains\Trend\Services\MomentumService;
 
 readonly class TopicProfileService
 {
     public function __construct(
         private TopicHealthService $healthService,
         private TopicLifecycleService $lifecycleService,
+        private MomentumService $momentumService,
     ) {}
 
     public function build(
         Trend $trend
     ): TopicProfileData {
 
+        $topic = $trend->topic;
+
+        $contentCount =
+            $topic
+                ->contents()
+                ->count();
+
+        $clusterCount =
+            $topic
+                ->clusters()
+                ->count();
+
+        $momentum =
+            $this->momentumService
+                ->calculate(
+                    $trend->growth_rate,
+                    $trend->velocity
+                );
+
         return new TopicProfileData(
 
-            topic: $trend->topic->name,
+            topic:
+            $topic->name,
 
-            health: $this->healthService
+            growthRate:
+            $trend->growth_rate,
+
+            velocity:
+            $trend->velocity,
+
+            momentum:
+            $momentum,
+
+            authorityScore:
+            $trend->authority_score,
+
+            contentCount:
+            $contentCount,
+
+            clusterCount:
+            $clusterCount,
+
+            health:
+            $this->healthService
                 ->calculate($trend),
 
-            lifecycle: $this->lifecycleService
+            lifecycle:
+            $this->lifecycleService
                 ->calculate($trend),
         );
     }

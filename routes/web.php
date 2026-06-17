@@ -49,8 +49,10 @@ Route::get('/test', function (
     return Trend::query()
         ->with('topic')
         ->get()
-        ->map(fn ($trend) => $service
-            ->build($trend)
-            ->toArray()
+        ->map(
+            fn ($trend)
+            => $service
+                ->build($trend)
+                ->toArray()
         );
 });
