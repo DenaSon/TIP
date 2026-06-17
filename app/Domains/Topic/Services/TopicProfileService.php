@@ -13,6 +13,7 @@ readonly class TopicProfileService
         private TopicLifecycleService $lifecycleService,
         private MomentumService $momentumService,
         private StrategicSignalService $signalService,
+        private TopicNarrativeService $narrativeService,
     ) {}
 
     public function build(
@@ -43,39 +44,35 @@ readonly class TopicProfileService
             $this->signalService
                 ->generate($trend);
 
+        $narrative =
+            $this->narrativeService
+                ->generate($trend);
+
         return new TopicProfileData(
 
-            topic:
-            $topic->name,
+            topic: $topic->name,
 
-            growthRate:
-            $trend->growth_rate,
+            growthRate: $trend->growth_rate,
 
-            velocity:
-            $trend->velocity,
+            velocity: $trend->velocity,
 
-            momentum:
-            $momentum,
+            momentum: $momentum,
 
-            authorityScore:
-            $trend->authority_score,
+            authorityScore: $trend->authority_score,
 
-            contentCount:
-            $contentCount,
+            contentCount: $contentCount,
 
-            clusterCount:
-            $clusterCount,
+            clusterCount: $clusterCount,
 
-            health:
-            $this->healthService
+            health: $this->healthService
                 ->calculate($trend),
 
-            lifecycle:
-            $this->lifecycleService
+            lifecycle: $this->lifecycleService
                 ->calculate($trend),
 
-            signals:
-            $signals,
+            signals: $signals,
+
+            narrative: $narrative,
         );
     }
 }

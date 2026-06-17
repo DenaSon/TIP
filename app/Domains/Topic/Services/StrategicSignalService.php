@@ -48,14 +48,11 @@ readonly class StrategicSignalService
             $signals[] =
                 new StrategicSignalData(
 
-                    signal:
-                    StrategicSignal::RapidGrowth,
+                    signal: StrategicSignal::RapidGrowth,
 
-                    title:
-                    'Rapid Growth',
+                    title: 'Rapid Growth',
 
-                    description:
-                    'Topic growth rate is significantly above normal.'
+                    description: 'Topic growth rate is significantly above normal.'
                 );
         }
 
@@ -70,14 +67,11 @@ readonly class StrategicSignalService
             $signals[] =
                 new StrategicSignalData(
 
-                    signal:
-                    StrategicSignal::StrongMomentum,
+                    signal: StrategicSignal::StrongMomentum,
 
-                    title:
-                    'Strong Momentum',
+                    title: 'Strong Momentum',
 
-                    description:
-                    'Momentum remains strongly positive.'
+                    description: 'Momentum remains strongly positive.'
                 );
         }
 
@@ -92,14 +86,11 @@ readonly class StrategicSignalService
             $signals[] =
                 new StrategicSignalData(
 
-                    signal:
-                    StrategicSignal::StrongAuthority,
+                    signal: StrategicSignal::StrongAuthority,
 
-                    title:
-                    'Strong Authority',
+                    title: 'Strong Authority',
 
-                    description:
-                    'Trusted sources are actively covering this topic.'
+                    description: 'Trusted sources are actively covering this topic.'
                 );
         }
 
@@ -118,14 +109,11 @@ readonly class StrategicSignalService
             $signals[] =
                 new StrategicSignalData(
 
-                    signal:
-                    StrategicSignal::EarlyOpportunity,
+                    signal: StrategicSignal::EarlyOpportunity,
 
-                    title:
-                    'Early Opportunity',
+                    title: 'Early Opportunity',
 
-                    description:
-                    'Growth is accelerating while competition remains low.'
+                    description: 'Growth is accelerating while competition remains low.'
                 );
         }
 

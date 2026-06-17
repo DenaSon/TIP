@@ -30,8 +30,7 @@ readonly class OpportunityReasonService
                 new OpportunityReasonData(
                     code: 'rapid_growth',
                     title: 'Rapid Growth',
-                    description:
-                    'High trend contribution detected'
+                    description: 'High trend contribution detected'
                 );
         }
 
@@ -41,8 +40,7 @@ readonly class OpportunityReasonService
                 new OpportunityReasonData(
                     code: 'positive_momentum',
                     title: 'Positive Momentum',
-                    description:
-                    'Strong momentum contribution detected'
+                    description: 'Strong momentum contribution detected'
                 );
         }
 
@@ -52,8 +50,7 @@ readonly class OpportunityReasonService
                 new OpportunityReasonData(
                     code: 'strong_authority',
                     title: 'Strong Source Coverage',
-                    description:
-                    'Trusted sources are covering this topic'
+                    description: 'Trusted sources are covering this topic'
                 );
         }
 
@@ -63,8 +60,7 @@ readonly class OpportunityReasonService
                 new OpportunityReasonData(
                     code: 'high_opportunity',
                     title: 'High Opportunity Score',
-                    description:
-                    'Overall opportunity score is exceptionally high'
+                    description: 'Overall opportunity score is exceptionally high'
                 );
         }
 
@@ -74,8 +70,7 @@ readonly class OpportunityReasonService
                 new OpportunityReasonData(
                     code: 'stable_activity',
                     title: 'Stable Activity',
-                    description:
-                    'No strong opportunity signals detected'
+                    description: 'No strong opportunity signals detected'
                 );
         }
 

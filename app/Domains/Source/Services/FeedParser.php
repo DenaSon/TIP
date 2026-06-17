@@ -107,7 +107,7 @@ class FeedParser
 
                 $externalId = md5(
                     (string) ($item->title ?? '')
-                    . (string) ($item->pubDate ?? '')
+                    .(string) ($item->pubDate ?? '')
                 );
             }
 
@@ -125,9 +125,9 @@ class FeedParser
                 content: (string) ($item->description ?? ''),
 
                 rawPayload: json_decode(
-                json_encode($item),
-                true
-            ) ?? [],
+                    json_encode($item),
+                    true
+                ) ?? [],
 
                 publishedAt: (string) ($item->pubDate ?? ''),
             );
@@ -167,7 +167,7 @@ class FeedParser
 
                 $externalId = md5(
                     (string) ($entry->title ?? '')
-                    . (string) ($entry->updated ?? '')
+                    .(string) ($entry->updated ?? '')
                 );
             }
 
@@ -200,9 +200,9 @@ class FeedParser
                 content: $content,
 
                 rawPayload: json_decode(
-                json_encode($entry),
-                true
-            ) ?? [],
+                    json_encode($entry),
+                    true
+                ) ?? [],
 
                 publishedAt: $publishedAt,
             );

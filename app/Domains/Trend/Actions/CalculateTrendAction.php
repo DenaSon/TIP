@@ -30,7 +30,6 @@ readonly class CalculateTrendAction
             $this->service
                 ->calculateAuthority($topic);
 
-
         $velocity =
             $this->velocityCalculator
                 ->calculate($topic);
@@ -66,6 +65,4 @@ readonly class CalculateTrendAction
                 ]
             );
     }
-
-
 }

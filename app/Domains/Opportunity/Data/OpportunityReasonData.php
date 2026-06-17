@@ -10,7 +10,6 @@ readonly class OpportunityReasonData
         public string $description,
     ) {}
 
-
     public function toArray(): array
     {
         return [

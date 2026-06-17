@@ -5,7 +5,7 @@ namespace Domains\Topic\Data;
 readonly class TopicNarrativeData
 {
     /**
-     * @param string[] $insights
+     * @param  string[]  $insights
      */
     public function __construct(
         public string $summary,

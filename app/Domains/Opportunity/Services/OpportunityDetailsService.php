@@ -30,17 +30,13 @@ readonly class OpportunityDetailsService
                 ->generate($trend);
 
         return new OpportunityDetailsData(
-            opportunityScore:
-            $breakdown->opportunityScore,
+            opportunityScore: $breakdown->opportunityScore,
 
-            breakdown:
-            $breakdown,
+            breakdown: $breakdown,
 
-            confidence:
-            $confidence,
+            confidence: $confidence,
 
-            reasons:
-            $reasons,
+            reasons: $reasons,
         );
     }
 }
