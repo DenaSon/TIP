@@ -4,12 +4,18 @@ namespace Domains\Trend\Actions;
 
 use Domains\Topic\Models\Topic;
 use Domains\Trend\Models\Trend;
+use Domains\Trend\Services\AccelerationCalculator;
 use Domains\Trend\Services\TrendScoreService;
+use Domains\Trend\Services\VelocityCalculator;
 
 readonly class CalculateTrendAction
 {
     public function __construct(
-        private TrendScoreService $service
+        private TrendScoreService $service,
+
+        private VelocityCalculator $velocityCalculator,
+
+        private AccelerationCalculator $accelerationCalculator,
     ) {}
 
     public function execute(
@@ -29,6 +35,14 @@ readonly class CalculateTrendAction
             authorityScore: $authorityScore
         );
 
+        $velocity =
+            $this->velocityCalculator
+                ->calculate($topic);
+
+        $acceleration =
+            $this->accelerationCalculator
+                ->calculate($topic);
+
         Trend::query()
             ->updateOrCreate(
                 [
@@ -36,6 +50,10 @@ readonly class CalculateTrendAction
                 ],
                 [
                     'growth_rate' => $growthRate,
+
+                    'velocity' => $velocity,
+
+                    'acceleration' => $acceleration,
 
                     'authority_score' => $authorityScore,
 

@@ -13,17 +13,28 @@ class Trend extends Model
     protected $fillable = [
         'topic_id',
         'growth_rate',
+        'velocity',
+        'acceleration',
         'authority_score',
         'score',
         'calculated_at',
+
     ];
 
     protected function casts(): array
     {
         return [
+
             'growth_rate' => 'float',
+
+            'velocity' => 'float',
+
+            'acceleration' => 'float',
+
             'authority_score' => 'float',
+
             'score' => 'float',
+
             'calculated_at' => 'datetime',
         ];
     }
@@ -32,13 +43,6 @@ class Trend extends Model
     {
         return $this->belongsTo(
             Topic::class
-        );
-    }
-
-    public function trend()
-    {
-        return $this->hasOne(
-            Trend::class
         );
     }
 
