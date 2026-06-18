@@ -150,7 +150,7 @@ new class extends Component {
 
             @scope('cell_name', $topic)
 
-            <x-button link="{{ route('topics.show',['topic' => $topic->id]) }}"
+            <x-button link="{{ route('core.topics.show',['topic' => $topic->id]) }}"
                 :label="$topic->name"
                 class="btn btn-link"
 

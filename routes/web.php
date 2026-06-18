@@ -1,58 +1,43 @@
 <?php
 
-use Domains\Topic\Services\TopicMetricsService;
-use Domains\Trend\Models\Trend;
 use Illuminate\Support\Facades\Route;
 
-Route::livewire('/sources', 'pages::sources.index')
-    ->name('sources.index');
+Route::prefix('core')
+    ->as('core.')
+    ->group(function () {
 
-Route::livewire(
-    '/contents',
-    'pages::contents.index'
-)->name('contents.index');
+        Route::livewire('/dashboard', 'pages::core.dashboard.index')
+            ->name('dashboard.index');
 
-Route::livewire(
-    '/topics',
-    'pages::topics.index'
-)->name('topics.index');
+        Route::livewire('/sources', 'pages::core.sources.index')
+            ->name('sources.index');
 
-Route::livewire(
-    '/trends',
-    'pages::trends.index'
-)->name('trends.index');
+        Route::livewire('/contents', 'pages::core.contents.index')
+            ->name('contents.index');
 
-Route::livewire(
-    '/dashboard',
-    'pages::dashboard.index'
-)->name('dashboard.index');
-Route::livewire(
-    '/clusters',
-    'pages::clusters.index'
-)->name('clusters.index');
+        Route::livewire('/contents/{content}', 'pages::core.contents.show')
+            ->name('contents.show');
 
-Route::livewire('topics/create', 'pages::topics.create');
-Route::livewire('topics/{topic}/edit', 'pages::topics.edit')->name('topics.edit');
-Route::livewire('topics/{topic}/keywords', 'pages::topics.keywords');
-Route::livewire('/topics/{topic}/show', 'pages::topics.show')->name('topics.show');
+        Route::livewire('/topics', 'pages::core.topics.index')
+            ->name('topics.index');
 
-Route::livewire(
-    '/contents/{content}',
-    'pages::contents.show'
-)->name('contents.show');
+        Route::livewire('/topics/create', 'pages::core.topics.create')
+            ->name('topics.create');
+
+        Route::livewire('/topics/{topic}/show', 'pages::core.topics.show')
+            ->name('topics.show');
+
+        Route::livewire('/topics/{topic}/edit', 'pages::core.topics.edit')
+            ->name('topics.edit');
+
+        Route::livewire('/topics/{topic}/keywords', 'pages::core.topics.keywords')
+            ->name('topics.keywords');
+
+        Route::livewire('/clusters', 'pages::core.clusters.index')
+            ->name('clusters.index');
+
+        Route::livewire('/trends', 'pages::core.trends.index')
+            ->name('trends.index');
+    });
 
 require __DIR__.'/settings.php';
-
-Route::get('/test', function (
-    TopicMetricsService $service
-) {
-
-    return Trend::query()
-        ->with('topic')
-        ->get()
-        ->map(
-            fn ($trend) => $service
-                ->build($trend)
-                ->toArray()
-        );
-});

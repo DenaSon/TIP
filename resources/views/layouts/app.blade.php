@@ -50,12 +50,12 @@
 
         {{-- Activates the menu item when a route matches the `link` property --}}
         <x-menu activate-by-route>
-            <x-menu-item title="Dashboard" icon="o-home" link="{{ route('dashboard.index') }}" />
-            <x-menu-item title="Sources" icon="o-home" link="{{ route('sources.index') }}" />
-            <x-menu-item title="Contents" icon="o-envelope" link="{{ route('contents.index') }}" />
-            <x-menu-item title="Topics" icon="o-envelope" link="{{ route('topics.index') }}" />
-            <x-menu-item title="Trends" icon="o-envelope" link="{{ route('trends.index') }}" />
-            <x-menu-item title="Clusters" icon="o-envelope" link="{{ route('clusters.index') }}" />
+            <x-menu-item title="Dashboard" icon="o-home" link="{{ route('core.dashboard.index') }}" />
+            <x-menu-item title="Sources" icon="o-home" link="{{ route('core.sources.index') }}" />
+            <x-menu-item title="Contents" icon="o-envelope" link="{{ route('core.contents.index') }}" />
+            <x-menu-item title="Topics" icon="o-envelope" link="{{ route('core.topics.index') }}" />
+            <x-menu-item title="Trends" icon="o-envelope" link="{{ route('core.trends.index') }}" />
+            <x-menu-item title="Clusters" icon="o-envelope" link="{{ route('core.clusters.index') }}" />
 {{--            <x-menu-sub title="Settings" icon="o-cog-6-tooth">--}}
 {{--                <x-menu-item title="Wifi" icon="o-wifi" link="####" />--}}
 {{--                <x-menu-item title="Archives" icon="o-archive-box" link="####" />--}}
