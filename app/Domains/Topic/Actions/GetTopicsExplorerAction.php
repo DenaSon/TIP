@@ -4,6 +4,7 @@ namespace Domains\Topic\Actions;
 
 use Domains\Topic\Services\TopicProfileService;
 use Domains\Trend\Models\Trend;
+use Illuminate\Support\Collection;
 
 readonly class GetTopicsExplorerAction
 {
@@ -11,16 +12,18 @@ readonly class GetTopicsExplorerAction
         private TopicProfileService $profileService,
     ) {}
 
-    public function execute()
+    public function execute(): Collection
     {
         return Trend::query()
             ->with('topic')
-            ->orderByDesc('score')
             ->get()
             ->map(
-                fn (Trend $trend) => $this
-                    ->profileService
+                fn (Trend $trend) => $this->profileService
                     ->build($trend)
-            );
+            )
+            ->sortByDesc(
+                fn ($profile) => $profile->momentum
+            )
+            ->values();
     }
 }
