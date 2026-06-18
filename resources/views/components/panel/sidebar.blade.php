@@ -100,26 +100,26 @@
 
             </li>
 
-            <li>
+{{--            <li>--}}
 
-                <a
-                    wire:navigate
-                    wire:current="menu-active"
-                    href="{{ route('panel.topics.index') }}"
-                >
+{{--                <a--}}
+{{--                    wire:navigate--}}
+{{--                    wire:current="menu-active"--}}
+{{--                    href="{{ route('panel.topics.index') }}"--}}
+{{--                >--}}
 
-                    <x-icon
-                        name="o-circle-stack"
-                        class="w-5 h-5"
-                    />
+{{--                    <x-icon--}}
+{{--                        name="o-circle-stack"--}}
+{{--                        class="w-5 h-5"--}}
+{{--                    />--}}
 
-                    <span>
-                        موضوعات
-                    </span>
+{{--                    <span>--}}
+{{--                        موضوعات--}}
+{{--                    </span>--}}
 
-                </a>
+{{--                </a>--}}
 
-            </li>
+{{--            </li>--}}
 
             <li>
 

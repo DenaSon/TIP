@@ -61,9 +61,9 @@ Route::prefix('panel')
         )->name('opportunities.index');
 
         Route::livewire(
-            '/topics',
-            'pages::panel.topics.index'
-        )->name('topics.index');
+            '/trends',
+            'pages::panel.trends.index'
+        )->name('trends.index');
 
         Route::livewire(
             '/topics',
