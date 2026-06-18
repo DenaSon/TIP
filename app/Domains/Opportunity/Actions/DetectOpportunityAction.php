@@ -24,17 +24,18 @@ readonly class DetectOpportunityAction
             return;
         }
 
-        $score = $this->scoreService
-            ->calculate(
-                $topic,
-                $trend
-            );
+        $score =
+            $this->scoreService
+                ->calculate($trend);
 
-        $reason = $this->reasonService
-            ->generate(
-                $topic,
-                $trend
-            );
+        $reasons =
+            $this->reasonService
+                ->generate($trend);
+
+        $reason =
+            collect($reasons)
+                ->pluck('title')
+                ->implode(', ');
 
         Opportunity::query()
             ->updateOrCreate(
