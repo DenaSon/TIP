@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::prefix('panel')
+    ->as('panel.')
+    ->group(function () {});
+
 Route::prefix('core')
     ->as('core.')
     ->group(function () {
@@ -39,5 +43,41 @@ Route::prefix('core')
         Route::livewire('/trends', 'pages::core.trends.index')
             ->name('trends.index');
     });
+
+
+
+Route::prefix('panel')
+    ->as('panel.')
+    ->group(function () {
+
+        Route::livewire(
+            '/opportunities/{topic}',
+            'pages::panel.opportunities.show'
+        )->name('opportunities.show');
+
+        Route::livewire(
+            '/opportunities',
+            'pages::panel.opportunities.index'
+        )->name('opportunities.index');
+
+        Route::livewire(
+            '/topics',
+            'pages::panel.topics.index'
+        )->name('topics.index');
+
+        Route::livewire(
+            '/topics',
+            'pages::panel.topics.index'
+        )->name('topics.index');
+
+        Route::livewire(
+            '/trends',
+            'pages::panel.trends.index'
+        )->name('trends.index');
+
+    });
+
+
+
 
 require __DIR__.'/settings.php';

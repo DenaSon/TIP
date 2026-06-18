@@ -28,11 +28,11 @@ readonly class TopicProfileService
 
         $signals =
             $this->signalService
-                ->generate($trend);
+                ->generate($metrics);
 
         $narrative =
             $this->narrativeService
-                ->generate($trend);
+                ->generate($metrics);
 
         return new TopicProfileData(
 
@@ -45,6 +45,8 @@ readonly class TopicProfileService
             momentum: $metrics->momentum,
 
             authorityScore: $metrics->authorityScore,
+
+            opportunityScore: $metrics->opportunityScore,
 
             contentCount: $metrics->contentCount,
 

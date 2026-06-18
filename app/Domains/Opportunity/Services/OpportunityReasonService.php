@@ -3,6 +3,7 @@
 namespace Domains\Opportunity\Services;
 
 use Domains\Opportunity\Data\OpportunityReasonData;
+use Domains\Opportunity\Enums\OpportunityReason;
 use Domains\Trend\Models\Trend;
 
 readonly class OpportunityReasonService
@@ -26,51 +27,66 @@ readonly class OpportunityReasonService
 
         if ($breakdown->trendContribution >= 30) {
 
+            $reason =
+                OpportunityReason::RapidGrowth;
+
             $reasons[] =
                 new OpportunityReasonData(
-                    code: 'rapid_growth',
-                    title: 'Rapid Growth',
-                    description: 'High trend contribution detected'
+                    code: $reason->value,
+                    title: $reason->title(),
+                    description: $reason->description(),
                 );
         }
 
         if ($breakdown->momentumContribution >= 20) {
 
+            $reason =
+                OpportunityReason::PositiveMomentum;
+
             $reasons[] =
                 new OpportunityReasonData(
-                    code: 'positive_momentum',
-                    title: 'Positive Momentum',
-                    description: 'Strong momentum contribution detected'
+                    code: $reason->value,
+                    title: $reason->title(),
+                    description: $reason->description(),
                 );
         }
 
         if ($breakdown->authorityContribution >= 7) {
 
+            $reason =
+                OpportunityReason::StrongAuthority;
+
             $reasons[] =
                 new OpportunityReasonData(
-                    code: 'strong_authority',
-                    title: 'Strong Source Coverage',
-                    description: 'Trusted sources are covering this topic'
+                    code: $reason->value,
+                    title: $reason->title(),
+                    description: $reason->description(),
                 );
         }
 
         if ($breakdown->opportunityScore >= 80) {
 
+            $reason =
+                OpportunityReason::HighOpportunity;
+
             $reasons[] =
                 new OpportunityReasonData(
-                    code: 'high_opportunity',
-                    title: 'High Opportunity Score',
-                    description: 'Overall opportunity score is exceptionally high'
+                    code: $reason->value,
+                    title: $reason->title(),
+                    description: $reason->description(),
                 );
         }
 
         if (empty($reasons)) {
 
+            $reason =
+                OpportunityReason::StableActivity;
+
             $reasons[] =
                 new OpportunityReasonData(
-                    code: 'stable_activity',
-                    title: 'Stable Activity',
-                    description: 'No strong opportunity signals detected'
+                    code: $reason->value,
+                    title: $reason->title(),
+                    description: $reason->description(),
                 );
         }
 

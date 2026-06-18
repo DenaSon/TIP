@@ -4,6 +4,7 @@ namespace Domains\Topic\Services;
 
 use Domains\Topic\Data\TopicMetricsData;
 use Domains\Topic\Data\TopicNarrativeData;
+use Domains\Topic\Enums\StrategicSignal;
 use Domains\Topic\Enums\TopicLifecycle;
 
 readonly class TopicNarrativeService
@@ -25,65 +26,63 @@ readonly class TopicNarrativeService
 
         /*
         |--------------------------------------------------------------------------
-        | Lifecycle
+        | Lifecycle Narrative
         |--------------------------------------------------------------------------
         */
 
-        if (
-            $lifecycle->lifecycle
-            === TopicLifecycle::Emerging
-        ) {
+        match ($lifecycle->lifecycle) {
 
-            $insights[] =
-                'This topic is emerging rapidly.';
-        }
+            TopicLifecycle::Emerging
+            => $insights[] =
+                'این موضوع با سرعت در حال ظهور است.',
 
-        if (
-            $lifecycle->lifecycle
-            === TopicLifecycle::Growing
-        ) {
+            TopicLifecycle::Growing
+            => $insights[] =
+                'این موضوع همچنان در حال جذب توجه و رشد است.',
 
-            $insights[] =
-                'This topic continues to gain traction.';
-        }
+            TopicLifecycle::Stable
+            => $insights[] =
+                'این موضوع به مرحله پایداری رسیده است.',
+
+            TopicLifecycle::Saturated
+            => $insights[] =
+                'رشد موضوع به مرحله اشباع نزدیک شده است.',
+
+            TopicLifecycle::Declining
+            => $insights[] =
+                'توجه به این موضوع در حال کاهش است.',
+        };
 
         /*
         |--------------------------------------------------------------------------
-        | Signals
+        | Signal Narrative
         |--------------------------------------------------------------------------
         */
 
         foreach (
             $this->signalService
-                ->generate($metrics) as $signal
+                ->generate($metrics)
+            as $signal
         ) {
 
-            switch ($signal->signal->value) {
+            match ($signal->signal) {
 
-                case 'rapid_growth':
+                StrategicSignal::RapidGrowth
+                => $insights[] =
+                    'سرعت رشد این موضوع به شکل محسوسی افزایش یافته است.',
 
-                    $insights[] =
-                        'Growth has accelerated significantly.';
-                    break;
+                StrategicSignal::StrongMomentum
+                => $insights[] =
+                    'مومنتوم رشد همچنان قدرتمند و مثبت باقی مانده است.',
 
-                case 'strong_momentum':
+                StrategicSignal::StrongAuthority
+                => $insights[] =
+                    'منابع معتبر و اثرگذار به صورت فعال این موضوع را پوشش می‌دهند.',
 
-                    $insights[] =
-                        'Momentum remains strongly positive.';
-                    break;
-
-                case 'strong_authority':
-
-                    $insights[] =
-                        'Trusted sources are actively covering this topic.';
-                    break;
-
-                case 'early_opportunity':
-
-                    $insights[] =
-                        'Competition remains relatively low.';
-                    break;
-            }
+                StrategicSignal::EarlyOpportunity
+                => $insights[] =
+                    'با وجود رشد مناسب، سطح رقابت هنوز پایین است.',
+            };
         }
 
         $summary =

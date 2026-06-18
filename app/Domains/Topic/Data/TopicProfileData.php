@@ -5,13 +5,14 @@ namespace Domains\Topic\Data;
 readonly class TopicProfileData
 {
     /**
-     * @param  StrategicSignalData[]  $signals
+     * @param StrategicSignalData[] $signals
      */
     public function __construct(
 
         public string $topic,
 
         // Core Metrics
+
         public float $growthRate,
 
         public float $velocity,
@@ -20,12 +21,16 @@ readonly class TopicProfileData
 
         public float $authorityScore,
 
+        public float $opportunityScore,
+
         // Topic Statistics
+
         public int $contentCount,
 
         public int $clusterCount,
 
         // Intelligence
+
         public TopicHealthData $health,
 
         public TopicLifecycleData $lifecycle,
@@ -50,6 +55,8 @@ readonly class TopicProfileData
 
             'authority_score' => $this->authorityScore,
 
+            'opportunity_score' => $this->opportunityScore,
+
             'content_count' => $this->contentCount,
 
             'cluster_count' => $this->clusterCount,
@@ -59,7 +66,8 @@ readonly class TopicProfileData
             'lifecycle' => $this->lifecycle->toArray(),
 
             'signals' => array_map(
-                fn (StrategicSignalData $signal) => $signal->toArray(),
+                fn (StrategicSignalData $signal)
+                => $signal->toArray(),
                 $this->signals
             ),
 

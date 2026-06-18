@@ -25,14 +25,17 @@ readonly class StrategicSignalService
 
         if ($metrics->growthRate >= 50) {
 
+            $signal =
+                StrategicSignal::RapidGrowth;
+
             $signals[] =
                 new StrategicSignalData(
 
-                    signal: StrategicSignal::RapidGrowth,
+                    signal: $signal,
 
-                    title: 'Rapid Growth',
+                    title: $signal->label(),
 
-                    description: 'Topic growth rate is significantly above normal.'
+                    description: $signal->description(),
                 );
         }
 
@@ -44,14 +47,17 @@ readonly class StrategicSignalService
 
         if ($metrics->momentum >= 50) {
 
+            $signal =
+                StrategicSignal::StrongMomentum;
+
             $signals[] =
                 new StrategicSignalData(
 
-                    signal: StrategicSignal::StrongMomentum,
+                    signal: $signal,
 
-                    title: 'Strong Momentum',
+                    title: $signal->label(),
 
-                    description: 'Momentum remains strongly positive.'
+                    description: $signal->description(),
                 );
         }
 
@@ -63,14 +69,17 @@ readonly class StrategicSignalService
 
         if ($metrics->authorityScore >= 85) {
 
+            $signal =
+                StrategicSignal::StrongAuthority;
+
             $signals[] =
                 new StrategicSignalData(
 
-                    signal: StrategicSignal::StrongAuthority,
+                    signal: $signal,
 
-                    title: 'Strong Authority',
+                    title: $signal->label(),
 
-                    description: 'Trusted sources are actively covering this topic.'
+                    description: $signal->description(),
                 );
         }
 
@@ -86,14 +95,17 @@ readonly class StrategicSignalService
             $metrics->contentCount < 50
         ) {
 
+            $signal =
+                StrategicSignal::EarlyOpportunity;
+
             $signals[] =
                 new StrategicSignalData(
 
-                    signal: StrategicSignal::EarlyOpportunity,
+                    signal: $signal,
 
-                    title: 'Early Opportunity',
+                    title: $signal->label(),
 
-                    description: 'Growth is accelerating while competition remains low.'
+                    description: $signal->description(),
                 );
         }
 
