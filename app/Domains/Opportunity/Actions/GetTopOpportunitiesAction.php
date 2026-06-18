@@ -13,29 +13,20 @@ readonly class GetTopOpportunitiesAction
     ) {}
 
     public function execute(
-        int $limit = 20,
-    ): Collection {
-
+        int $limit = 9
+    ): \Illuminate\Database\Eloquent\Collection|Collection {
         return Trend::query()
             ->with('topic')
             ->orderByDesc('score')
             ->limit($limit)
             ->get()
-            ->map(function (
-                Trend $trend
-            ) {
-
-                return (object) [
-
+            ->map(
+                fn (Trend $trend) => (object) [
                     'topic' => $trend->topic,
-
-                    'trend' => $trend,
-
-                    'details' => $this
-                        ->detailsService
+                    'details' => $this->detailsService
                         ->build($trend),
+                ]
+            );
 
-                ];
-            });
     }
 }

@@ -4,6 +4,7 @@ use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 
+use Domains\Trend\Models\Trend;
 use Domains\Opportunity\Actions\GetTopOpportunitiesAction;
 
 new #[Layout('layouts::panel', [
@@ -11,140 +12,148 @@ new #[Layout('layouts::panel', [
 ])]
 class extends Component
 {
+    public int $limit = 9;
+
+    public bool $hasMore = true;
+
+    public function mount(): void
+    {
+        $this->updateHasMore();
+    }
+
+    public function loadMore(): void
+    {
+        if (! $this->hasMore) {
+            return;
+        }
+
+        $this->limit += 9;
+
+        $this->updateHasMore();
+    }
+
+    protected function updateHasMore(): void
+    {
+        $this->hasMore =
+            Trend::count() > $this->limit;
+    }
+
     #[Computed]
     public function opportunities()
     {
         return app(
             GetTopOpportunitiesAction::class
-        )->execute();
+        )->execute(
+            limit: $this->limit
+        );
     }
 };
 
 ?>
 
+
+
 <div>
 
-    <x-panel.page-header
-        title="فرصت‌ها"
-        description="بهترین فرصت‌های شناسایی شده توسط موتور تحلیل TIP"
-    />
-
     @php
-        $topOpportunity = $this->opportunities->first();
+
+        $opportunities =
+            $this->opportunities;
+
+        $topOpportunity =
+            $opportunities->first();
+
     @endphp
 
-    {{-- Hero Section --}}
-    <div
-        class="
-            hero
-            bg-base-100
-            border
-            border-base-300
-            rounded-box
-            mb-8
-        "
-    >
+    @if($opportunities->isNotEmpty())
 
+        {{-- Hero --}}
         <div
             class="
-                hero-content
-                w-full
-                justify-between
-                flex-col
-                lg:flex-row
+                card
+                bg-base-100
+                border
+                border-base-300
+                shadow-sm
+                mb-8
             "
         >
 
-            <div>
+            <div class="card-body">
 
                 <div
                     class="
-                        badge
-                        badge-primary
-                        mb-3
-                    "
-                >
-                    بهترین فرصت فعلی
-                </div>
-
-                <h2
-                    class="
-                        text-3xl
-                        font-bold
-                    "
-                >
-                    {{ $topOpportunity?->topic->name }}
-                </h2>
-
-                <p
-                    class="
-                        mt-2
-                        text-base-content/70
-                    "
-                >
-                    فرصت شناسایی شده توسط موتور تحلیل TIP
-                </p>
-
-            </div>
-
-            <div
-                class="
-                    flex
-                    gap-6
-                "
-            >
-
-                <div
-                    class="
-                        text-center
+                        flex
+                        flex-col
+                        lg:flex-row
+                        lg:items-center
+                        lg:justify-between
+                        gap-4
                     "
                 >
 
-                    <div
-                        class="
-                            text-4xl
-                            font-black
-                            text-primary
-                        "
-                    >
-                        {{ round(
-                            $topOpportunity?->details->opportunityScore ?? 0
-                        ) }}
+                    <div>
+
+                        <div
+                            class="
+                                badge
+                                badge-outline
+                                badge-primary
+                                mb-3
+                            "
+                        >
+                            بهترین فرصت فعلی
+                        </div>
+
+                        <h2
+                            class="
+                                text-4xl
+                                font-black
+                            "
+                        >
+                            {{ $topOpportunity->topic->name }}
+                        </h2>
+
+                        <p
+                            class="
+                                mt-2
+                                text-base-content/70
+                            "
+                        >
+                            مهم‌ترین فرصت شناسایی شده توسط موتور تحلیل TIP
+                        </p>
+
                     </div>
 
                     <div
                         class="
-                            text-sm
-                            text-base-content/60
+                            flex
+                            flex-wrap
+                            gap-2
                         "
                     >
-                        امتیاز فرصت
-                    </div>
 
-                </div>
+                        <x-badge
+                            :value="
+                                round(
+                                    $topOpportunity
+                                        ->details
+                                        ->opportunityScore
+                                ) . ' امتیاز'
+                            "
+                            icon="o-chart-bar"
+                            class="badge-primary"
+                        />
 
-                <div
-                    class="
-                        text-center
-                    "
-                >
+                        <x-badge
+                            :value="
+                                $opportunities->count()
+                                . ' فرصت'
+                            "
+                            icon="o-light-bulb"
+                            class="badge-outline"
+                        />
 
-                    <div
-                        class="
-                            text-4xl
-                            font-black
-                        "
-                    >
-                        {{ $this->opportunities->count() }}
-                    </div>
-
-                    <div
-                        class="
-                            text-sm
-                            text-base-content/60
-                        "
-                    >
-                        فرصت فعال
                     </div>
 
                 </div>
@@ -153,30 +162,76 @@ class extends Component
 
         </div>
 
-    </div>
+        {{-- Grid --}}
+        <div
+            class="
+                grid
+                gap-6
+                md:grid-cols-2
+                xl:grid-cols-3
+            "
+        >
 
-    {{-- Opportunities Grid --}}
-    <div
-        class="
-            grid
-            gap-6
-            md:grid-cols-2
-            xl:grid-cols-3
-        "
-    >
+            @foreach(
+                $opportunities as $item
+            )
 
-        @foreach(
-            $this->opportunities
-            as $item
-        )
+                <x-panel.opportunity-card
+                    :topic="$item->topic"
+                    :details="$item->details"
+                />
 
-            <x-panel.opportunity-card
-                :topic="$item->topic"
-                :details="$item->details"
-            />
+            @endforeach
 
-        @endforeach
+        </div>
 
-    </div>
+        {{-- Infinite Scroll --}}
+        @if($hasMore)
+
+            <div
+                wire:intersect.margin.300px="loadMore"
+                class="
+                    flex
+                    justify-center
+                    py-10
+                "
+            >
+
+                <span
+                    class="
+                        loading
+                        loading-spinner
+                        loading-md
+                    "
+                ></span>
+
+            </div>
+
+        @else
+
+            <div
+                class="
+                    text-center
+                    py-8
+                    text-sm
+                    text-base-content/50
+                "
+            >
+
+                همه فرصت‌ها نمایش داده شدند
+
+            </div>
+
+        @endif
+
+    @else
+
+        <x-panel.empty-state
+            title="فرصتی پیدا نشد"
+            description="هنوز فرصت معناداری برای نمایش وجود ندارد."
+            icon="o-light-bulb"
+        />
+
+    @endif
 
 </div>

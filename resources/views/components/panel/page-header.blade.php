@@ -1,24 +1,40 @@
 @props([
-    'title',
+    'title' => null,
     'description' => null,
 ])
 
-<div class="mb-8">
+@if($title || $description)
 
-    <h1 class="text-3xl font-bold">
+    <div class="mb-8">
 
-        {{ $title }}
+        @if($title)
 
-    </h1>
+            <h1
+                class="
+                    text-3xl
+                    font-black
+                    tracking-tight
+                "
+            >
+                {{ $title }}
+            </h1>
 
-    @if($description)
+        @endif
 
-        <p class="text-base-content/70 mt-2">
+        @if($description)
 
-            {{ $description }}
+            <p
+                class="
+                    text-base-content/70
+                    mt-2
+                    leading-7
+                "
+            >
+                {{ $description }}
+            </p>
 
-        </p>
+        @endif
 
-    @endif
+    </div>
 
-</div>
+@endif

@@ -42,7 +42,7 @@ class extends Component
             as $topic
         )
 
-            <x-panel.topic-card
+            <x-components.panel.topic-card
                 :topic="$topic"
             />
 

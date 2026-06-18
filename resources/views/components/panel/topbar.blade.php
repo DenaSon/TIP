@@ -17,13 +17,13 @@
     <div
         class="
             navbar
-            min-h-16
+            min-h-18
             px-4
             lg:px-6
         "
     >
 
-        {{-- Right Side --}}
+        {{-- Right --}}
         <div class="navbar-start">
 
             <label
@@ -43,32 +43,61 @@
 
             </label>
 
-            <div class="mr-2">
+            @if($title)
 
-                @if($title)
+                <div
+                    class="
+                        mr-2
+                    "
+                >
 
                     <h1
                         class="
-                            text-lg
-                            font-bold
+                            text-xl
+                            font-black
+                            leading-none
                         "
                     >
                         {{ $title }}
                     </h1>
 
-                @endif
 
-            </div>
+                </div>
+
+            @endif
 
         </div>
 
-        {{-- Left Side --}}
+        {{-- Left --}}
         <div
             class="
                 navbar-end
                 gap-2
             "
         >
+
+            <div
+                class="
+                    hidden
+                    lg:flex
+                    badge
+                    badge-success
+                    badge-outline
+                    gap-1
+                "
+            >
+
+                <span
+                    class="
+                        size-2
+                        rounded-full
+                        bg-success
+                    "
+                ></span>
+
+                فعال
+
+            </div>
 
             <label
                 class="

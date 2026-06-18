@@ -2,7 +2,7 @@
     class="
         bg-base-100
         min-h-full
-        w-72
+        w-64
         border-l
         border-base-300
         flex
@@ -13,14 +13,20 @@
     {{-- Brand --}}
     <div
         class="
-            px-6
-            py-6
+            px-5
+            py-5
             border-b
             border-base-300
         "
     >
 
-        <div class="flex items-center gap-3">
+        <div
+            class="
+                flex
+                items-center
+                gap-3
+            "
+        >
 
             <div
                 class="
@@ -32,33 +38,40 @@
                     items-center
                     justify-center
                     shadow-sm
+                    shrink-0
                 "
             >
+
                 <x-icon
                     name="o-bolt"
-                    class="w-6 h-6"
+                    class="w-5 h-5"
                 />
+
             </div>
 
             <div>
 
-                <div
+                <h2
                     class="
                         text-lg
-                        font-bold
+                        font-black
+                        leading-none
                     "
                 >
                     TIP
-                </div>
+                </h2>
 
-                <div
+                <p
                     class="
+                        hidden
+                        lg:block
                         text-xs
                         text-base-content/60
+                        mt-1
                     "
                 >
                     Trend Intelligence Platform
-                </div>
+                </p>
 
             </div>
 
@@ -67,17 +80,16 @@
     </div>
 
     {{-- Navigation --}}
-    <div class="flex-1 py-4">
+    <div class="flex-1 py-3">
 
-        <ul class="menu w-full gap-1">
-
-            <li class="menu-title">
-
-                <span>
-                    اکتشاف
-                </span>
-
-            </li>
+        <ul
+            class="
+                menu
+                w-full
+                px-3
+                gap-1
+            "
+        >
 
             <li>
 
@@ -99,27 +111,6 @@
                 </a>
 
             </li>
-
-{{--            <li>--}}
-
-{{--                <a--}}
-{{--                    wire:navigate--}}
-{{--                    wire:current="menu-active"--}}
-{{--                    href="{{ route('panel.topics.index') }}"--}}
-{{--                >--}}
-
-{{--                    <x-icon--}}
-{{--                        name="o-circle-stack"--}}
-{{--                        class="w-5 h-5"--}}
-{{--                    />--}}
-
-{{--                    <span>--}}
-{{--                        موضوعات--}}
-{{--                    </span>--}}
-
-{{--                </a>--}}
-
-{{--            </li>--}}
 
             <li>
 
@@ -146,94 +137,6 @@
 
     </div>
 
-    {{-- Footer --}}
-    <div
-        class="
-            border-t
-            border-base-300
-            p-4
-        "
-    >
 
-        <div class="space-y-4">
-
-            <div>
-
-                <div
-                    class="
-                        text-xs
-                        text-base-content/60
-                        mb-1
-                    "
-                >
-                    وضعیت سیستم
-                </div>
-
-                <div
-                    class="
-                        flex
-                        items-center
-                        gap-2
-                    "
-                >
-
-                    <span
-                        class="
-                            size-2.5
-                            rounded-full
-                            bg-success
-                            animate-pulse
-                        "
-                    ></span>
-
-                    <span
-                        class="
-                            text-sm
-                            font-medium
-                        "
-                    >
-                        فعال
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div>
-
-                <div
-                    class="
-                        text-xs
-                        text-base-content/60
-                        mb-1
-                    "
-                >
-                    آخرین بروزرسانی
-                </div>
-
-                <div
-                    class="
-                        text-sm
-                        font-medium
-                    "
-                >
-                    چند لحظه پیش
-                </div>
-
-            </div>
-
-            <div
-                class="
-                    pt-2
-                    text-xs
-                    text-base-content/50
-                "
-            >
-                Version 0.4
-            </div>
-
-        </div>
-
-    </div>
 
 </aside>
