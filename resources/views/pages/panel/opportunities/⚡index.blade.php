@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Concerns\HasInfiniteScroll;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
@@ -10,33 +11,21 @@ use Domains\Opportunity\Actions\GetTopOpportunitiesAction;
 new #[Layout('layouts::panel', [
     'title' => 'فرصت‌ها',
 ])]
-class extends Component
-{
-    public int $limit = 9;
-
-    public bool $hasMore = true;
+class extends Component {
+    use HasInfiniteScroll;
 
     public function mount(): void
     {
-        $this->updateHasMore();
+        $this->mountHasInfiniteScroll();
     }
 
-    public function loadMore(): void
+    protected function totalItemsCount(): int
     {
-        if (! $this->hasMore) {
-            return;
-        }
-
-        $this->limit += 9;
-
-        $this->updateHasMore();
+        return Trend::count();
     }
 
-    protected function updateHasMore(): void
-    {
-        $this->hasMore =
-            Trend::count() > $this->limit;
-    }
+
+
 
     #[Computed]
     public function opportunities()
@@ -50,7 +39,6 @@ class extends Component
 };
 
 ?>
-
 
 
 <div>

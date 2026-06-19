@@ -110,9 +110,10 @@
             >
 
                 <input
+                    id="theme-toggle"
                     type="checkbox"
                     class="theme-controller"
-                    value="night"
+                    value="dark"
                 />
 
                 <x-icon

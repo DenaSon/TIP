@@ -64,6 +64,23 @@ class TopicSeeder extends Seeder
                 'slug' => 'nvidia',
                 'description' => 'NVIDIA products, GPUs, AI hardware and company developments.',
             ],
+            [
+                'name' => 'Crypto',
+                'slug' => 'crypto',
+                'description' => 'Cryptocurrency, blockchain, digital assets, DeFi and Web3 ecosystem.',
+            ],
+
+            [
+                'name' => 'Technology',
+                'slug' => 'technology',
+                'description' => 'Technology companies, software, hardware, cloud computing and digital innovation.',
+            ],
+
+            [
+                'name' => 'Startups & Business',
+                'slug' => 'startups-business',
+                'description' => 'Startups, venture capital, entrepreneurship, investments and business growth.',
+            ],
 
         ];
 
