@@ -10,6 +10,8 @@ use Domains\Topic\Models\Topic;
 
 readonly class TopicKeywordCandidateService
 {
+    private const int STRATEGIC_WEIGHT = 80;
+
     public function __construct(
         private TopicKeywordQualityService $qualityService,
     ) {}
@@ -38,6 +40,10 @@ readonly class TopicKeywordCandidateService
                 new TopicKeywordCandidateData(
 
                     topicId: $quality->topicId,
+
+                    keywordId: $quality->keywordId,
+
+                    singleKeywordPercentage: $quality->singleKeywordPercentage,
 
                     topicName: $quality->topicName,
 
@@ -83,8 +89,7 @@ readonly class TopicKeywordCandidateService
 
         if (
             $quality->qualityGrade
-            ===
-            KeywordQualityGrade::NotValidated
+            === KeywordQualityGrade::NotValidated
         ) {
 
             return [
@@ -92,36 +97,6 @@ readonly class TopicKeywordCandidateService
                 'action' => KeywordCandidateAction::NotValidated,
 
                 'reason' => 'No matching content found',
-            ];
-        }
-
-        if (
-            $quality->qualityGrade
-            === KeywordQualityGrade::Weak
-            &&
-            $quality->singleKeywordPercentage >= 90
-        ) {
-
-            return [
-
-                'action' => KeywordCandidateAction::Remove,
-
-                'reason' => 'Weak keyword with excessive single-keyword matches',
-            ];
-        }
-
-        if (
-            $quality->qualityGrade
-            === KeywordQualityGrade::NeedsReview
-            ||
-            $quality->singleKeywordPercentage >= 70
-        ) {
-
-            return [
-
-                'action' => KeywordCandidateAction::ReduceWeight,
-
-                'reason' => 'Potential false-positive keyword',
             ];
         }
 
@@ -139,6 +114,97 @@ readonly class TopicKeywordCandidateService
                 'action' => KeywordCandidateAction::Promote,
 
                 'reason' => 'Strong and reliable keyword',
+            ];
+        }
+
+        /*
+         |----------------------------------------------------------
+         | Strategic Keywords
+         |----------------------------------------------------------
+         */
+
+        if (
+            $quality->weight >= self::STRATEGIC_WEIGHT
+        ) {
+
+            if (
+                $quality->qualityGrade
+                === KeywordQualityGrade::Weak
+            ) {
+
+                return [
+
+                    'action' => KeywordCandidateAction::ReduceWeight,
+
+                    'reason' => 'Strategic keyword with low validation',
+                ];
+            }
+
+            return [
+
+                'action' => KeywordCandidateAction::Keep,
+
+                'reason' => 'Strategic keyword',
+            ];
+        }
+
+        /*
+         |----------------------------------------------------------
+         | Weak Keywords
+         |----------------------------------------------------------
+         */
+
+        if (
+            $quality->qualityGrade
+            === KeywordQualityGrade::Weak
+            &&
+            $quality->matchCount <= 3
+        ) {
+
+            return [
+
+                'action' => KeywordCandidateAction::Remove,
+
+                'reason' => 'Very low usage and weak quality',
+            ];
+        }
+
+        /*
+         |----------------------------------------------------------
+         | Needs Review
+         |----------------------------------------------------------
+         */
+
+        if (
+            $quality->qualityGrade
+            === KeywordQualityGrade::NeedsReview
+        ) {
+
+            return [
+
+                'action' => KeywordCandidateAction::ReduceWeight,
+
+                'reason' => 'Needs review',
+            ];
+        }
+
+        /*
+         |----------------------------------------------------------
+         | High Dependency
+         |----------------------------------------------------------
+         */
+
+        if (
+            $quality->singleKeywordPercentage >= 90
+            &&
+            $quality->matchCount <= 5
+        ) {
+
+            return [
+
+                'action' => KeywordCandidateAction::ReduceWeight,
+
+                'reason' => 'High single-keyword dependency',
             ];
         }
 

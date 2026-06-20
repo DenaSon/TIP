@@ -7,6 +7,7 @@ readonly class TopicAuditData
     public function __construct(
         public string $topicName,
 
+        public int $keywordId,
         public int $coverage,
 
         public int $sourceDiversity,

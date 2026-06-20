@@ -2,7 +2,6 @@
 
 namespace Domains\Topic\Models;
 
-use App\Domains\Topic\Models\TopicKeyword;
 use Domains\Cluster\Models\Cluster;
 use Domains\Content\Models\Content;
 use Domains\Opportunity\Models\Opportunity;

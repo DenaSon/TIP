@@ -9,6 +9,7 @@ readonly class TopicKeywordQualityData
     public function __construct(
 
         public int $topicId,
+        public int $keywordId,
 
         public string $topicName,
 

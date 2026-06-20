@@ -3,27 +3,22 @@
 namespace Domains\Topic\Data;
 
 use Domains\Topic\Enums\KeywordCandidateAction;
-use Domains\Topic\Enums\KeywordQualityGrade;
+use Domains\Topic\Enums\KeywordStatus;
 
-readonly class TopicKeywordCandidateData
+readonly class TopicKeywordLifecycleData
 {
     public function __construct(
 
         public int $topicId,
         public int $keywordId,
-        public float $singleKeywordPercentage,
 
         public string $topicName,
 
         public string $keyword,
 
-        public int $weight,
+        public KeywordStatus $currentStatus,
 
-        public int $matchCount,
-
-        public float $qualityScore,
-
-        public KeywordQualityGrade $qualityGrade,
+        public KeywordStatus $recommendedStatus,
 
         public KeywordCandidateAction $action,
 

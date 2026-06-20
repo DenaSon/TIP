@@ -40,6 +40,8 @@ readonly class TopicKeywordQualityService
 
                         topicId: $audit->topicId,
 
+                        keywordId: $audit->keywordId,
+
                         topicName: $audit->topicName,
 
                         keyword: $audit->keyword,
@@ -96,6 +98,8 @@ readonly class TopicKeywordQualityService
                 new TopicKeywordQualityData(
 
                     topicId: $audit->topicId,
+
+                    keywordId: $audit->keywordId,
 
                     topicName: $audit->topicName,
 

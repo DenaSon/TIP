@@ -33,6 +33,8 @@ readonly class TopicKeywordAuditService
 
             $stats[$normalizedKeyword] = [
 
+                'keyword_id' => $keyword->id,
+
                 'keyword' => $keyword->keyword,
 
                 'weight' => $keyword->weight,
@@ -64,7 +66,8 @@ readonly class TopicKeywordAuditService
                     ) {
 
                         $matchedKeywords =
-                            $match->matched_keywords ?? [];
+                            $match->matched_keywords
+                            ?? [];
 
                         $keywordCount =
                             count(
@@ -144,6 +147,8 @@ readonly class TopicKeywordAuditService
                 new TopicKeywordAuditData(
 
                     topicId: $topic->id,
+
+                    keywordId: $stat['keyword_id'],
 
                     topicName: $topic->name,
 
