@@ -34,6 +34,10 @@ class TipAuditCommand extends Command
 
         $this->unassignedAiCandidates();
 
+        $this->unassignedAiCandidatesSummary();
+
+        $this->unmatchedKeywordHints();
+
         return self::SUCCESS;
     }
     private function unassignedSources(): void
@@ -357,6 +361,125 @@ class TipAuditCommand extends Command
                 'Topics Per Content',
                 'Contents',
             ],
+            $rows
+        );
+    }
+
+    private function unassignedAiCandidatesSummary(): void
+    {
+        $rows = Content::query()
+
+            ->whereDoesntHave('topics')
+
+            ->where(function ($query) {
+
+                $query
+
+                    ->where('title', 'like', '%ai%')
+
+                    ->orWhere('title', 'like', '%agent%')
+
+                    ->orWhere('title', 'like', '%llm%')
+
+                    ->orWhere('title', 'like', '%model%')
+
+                    ->orWhere('title', 'like', '%reasoning%')
+
+                    ->orWhere('title', 'like', '%multimodal%')
+
+                    ->orWhere('title', 'like', '%voice%')
+
+                    ->orWhere('title', 'like', '%foundation%');
+            })
+
+            ->selectRaw('source_id, count(*) as total')
+
+            ->groupBy('source_id')
+
+            ->with('source:id,name')
+
+            ->orderByDesc('total')
+
+            ->limit(20)
+
+            ->get()
+
+            ->map(fn ($row) => [
+
+                $row->source?->name,
+
+                $row->total,
+            ])
+
+            ->toArray();
+
+        $this->newLine();
+
+        $this->info('AI GAPS BY SOURCE');
+
+        $this->table(
+            ['Source', 'Candidates'],
+            $rows
+        );
+    }
+
+    private function unmatchedKeywordHints(): void
+    {
+        $words = [];
+
+        Content::query()
+
+            ->whereDoesntHave('topics')
+
+            ->limit(500)
+
+            ->get()
+
+            ->each(function ($content) use (&$words) {
+
+                $text = strtolower(
+                    strip_tags(
+                        $content->title
+                    )
+                );
+
+                preg_match_all(
+                    '/[a-z0-9\-]{4,}/',
+                    $text,
+                    $matches
+                );
+
+                foreach ($matches[0] as $word) {
+
+                    $words[$word] =
+                        ($words[$word] ?? 0) + 1;
+                }
+            });
+
+        arsort($words);
+
+        $rows =
+            collect($words)
+
+                ->take(50)
+
+                ->map(fn ($count, $word) => [
+
+                    $word,
+
+                    $count,
+                ])
+
+                ->values()
+
+                ->toArray();
+
+        $this->newLine();
+
+        $this->info('UNMATCHED KEYWORD HINTS');
+
+        $this->table(
+            ['Keyword', 'Count'],
             $rows
         );
     }

@@ -883,8 +883,8 @@ class TopicKeywordSeeder extends Seeder
                 ['supervised fine tuning', 95],
                 ['sft', 90],
 
-                ['fine tuning', 90],
-                ['fine-tuning', 90],
+                ['fine tuning', 60],
+                ['fine-tuning', 60],
 
                 ['model architecture', 95],
 
@@ -933,24 +933,21 @@ class TopicKeywordSeeder extends Seeder
                 ['world model', 90],
                 ['world models', 90],
 
-                ['training data', 85],
 
                 ['data mixture', 90],
 
-                ['data composition', 90],
+                ['data composition', 60],
 
-                ['training objective', 90],
+                ['training objective', 60],
 
                 ['pretraining corpus', 95],
 
-                ['model capability', 85],
 
                 ['emergent capability', 95],
                 ['emergent capabilities', 95],
 
-                ['model generalization', 90],
 
-                ['transfer learning', 90],
+                ['transfer learning', 60],
 
                 ['representation learning', 90],
 
