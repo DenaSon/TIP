@@ -15,11 +15,16 @@ class TopicBoundaryAnalysisService
         Topic $topic
     ): TopicBoundaryData {
 
-        $overlaps =
+        $overlaps = collect(
             $this->overlapService
-                ->analyze($topic);
+                ->analyze($topic)
+        )
+            ->sortByDesc(
+                fn ($item) => $item->overlapPercentage
+            )
+            ->values();
 
-        if (empty($overlaps)) {
+        if ($overlaps->isEmpty()) {
 
             return new TopicBoundaryData(
                 topicId: $topic->id,
@@ -36,16 +41,34 @@ class TopicBoundaryAnalysisService
         }
 
         $highest =
-            collect($overlaps)
-                ->sortByDesc(
-                    fn ($item) => $item->overlapPercentage
-                )
-                ->first();
+            $overlaps->first();
 
-        $score =
+        $weights = [
+            0 => 0.5,
+            1 => 0.3,
+            2 => 0.2,
+        ];
+
+        $risk = 0;
+
+        foreach ($weights as $index => $weight) {
+
+            $overlap =
+                $overlaps->get($index);
+
+            if (! $overlap) {
+                continue;
+            }
+
+            $risk +=
+                $overlap->overlapPercentage
+                * $weight;
+        }
+
+        $boundaryScore =
             max(
                 0,
-                100 - $highest->overlapPercentage
+                100 - $risk
             );
 
         return new TopicBoundaryData(
@@ -54,10 +77,13 @@ class TopicBoundaryAnalysisService
 
             topicName: $topic->name,
 
-            boundaryScore: round($score, 2),
+            boundaryScore: round(
+                $boundaryScore,
+                2
+            ),
 
             boundaryStatus: $this->determineStatus(
-                $highest->overlapPercentage
+                $risk
             ),
 
             highestOverlapTopic: $highest->overlappingTopicName,
@@ -67,14 +93,14 @@ class TopicBoundaryAnalysisService
     }
 
     private function determineStatus(
-        float $overlap
+        float $risk
     ): string {
 
         return match (true) {
 
-            $overlap >= 50 => 'High Risk',
+            $risk >= 40 => 'High Risk',
 
-            $overlap >= 30 => 'Needs Review',
+            $risk >= 20 => 'Needs Review',
 
             default => 'Healthy',
         };
