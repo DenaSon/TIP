@@ -68,6 +68,10 @@ class FetchFeedJob implements ShouldQueue
             return;
         }
 
+        if ($this->source->status !== Source::STATUS_ACTIVE) {
+            return;
+        }
+
         $xml = $fetchFeedAction->execute($this->source);
 
         /**

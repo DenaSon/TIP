@@ -93,7 +93,6 @@ class TopicKeywordSeeder extends Seeder
                 ['agent planning system', 95],
             ],
 
-
             'coding-ai' => [
 
                 ['coding ai', 100],
@@ -167,7 +166,6 @@ class TopicKeywordSeeder extends Seeder
 
                 ['devin', 100],
 
-
                 ['aider', 100],
 
                 ['windsurf', 100],
@@ -196,7 +194,6 @@ class TopicKeywordSeeder extends Seeder
 
                 ['software development automation', 90],
             ],
-
 
             'context-engineering' => [
 
@@ -413,120 +410,555 @@ class TopicKeywordSeeder extends Seeder
                 ['reasoning workflow', 85],
             ],
 
+            'ai-infrastructure' => [
+
+                ['ai infrastructure', 100],
+
+                ['ai compute', 100],
+                ['compute infrastructure', 95],
+
+                ['ai hardware', 100],
+
+                ['gpu cluster', 100],
+                ['gpu clusters', 100],
+
+                ['gpu infrastructure', 100],
+
+                ['accelerator', 95],
+                ['ai accelerator', 100],
+
+                ['inference infrastructure', 100],
+                ['inference platform', 95],
+
+                ['inference engine', 95],
+                ['inference serving', 95],
+
+                ['model serving', 95],
+
+                ['distributed inference', 100],
+
+                ['inference optimization', 95],
+
+                ['serving infrastructure', 95],
+
+                ['high performance computing', 95],
+
+                ['hpc cluster', 95],
+
+                ['training infrastructure', 100],
+
+                ['training cluster', 95],
+
+                ['training compute', 95],
+
+                ['data center', 95],
+                ['ai data center', 100],
+
+                ['compute cluster', 95],
+
+                ['cluster orchestration', 90],
+
+                ['vector database', 100],
+
+                ['vector search', 95],
+
+                ['embedding infrastructure', 95],
+
+                ['retrieval infrastructure', 95],
+
+                ['distributed systems', 90],
+
+                ['scalable inference', 100],
+
+                ['inference scaling', 95],
+
+                ['latency optimization', 90],
+
+                ['throughput optimization', 90],
+
+                ['model deployment', 95],
+
+                ['ai deployment', 95],
+
+                ['production ai', 95],
+
+                ['mlops', 100],
+
+                ['llmops', 100],
+
+                ['model operations', 95],
+
+                ['observability', 90],
+
+                ['model monitoring', 95],
+
+                ['ai platform', 95],
+
+                ['inference stack', 95],
+
+                ['serving stack', 95],
+
+                ['cloud inference', 95],
+
+                ['private inference', 95],
+
+                ['on-prem inference', 95],
+
+                ['edge inference', 95],
+
+                ['edge ai', 95],
+
+                ['gpu', 90],
+
+                ['h100', 100],
+                ['h200', 100],
+
+                ['b200', 100],
+
+                ['gb200', 100],
+
+                ['blackwell', 100],
+
+                ['cuda', 95],
+
+                ['tensor processing unit', 100],
+                ['tpu', 100],
+
+                ['trillium', 95],
+
+                ['amd instinct', 95],
+
+                ['mi300', 95],
+
+                ['ai supercomputer', 100],
+
+                ['compute capacity', 95],
+
+                ['inference cost', 95],
+
+                ['compute efficiency', 95],
+
+                ['foundation model infrastructure', 100],
+            ],
+
             'multimodal-ai' => [
+
+                // Core Concepts
 
                 ['multimodal ai', 100],
                 ['multimodal model', 100],
-                ['multimodal models', 100],
-
                 ['multimodal intelligence', 95],
-                ['multimodal system', 95],
 
                 ['vision language model', 100],
                 ['vision-language model', 100],
+
                 ['vlm', 95],
-
-                ['image understanding', 95],
-                ['visual reasoning', 100],
-
-                ['image reasoning', 95],
-
-                ['video understanding', 100],
-                ['video reasoning', 95],
-
-                ['audio understanding', 95],
-                ['audio reasoning', 95],
-
-                ['speech understanding', 90],
-                ['speech reasoning', 90],
-
-                ['vision model', 95],
-                ['image model', 90],
-                ['video model', 90],
-                ['audio model', 90],
-
-                ['multimodal benchmark', 95],
-                ['multimodal evaluation', 95],
-
-                ['multimodal capability', 95],
-                ['multimodal performance', 90],
 
                 ['cross modal', 95],
                 ['cross-modal', 95],
 
-                ['cross modal reasoning', 100],
-                ['cross-modal reasoning', 100],
+                ['multimodal reasoning', 95],
 
-                ['image captioning', 90],
-                ['visual grounding', 100],
+                ['multimodal understanding', 95],
 
-                ['grounded generation', 95],
+                ['multimodal generation', 95],
 
-                ['document understanding', 95],
+                // Vision
 
-                ['vision encoder', 95],
+                ['computer vision', 100],
 
-                ['image-text model', 100],
-                ['text-image model', 100],
+                ['visual reasoning', 95],
 
-                ['image to text', 90],
-                ['text to image', 90],
+                ['visual understanding', 95],
 
-                ['image generation model', 95],
-                ['video generation model', 95],
+                ['image understanding', 95],
 
-                ['multimodal agent', 90],
+                ['image analysis', 90],
 
-                ['visual agent', 90],
+                ['image recognition', 90],
 
-                ['multimodal interaction', 90],
+                ['object detection', 95],
 
-                ['multimodal inference', 90],
-
-                ['multimodal architecture', 95],
+                ['image classification', 90],
 
                 ['visual perception', 95],
 
-                ['machine perception', 95],
+                ['scene understanding', 95],
 
-                ['computer vision', 95],
+                // Image Generation
 
-                ['vision transformer', 95],
+                ['image generation', 100],
 
-                ['visual encoder', 95],
+                ['image generator', 95],
 
-                ['audio encoder', 95],
+                ['text to image', 100],
 
-                ['speech-to-text', 90],
-                ['speech to text', 90],
+                ['text-to-image', 100],
 
-                ['text-to-speech', 90],
-                ['text to speech', 90],
+                ['image synthesis', 95],
 
-                ['multimodal workflow', 85],
+                ['synthetic image', 90],
 
-                ['image generation', 85],
-                ['video generation', 85],
+                ['generative image', 90],
 
-                ['image synthesis', 90],
+                ['visual generation', 95],
 
-                ['visual intelligence', 95],
+                ['diffusion model', 100],
 
-                ['multimodal frontier', 90],
+                ['diffusion models', 100],
 
-                ['multimodal scaling', 90],
+                ['latent diffusion', 95],
 
-                ['multimodal learning', 90],
+                // Video
 
-                ['multimodal foundation model', 100],
+                ['video generation', 100],
 
-                ['vision foundation model', 95],
+                ['video model', 95],
+
+                ['video synthesis', 95],
+
+                ['text to video', 100],
+
+                ['text-to-video', 100],
+
+                ['video understanding', 95],
+
+                ['video analysis', 90],
+
+                ['video reasoning', 95],
+
+                ['video intelligence', 90],
+
+                ['world model', 95],
+
+                // Audio
+
+                ['audio model', 95],
+
+                ['audio generation', 95],
+
+                ['speech model', 95],
+
+                ['speech recognition', 100],
+
+                ['voice recognition', 95],
+
+                ['speech understanding', 95],
+
+                ['speech synthesis', 95],
+
+                ['text to speech', 95],
+
+                ['text-to-speech', 95],
+
+                ['voice generation', 95],
+
+                ['audio understanding', 90],
+
+                ['audio intelligence', 90],
+
+                // Multimodal Interaction
+
+                ['visual question answering', 100],
+
+                ['vqa', 90],
+
+                ['image captioning', 95],
+
+                ['video captioning', 95],
+
+                ['multimodal retrieval', 95],
+
+                ['multimodal embedding', 95],
+
+                ['multimodal benchmark', 90],
+
+                ['multimodal dataset', 90],
+
+                ['grounded generation', 95],
+
+                ['grounded vision', 95],
+
+                // Research Signals
+
+                ['visual transformer', 95],
+
+                ['vision encoder', 95],
+
+                ['image encoder', 95],
+
+                ['multimodal transformer', 100],
+
+                ['vision encoder decoder', 95],
+
+                ['image-text alignment', 95],
+
+                ['cross-modal alignment', 95],
+
+                ['multimodal learning', 95],
+
+                ['visual-language alignment', 95],
+
+            ],
+
+            'voice-ai' => [
+
+                // Core Concepts
+
+                ['voice ai', 100],
+                ['speech ai', 100],
+
+                ['voice intelligence', 95],
+                ['speech intelligence', 95],
+
+                ['spoken language', 95],
+
+                ['conversational voice', 95],
+
+                ['audio intelligence', 95],
+
+                // Speech Recognition
+
+                ['speech recognition', 100],
+
+                ['automatic speech recognition', 100],
+
+                ['asr', 95],
+
+                ['speech to text', 100],
+                ['speech-to-text', 100],
+
+                ['voice transcription', 95],
+
+                ['spoken language understanding', 95],
+
+                ['speech understanding', 95],
+
+                ['voice understanding', 95],
+
+                ['audio transcription', 95],
+
+                // Speech Generation
+
+                ['speech synthesis', 100],
+
+                ['text to speech', 100],
+                ['text-to-speech', 100],
+
+                ['tts', 95],
+
+                ['voice synthesis', 100],
+
+                ['synthetic voice', 95],
+
+                ['voice generation', 95],
+
+                ['voice cloning', 100],
+
+                ['neural voice', 95],
+
+                ['voice model', 95],
+
+                // Voice Assistants
+
+                ['voice assistant', 100],
+                ['voice assistants', 100],
+
+                ['voice agent', 100],
+                ['voice agents', 100],
+
+                ['conversational agent', 95],
+
+                ['audio agent', 95],
+
+                ['spoken dialogue', 95],
+
+                ['dialogue system', 95],
+
+                ['dialog system', 95],
+
+                ['voice interface', 95],
+
+                ['voice interaction', 95],
+
+                // Audio Understanding
+
+                ['audio understanding', 95],
+
+                ['audio perception', 95],
+
+                ['speaker recognition', 95],
+
+                ['speaker identification', 95],
+
+                ['speaker verification', 95],
+
+                ['voice biometrics', 95],
+
+                ['speech quality', 95],
+
+                ['audio quality assessment', 90],
+
+                ['speech enhancement', 95],
+
+                ['noise suppression', 90],
+
+                // Multilingual Speech
+
+                ['multilingual speech', 95],
+
+                ['speech translation', 100],
+
+                ['voice translation', 100],
+
+                ['spoken translation', 95],
+
+                ['cross-lingual speech', 95],
+
+                // Realtime Voice
+
+                ['realtime voice', 100],
+
+                ['real-time voice', 100],
+
+                ['streaming speech', 95],
+
+                ['streaming audio', 95],
+
+                ['low latency speech', 95],
+
+                ['voice conversation', 95],
+
+                ['live speech', 95],
+
+                // Research Signals
+
+                ['speech benchmark', 90],
+
+                ['speech dataset', 90],
+
+                ['speech corpus', 90],
+
+                ['audio language model', 95],
+
+                ['speech language model', 95],
+
+                ['voice foundation model', 95],
 
                 ['audio foundation model', 95],
 
-                ['embodied perception', 90],
+                ['spoken intelligence', 90],
+
             ],
 
+            'foundation-models' => [
+
+                ['foundation model', 100],
+                ['foundation models', 100],
+
+                ['pretraining', 100],
+                ['pre-training', 100],
+
+                ['post training', 100],
+                ['post-training', 100],
+
+                ['model training', 95],
+
+                ['scaling law', 100],
+                ['scaling laws', 100],
+
+                ['model scaling', 95],
+
+                ['rlhf', 100],
+
+                ['reinforcement learning from human feedback', 100],
+
+                ['reward model', 95],
+                ['reward modeling', 95],
+
+                ['alignment training', 95],
+
+                ['instruction tuning', 95],
+
+                ['supervised fine tuning', 95],
+                ['sft', 90],
+
+                ['fine tuning', 90],
+                ['fine-tuning', 90],
+
+                ['model architecture', 95],
+
+                ['transformer architecture', 95],
+
+                ['mixture of experts', 95],
+                ['moe model', 95],
+
+                ['dense model', 90],
+
+                ['parameter efficient training', 95],
+
+                ['knowledge distillation', 95],
+                ['model distillation', 95],
+
+                ['synthetic data', 90],
+
+                ['curriculum learning', 90],
+
+                ['continual learning', 95],
+
+                ['lifelong learning', 95],
+
+                ['knowledge editing', 95],
+
+                ['model editing', 95],
+
+                ['model merging', 90],
+
+                ['model compression', 90],
+
+                ['weight merging', 90],
+
+                ['checkpoint merging', 90],
+
+                ['language model training', 95],
+
+                ['large language model training', 95],
+
+                ['generative model', 90],
+                ['generative models', 90],
+
+                ['diffusion language model', 100],
+                ['diffusion language models', 100],
+
+                ['world model', 90],
+                ['world models', 90],
+
+                ['training data', 85],
+
+                ['data mixture', 90],
+
+                ['data composition', 90],
+
+                ['training objective', 90],
+
+                ['pretraining corpus', 95],
+
+                ['model capability', 85],
+
+                ['emergent capability', 95],
+                ['emergent capabilities', 95],
+
+                ['model generalization', 90],
+
+                ['transfer learning', 90],
+
+                ['representation learning', 90],
+
+                ['self supervised learning', 90],
+                ['self-supervised learning', 90],
+
+                ['foundation model development', 100],
+            ],
 
 
 

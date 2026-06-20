@@ -41,6 +41,24 @@ class TopicSeeder extends Seeder
                 'description' => 'Reasoning capabilities, planning, inference-time compute and advanced thinking models.',
             ],
 
+            [
+                'name' => 'Multimodal AI',
+                'slug' => 'multimodal-ai',
+                'description' => 'Vision-language models, image generation, video generation, audio models, speech understanding and multimodal intelligence.',
+            ],
+
+            [
+                'name' => 'Voice AI',
+                'slug' => 'voice-ai',
+                'description' => 'Speech recognition, speech synthesis, voice assistants, conversational audio systems and spoken language intelligence.',
+            ],
+
+            [
+                'name' => 'Foundation Models',
+                'slug' => 'foundation-models',
+                'description' => 'Foundation models, pretraining, post-training, scaling laws, RLHF, model architecture and model development.',
+            ],
+
         ];
 
         foreach ($topics as $topic) {

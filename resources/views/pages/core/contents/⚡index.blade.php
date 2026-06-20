@@ -1,13 +1,14 @@
 <?php
 
+use Domains\Content\Models\Content;
+use Domains\Source\Models\Source;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-use Domains\Content\Models\Content;
-use Domains\Source\Models\Source;
-
 new class extends Component {
+
     use WithPagination;
 
     public string $search = '';
@@ -22,6 +23,7 @@ new class extends Component {
     public function getHeadersProperty(): array
     {
         return [
+
             [
                 'key' => 'id',
                 'label' => '#',
@@ -44,47 +46,126 @@ new class extends Component {
         ];
     }
 
-    public function getSourcesProperty(): \Illuminate\Database\Eloquent\Collection
+    public function getSourcesProperty(): Collection
     {
         return Source::query()
+
+            ->where(
+                'status',
+                Source::STATUS_ACTIVE
+            )
+
             ->orderBy('name')
+
             ->get();
     }
 
-    public function getMissedBySourceProperty()
+    public function getMissedBySourceProperty(): Collection
     {
-        return Content::whereDoesntHave('topics')
-            ->selectRaw('source_id, count(*) as missed')
+        return Content::query()
+
+            ->whereDoesntHave('topics')
+
+            ->whereHas(
+                'source',
+                fn ($query) => $query->where(
+                    'status',
+                    Source::STATUS_ACTIVE
+                )
+            )
+
+            ->selectRaw(
+                'source_id, COUNT(*) as missed'
+            )
+
             ->groupBy('source_id')
+
             ->orderByDesc('missed')
+
             ->with('source:id,name')
+
             ->get();
     }
 
     public function getContentsProperty(): LengthAwarePaginator
     {
         return Content::query()
+
             ->with('source')
+
+            ->whereHas(
+                'source',
+                fn ($query) => $query->where(
+                    'status',
+                    Source::STATUS_ACTIVE
+                )
+            )
+
             ->when(
                 $this->search,
-                fn($query) => $query->where(
+                fn ($query) => $query->where(
                     'title',
                     'like',
                     "%{$this->search}%"
                 )
             )
+
             ->when(
                 $this->sourceFilter,
-                fn($query) => $query->where(
+                fn ($query) => $query->where(
                     'source_id',
                     $this->sourceFilter
                 )
             )
+
             ->orderBy(
                 $this->sortBy['column'],
                 $this->sortBy['direction']
             )
+
             ->paginate(25);
+    }
+
+    public function getTotalContentsProperty(): int
+    {
+        return Content::count();
+    }
+
+    public function getTotalSourcesProperty(): int
+    {
+        return Source::query()
+            ->where(
+                'status',
+                Source::STATUS_ACTIVE
+            )
+            ->count();
+    }
+
+    public function getUnassignedContentsProperty(): int
+    {
+        return Content::query()
+            ->whereDoesntHave('topics')
+            ->count();
+    }
+
+    public function getCoverageProperty(): float
+    {
+        $total =
+            $this->totalContents;
+
+        if ($total === 0) {
+            return 0;
+        }
+
+        $assigned =
+            Content::query()
+                ->has('topics')
+                ->count();
+
+        return round(
+            ($assigned / $total) * 100,
+            2
+        );
     }
 
     public function updatedSearch(): void
@@ -127,7 +208,57 @@ new class extends Component {
         />
 
     </div>
+    <div class="stats shadow w-full">
 
+        <div class="stat">
+
+            <div class="stat-title">
+                Total Contents
+            </div>
+
+            <div class="stat-value text-primary">
+                {{ number_format($this->totalContents) }}
+            </div>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Active Sources
+            </div>
+
+            <div class="stat-value">
+                {{ number_format($this->totalSources) }}
+            </div>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Unassigned Content
+            </div>
+
+            <div class="stat-value text-warning">
+                {{ number_format($this->unassignedContents) }}
+            </div>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Coverage
+            </div>
+
+            <div class="stat-value text-success">
+                {{ $this->coverage }}%
+            </div>
+
+        </div>
+
+    </div>
     <x-card>
 
         <x-table
@@ -183,60 +314,7 @@ new class extends Component {
 
     </x-card>
 
-    <div class="stats shadow w-full">
 
-        <div class="stat">
-
-            <div class="stat-title">
-                Total Contents
-            </div>
-
-            <div class="stat-value text-primary">
-                {{ number_format(\Domains\Content\Models\Content::count()) }}
-            </div>
-
-        </div>
-
-        <div class="stat">
-
-            <div class="stat-title">
-                Sources
-            </div>
-
-            <div class="stat-value">
-                {{ number_format(\Domains\Source\Models\Source::count()) }}
-            </div>
-
-        </div>
-
-
-
-
-    </div>
-    <div class="stats shadow w-full">
-
-        <div class="stat">
-            <div class="stat-title">Total Contents</div>
-            <div class="stat-value text-primary">
-                {{ number_format(\Domains\Content\Models\Content::count()) }}
-            </div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">Sources</div>
-            <div class="stat-value">
-                {{ number_format(\Domains\Source\Models\Source::count()) }}
-            </div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">Unassigned Content</div>
-            <div class="stat-value text-warning">
-                {{ Content::whereDoesntHave('topics')->count() }}
-            </div>
-        </div>
-
-    </div>
 
     {{-- لیست منابع با بیشترین miss --}}
     <x-card title="Missed by Source">
