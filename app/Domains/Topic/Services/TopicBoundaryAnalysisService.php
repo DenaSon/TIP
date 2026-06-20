@@ -8,7 +8,7 @@ use Domains\Topic\Models\Topic;
 class TopicBoundaryAnalysisService
 {
     public function __construct(
-        private TopicOverlapMatrixService $overlapService,
+        private readonly TopicOverlapMatrixService $overlapService,
     ) {}
 
     public function analyze(
@@ -37,6 +37,8 @@ class TopicBoundaryAnalysisService
                 highestOverlapTopic: null,
 
                 highestOverlapPercentage: 0,
+
+                requiresReview: false,
             );
         }
 
@@ -89,6 +91,11 @@ class TopicBoundaryAnalysisService
             highestOverlapTopic: $highest->overlappingTopicName,
 
             highestOverlapPercentage: $highest->overlapPercentage,
+
+            requiresReview: $this->requiresReview(
+                $boundaryScore,
+                $highest->overlapPercentage
+            ),
         );
     }
 
@@ -104,5 +111,15 @@ class TopicBoundaryAnalysisService
 
             default => 'Healthy',
         };
+    }
+
+    private function requiresReview(
+        float $boundaryScore,
+        float $highestOverlap
+    ): bool {
+
+        return
+            $boundaryScore < 80
+            || $highestOverlap > 40;
     }
 }

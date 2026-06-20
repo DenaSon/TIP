@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Domains\Topic\Services;
 
 use Domains\Topic\Data\TopicAuditData;
@@ -9,16 +8,13 @@ use Domains\Topic\Models\Topic;
 readonly class TopicAuditService
 {
     public function __construct(
-        private TopicQualityService          $qualityService,
+        private TopicQualityService $qualityService,
         private TopicBoundaryAnalysisService $boundaryService,
-    )
-    {
-    }
+    ) {}
 
     public function analyze(
         Topic $topic
-    ): TopicAuditData
-    {
+    ): TopicAuditData {
 
         $quality =
             $this->qualityService
@@ -45,6 +41,8 @@ readonly class TopicAuditService
             highestOverlapTopic: $boundary->highestOverlapTopic,
 
             highestOverlapPercentage: $boundary->highestOverlapPercentage,
+
+            requiresReview: $boundary->requiresReview,
         );
     }
 }

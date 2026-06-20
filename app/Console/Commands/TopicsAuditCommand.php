@@ -18,48 +18,64 @@ class TopicsAuditCommand extends Command
         TopicAuditService $auditService,
     ): int {
 
-        $rows = [];
-
-        Topic::query()
+        $audits = Topic::query()
             ->where(
                 'is_active',
                 true
             )
-            ->orderBy('name')
-            ->each(function (
-                Topic $topic
-            ) use (
-                &$rows,
-                $auditService
-            ) {
+            ->get()
+            ->map(
+                fn (Topic $topic) =>
+                $auditService->analyze(
+                    $topic
+                )
+            )
+            ->sortBy([
+                fn ($audit) =>
+                $audit->requiresReview
+                    ? 0
+                    : 1,
 
-                $audit =
-                    $auditService
-                        ->analyze($topic);
+                fn ($audit) =>
+                $audit->boundaryScore,
+            ]);
 
-                $rows[] = [
+        $rows = $audits
+            ->map(fn ($audit) => [
 
-                    $audit->topicName,
+                $audit->topicName,
 
-                    $audit->coverage,
+                $audit->coverage,
 
-                    $audit->sourceDiversity,
+                $audit->sourceDiversity,
 
-                    $audit->overlapPercentage . '%',
+                $audit->overlapPercentage . '%',
 
-                    $audit->boundaryScore,
+                $audit->boundaryScore,
 
-                    $audit->boundaryStatus,
+                $audit->boundaryStatus,
 
-                    $audit->highestOverlapTopic,
+                $audit->highestOverlapTopic,
 
-                    $audit->highestOverlapPercentage . '%',
-                ];
-            });
+                $audit->highestOverlapPercentage . '%',
+
+                $audit->requiresReview
+                    ? 'YES'
+                    : '-',
+            ])
+            ->all();
 
         $this->info('');
-        $this->info('TIP Topic Audit Report');
-        $this->info(str_repeat('=', 120));
+        $this->info(
+            'TIP Topic Audit Report'
+        );
+
+        $this->info(
+            str_repeat(
+                '=',
+                120
+            )
+        );
 
         $this->table(
             [
@@ -71,6 +87,7 @@ class TopicsAuditCommand extends Command
                 'Status',
                 'Highest Overlap',
                 'Overlap %',
+                'Review',
             ],
             $rows
         );

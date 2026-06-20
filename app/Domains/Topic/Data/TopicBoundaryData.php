@@ -15,5 +15,7 @@ readonly class TopicBoundaryData
         public ?string $highestOverlapTopic,
 
         public float $highestOverlapPercentage,
+
+        public bool $requiresReview,
     ) {}
 }
