@@ -21,6 +21,7 @@ class RebuildTopicsCommand extends Command
         );
 
         DB::table('content_topic')->delete();
+        DB::table('content_topic_matches')->delete();
 
         $count = Content::count();
 

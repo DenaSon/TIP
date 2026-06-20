@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Domains\Topic\Actions;
 
 use Domains\Topic\Data\TopicDrillDownData;
@@ -10,14 +9,13 @@ class GetTopicDrillDownAction
 {
     public function execute(
         Topic $topic
-    ): TopicDrillDownData
-    {
+    ): TopicDrillDownData {
 
         $clusters =
             $topic
                 ->clusters()
                 ->with([
-                    'contents'
+                    'contents',
                 ])
                 ->orderByDesc(
                     'content_count'

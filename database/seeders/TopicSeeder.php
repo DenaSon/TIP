@@ -12,74 +12,33 @@ class TopicSeeder extends Seeder
         $topics = [
 
             [
-                'name' => 'Artificial Intelligence',
-                'slug' => 'artificial-intelligence',
-                'description' => 'General artificial intelligence news, research, products and ecosystem.',
-            ],
-
-            [
-                'name' => 'Large Language Models',
-                'slug' => 'large-language-models',
-                'description' => 'LLMs, foundation models, multimodal models and language model advancements.',
-            ],
-
-            [
-                'name' => 'OpenAI',
-                'slug' => 'openai',
-                'description' => 'OpenAI products, models, announcements and ecosystem.',
-            ],
-
-            [
                 'name' => 'AI Agents',
                 'slug' => 'ai-agents',
-                'description' => 'Autonomous agents, agentic systems and multi-agent workflows.',
+                'description' => 'Autonomous agents, agentic systems, task execution, multi-agent workflows and AI assistants.',
             ],
 
             [
-                'name' => 'Anthropic',
-                'slug' => 'anthropic',
-                'description' => 'Anthropic, Claude models and company related developments.',
+                'name' => 'Coding AI',
+                'slug' => 'coding-ai',
+                'description' => 'AI-powered software development, code generation, AI IDEs and developer assistants.',
             ],
 
             [
-                'name' => 'Google AI',
-                'slug' => 'google-ai',
-                'description' => 'Google AI, DeepMind, Gemini and related products.',
+                'name' => 'Context Engineering',
+                'slug' => 'context-engineering',
+                'description' => 'Context management, MCP, memory systems, tool usage, RAG and agent context architectures.',
             ],
 
             [
                 'name' => 'AI Infrastructure',
                 'slug' => 'ai-infrastructure',
-                'description' => 'AI compute, inference, hardware and infrastructure ecosystem.',
+                'description' => 'Inference, compute, GPUs, serving systems, vector databases and AI deployment infrastructure.',
             ],
 
             [
-                'name' => 'Cybersecurity',
-                'slug' => 'cybersecurity',
-                'description' => 'Cyber attacks, vulnerabilities, malware and security incidents.',
-            ],
-
-            [
-                'name' => 'NVIDIA',
-                'slug' => 'nvidia',
-                'description' => 'NVIDIA products, GPUs, AI hardware and company developments.',
-            ],
-            [
-                'name' => 'Crypto',
-                'slug' => 'crypto',
-                'description' => 'Cryptocurrency, blockchain, digital assets, DeFi and Web3 ecosystem.',
-            ],
-
-            [
-                'name' => 'Technology',
-                'slug' => 'technology',
-                'description' => 'Technology companies, software, hardware, cloud computing and digital innovation.',
-            ],
-
-            [
-                'name' => 'Startups & Business',
-                'slug' => 'startups-business',
-                'description' => 'Startups, venture capital, entrepreneurship, investments and business growth.',
+                'name' => 'Reasoning Models',
+                'slug' => 'reasoning-models',
+                'description' => 'Reasoning capabilities, planning, inference-time compute and advanced thinking models.',
             ],
 
         ];
@@ -96,7 +55,6 @@ class TopicSeeder extends Seeder
                     'is_active' => true,
                 ]
             );
-
         }
     }
 }

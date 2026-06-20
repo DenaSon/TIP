@@ -22,9 +22,9 @@ class AssignTopicsAction
 
         $matches = $this->topicMatcher->match($text);
 
-        if (empty($matches)) {
-            return;
-        }
+        ContentTopicMatch::query()
+            ->where('content_id', $content->id)
+            ->delete();
 
         $topicIds = collect($matches)
             ->pluck('topic_id')
@@ -33,26 +33,14 @@ class AssignTopicsAction
         $content->topics()
             ->sync($topicIds);
 
-        ContentTopicMatch::query()
-            ->where(
-                'content_id',
-                $content->id
-            )
-            ->delete();
-
         foreach ($matches as $match) {
 
-            ContentTopicMatch::updateOrCreate(
-                [
-                    'content_id' => $content->id,
-                    'topic_id' => $match['topic_id'],
-                ],
-                [
-                    'score' => $match['score'],
-                    'matched_keywords' => $match['matched_keywords'],
-                ]
-            );
+            ContentTopicMatch::create([
+                'content_id' => $content->id,
+                'topic_id' => $match['topic_id'],
+                'score' => $match['score'],
+                'matched_keywords' => $match['matched_keywords'],
+            ]);
         }
-
     }
 }
