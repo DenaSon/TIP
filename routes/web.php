@@ -44,8 +44,6 @@ Route::prefix('core')
             ->name('trends.index');
     });
 
-
-
 Route::prefix('panel')
     ->as('panel.')
     ->group(function () {
@@ -76,8 +74,5 @@ Route::prefix('panel')
         )->name('trends.index');
 
     });
-
-
-
 
 require __DIR__.'/settings.php';

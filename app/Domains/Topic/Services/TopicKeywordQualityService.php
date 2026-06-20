@@ -3,6 +3,7 @@
 namespace Domains\Topic\Services;
 
 use Domains\Topic\Data\TopicKeywordQualityData;
+use Domains\Topic\Enums\KeywordQualityGrade;
 use Domains\Topic\Models\Topic;
 
 readonly class TopicKeywordQualityService
@@ -51,7 +52,7 @@ readonly class TopicKeywordQualityService
 
                         qualityScore: 0,
 
-                        qualityGrade: 'Not Validated',
+                        qualityGrade: KeywordQualityGrade::NotValidated,
                     );
 
                 continue;
@@ -171,17 +172,17 @@ readonly class TopicKeywordQualityService
 
     private function determineGrade(
         float $qualityScore
-    ): string {
+    ): KeywordQualityGrade {
 
         return match (true) {
 
-            $qualityScore >= 80 => 'Excellent',
+            $qualityScore >= 80 => KeywordQualityGrade::Excellent,
 
-            $qualityScore >= 60 => 'Good',
+            $qualityScore >= 60 => KeywordQualityGrade::Good,
 
-            $qualityScore >= 40 => 'Needs Review',
+            $qualityScore >= 40 => KeywordQualityGrade::NeedsReview,
 
-            default => 'Weak',
+            default => KeywordQualityGrade::Weak,
         };
     }
 }

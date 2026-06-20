@@ -6,8 +6,12 @@ use Domains\Topic\Data\TopicKeywordAuditData;
 use Domains\Topic\Models\ContentTopicMatch;
 use Domains\Topic\Models\Topic;
 
-class TopicKeywordAuditService
+readonly class TopicKeywordAuditService
 {
+    public function __construct(
+        private KeywordNormalizerService $normalizer,
+    ) {}
+
     /**
      * @return TopicKeywordAuditData[]
      */
@@ -21,7 +25,15 @@ class TopicKeywordAuditService
             $topic->keywords as $keyword
         ) {
 
-            $stats[$keyword->keyword] = [
+            $normalizedKeyword =
+                $this->normalizer
+                    ->normalize(
+                        $keyword->keyword
+                    );
+
+            $stats[$normalizedKeyword] = [
+
+                'keyword' => $keyword->keyword,
 
                 'weight' => $keyword->weight,
 
@@ -67,22 +79,37 @@ class TopicKeywordAuditService
                                 $item['keyword']
                                 ?? null;
 
+                            if (! $keyword) {
+                                continue;
+                            }
+
+                            $normalizedKeyword =
+                                $this->normalizer
+                                    ->normalize(
+                                        $keyword
+                                    );
+
                             if (
-                                ! $keyword
-                                || ! isset(
-                                    $stats[$keyword]
+                                ! isset(
+                                    $stats[
+                                    $normalizedKeyword
+                                    ]
                                 )
                             ) {
                                 continue;
                             }
 
-                            $stats[$keyword]['matches']++;
+                            $stats[
+                            $normalizedKeyword
+                            ]['matches']++;
 
                             if (
                                 $keywordCount === 1
                             ) {
 
-                                $stats[$keyword]['single_matches']++;
+                                $stats[
+                                $normalizedKeyword
+                                ]['single_matches']++;
                             }
                         }
                     }
@@ -92,53 +119,43 @@ class TopicKeywordAuditService
         $results = [];
 
         foreach (
-            $topic->keywords as $keyword
+            $stats as $stat
         ) {
 
             $matchCount =
-                $stats[
-                $keyword->keyword
-                ]['matches'];
+                $stat['matches'];
 
             $singleKeywordMatchCount =
-                $stats[
-                $keyword->keyword
-                ]['single_matches'];
+                $stat['single_matches'];
 
             $singleKeywordPercentage =
                 $matchCount === 0
                     ? 0
                     : round(
-                    (
-                        $singleKeywordMatchCount
-                        / $matchCount
-                    ) * 100,
-                    2
-                );
+                        (
+                            $singleKeywordMatchCount
+                            /
+                            $matchCount
+                        ) * 100,
+                        2
+                    );
 
             $results[] =
                 new TopicKeywordAuditData(
 
-                    topicId:
-                    $topic->id,
+                    topicId: $topic->id,
 
-                    topicName:
-                    $topic->name,
+                    topicName: $topic->name,
 
-                    keyword:
-                    $keyword->keyword,
+                    keyword: $stat['keyword'],
 
-                    weight:
-                    $keyword->weight,
+                    weight: $stat['weight'],
 
-                    matchCount:
-                    $matchCount,
+                    matchCount: $matchCount,
 
-                    singleKeywordMatchCount:
-                    $singleKeywordMatchCount,
+                    singleKeywordMatchCount: $singleKeywordMatchCount,
 
-                    singleKeywordPercentage:
-                    $singleKeywordPercentage,
+                    singleKeywordPercentage: $singleKeywordPercentage,
                 );
         }
 
@@ -147,8 +164,7 @@ class TopicKeywordAuditService
             fn (
                 TopicKeywordAuditData $a,
                 TopicKeywordAuditData $b
-            ) =>
-                $b->singleKeywordPercentage
+            ) => $b->singleKeywordPercentage
                 <=>
                 $a->singleKeywordPercentage
         );

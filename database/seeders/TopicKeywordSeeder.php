@@ -933,7 +933,6 @@ class TopicKeywordSeeder extends Seeder
                 ['world model', 90],
                 ['world models', 90],
 
-
                 ['data mixture', 90],
 
                 ['data composition', 60],
@@ -942,10 +941,8 @@ class TopicKeywordSeeder extends Seeder
 
                 ['pretraining corpus', 95],
 
-
                 ['emergent capability', 95],
                 ['emergent capabilities', 95],
-
 
                 ['transfer learning', 60],
 
@@ -956,8 +953,6 @@ class TopicKeywordSeeder extends Seeder
 
                 ['foundation model development', 100],
             ],
-
-
 
         ];
 

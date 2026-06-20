@@ -31,15 +31,15 @@ class DetectOpportunityJob implements ShouldQueue
         public readonly int $trendId
     ) {}
 
-//    public function middleware(): array
-//    {
-//        return [
-//            new ThrottlesExceptions(
-//                maxAttempts: 3,
-//                decaySeconds: 60
-//            ),
-//        ];
-//    }
+    //    public function middleware(): array
+    //    {
+    //        return [
+    //            new ThrottlesExceptions(
+    //                maxAttempts: 3,
+    //                decaySeconds: 60
+    //            ),
+    //        ];
+    //    }
 
     public function handle(
         DetectOpportunityAction $action

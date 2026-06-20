@@ -2,9 +2,10 @@
 
 namespace Domains\Topic\Data;
 
+use Domains\Topic\Enums\KeywordCandidateAction;
 use Domains\Topic\Enums\KeywordQualityGrade;
 
-readonly class TopicKeywordQualityData
+readonly class TopicKeywordCandidateData
 {
     public function __construct(
 
@@ -18,10 +19,12 @@ readonly class TopicKeywordQualityData
 
         public int $matchCount,
 
-        public float $singleKeywordPercentage,
-
         public float $qualityScore,
 
         public KeywordQualityGrade $qualityGrade,
+
+        public KeywordCandidateAction $action,
+
+        public string $reason,
     ) {}
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Domains\Topic\Services;
 
 use Domains\Topic\Models\ContentTopicMatch;
@@ -10,8 +9,7 @@ class TopicMatchStrengthService
 {
     public function averageScore(
         Topic $topic
-    ): float
-    {
+    ): float {
 
         return round(
             ContentTopicMatch::query()
@@ -26,8 +24,7 @@ class TopicMatchStrengthService
 
     public function medianScore(
         Topic $topic
-    ): float
-    {
+    ): float {
 
         $scores =
             ContentTopicMatch::query()

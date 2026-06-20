@@ -66,24 +66,18 @@ class TopicOverlapMatrixService
 
                     return new TopicOverlapData(
 
-                        topicId:
-                        $topic->id,
+                        topicId: $topic->id,
 
-                        topicName:
-                        $topic->name,
+                        topicName: $topic->name,
 
-                        overlappingTopicId:
-                        $row->topic_id,
+                        overlappingTopicId: $row->topic_id,
 
-                        overlappingTopicName:
-                        $topicNames[$row->topic_id]
+                        overlappingTopicName: $topicNames[$row->topic_id]
                         ?? 'Unknown',
 
-                        sharedContents:
-                        $row->shared_contents,
+                        sharedContents: $row->shared_contents,
 
-                        overlapPercentage:
-                        round(
+                        overlapPercentage: round(
                             (
                                 $row->shared_contents
                                 /

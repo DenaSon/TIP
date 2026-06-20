@@ -3,19 +3,19 @@
 namespace App\Console\Commands;
 
 use Domains\Topic\Models\Topic;
-use Domains\Topic\Services\TopicKeywordQualityService;
+use Domains\Topic\Services\TopicKeywordCandidateService;
 use Illuminate\Console\Command;
 
-class TopicsKeywordQualityCommand extends Command
+class TopicsKeywordCandidatesCommand extends Command
 {
     protected $signature =
-        'topics:keyword-quality';
+        'topics:keyword-candidates';
 
     protected $description =
-        'Generate keyword quality report';
+        'Generate keyword candidate report';
 
     public function handle(
-        TopicKeywordQualityService $qualityService,
+        TopicKeywordCandidateService $candidateService,
     ): int {
 
         Topic::query()
@@ -23,23 +23,19 @@ class TopicsKeywordQualityCommand extends Command
                 'is_active',
                 true
             )
-            ->with('keywords')
             ->orderByDesc('id')
+            ->lazy()
             ->each(function (
                 Topic $topic
             ) use (
-                $qualityService
+                $candidateService
             ) {
 
                 $results =
-                    $qualityService
-                        ->analyze(
-                            $topic
-                        );
+                    $candidateService
+                        ->analyze($topic);
 
-                if (
-                    empty($results)
-                ) {
+                if (empty($results)) {
                     return;
                 }
 
@@ -66,11 +62,9 @@ class TopicsKeywordQualityCommand extends Command
                 $this->table(
                     [
                         'Keyword',
-                        'Weight',
-                        'Matches',
-                        'Single %',
-                        'Quality',
+                        'Action',
                         'Grade',
+                        'Reason',
                     ],
                     collect($results)
                         ->map(
@@ -78,15 +72,11 @@ class TopicsKeywordQualityCommand extends Command
 
                                 $item->keyword,
 
-                                $item->weight,
-
-                                $item->matchCount,
-
-                                $item->singleKeywordPercentage.'%',
-
-                                $item->qualityScore,
+                                $item->action->value,
 
                                 $item->qualityGrade->value,
+
+                                $item->reason,
                             ]
                         )
                         ->all()

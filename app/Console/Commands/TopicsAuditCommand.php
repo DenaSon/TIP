@@ -25,19 +25,16 @@ class TopicsAuditCommand extends Command
             )
             ->get()
             ->map(
-                fn (Topic $topic) =>
-                $auditService->analyze(
+                fn (Topic $topic) => $auditService->analyze(
                     $topic
                 )
             )
             ->sortBy([
-                fn ($audit) =>
-                $audit->requiresReview
+                fn ($audit) => $audit->requiresReview
                     ? 0
                     : 1,
 
-                fn ($audit) =>
-                $audit->boundaryScore,
+                fn ($audit) => $audit->boundaryScore,
             ]);
 
         $rows = $audits
@@ -49,7 +46,7 @@ class TopicsAuditCommand extends Command
 
                 $audit->sourceDiversity,
 
-                $audit->overlapPercentage . '%',
+                $audit->overlapPercentage.'%',
 
                 $audit->boundaryScore,
 
@@ -57,7 +54,7 @@ class TopicsAuditCommand extends Command
 
                 $audit->highestOverlapTopic,
 
-                $audit->highestOverlapPercentage . '%',
+                $audit->highestOverlapPercentage.'%',
 
                 $audit->requiresReview
                     ? 'YES'

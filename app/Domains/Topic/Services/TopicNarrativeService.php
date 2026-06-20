@@ -32,24 +32,19 @@ readonly class TopicNarrativeService
 
         match ($lifecycle->lifecycle) {
 
-            TopicLifecycle::Emerging
-            => $insights[] =
+            TopicLifecycle::Emerging => $insights[] =
                 'این موضوع با سرعت در حال ظهور است.',
 
-            TopicLifecycle::Growing
-            => $insights[] =
+            TopicLifecycle::Growing => $insights[] =
                 'این موضوع همچنان در حال جذب توجه و رشد است.',
 
-            TopicLifecycle::Stable
-            => $insights[] =
+            TopicLifecycle::Stable => $insights[] =
                 'این موضوع به مرحله پایداری رسیده است.',
 
-            TopicLifecycle::Saturated
-            => $insights[] =
+            TopicLifecycle::Saturated => $insights[] =
                 'رشد موضوع به مرحله اشباع نزدیک شده است.',
 
-            TopicLifecycle::Declining
-            => $insights[] =
+            TopicLifecycle::Declining => $insights[] =
                 'توجه به این موضوع در حال کاهش است.',
         };
 
@@ -61,26 +56,21 @@ readonly class TopicNarrativeService
 
         foreach (
             $this->signalService
-                ->generate($metrics)
-            as $signal
+                ->generate($metrics) as $signal
         ) {
 
             match ($signal->signal) {
 
-                StrategicSignal::RapidGrowth
-                => $insights[] =
+                StrategicSignal::RapidGrowth => $insights[] =
                     'سرعت رشد این موضوع به شکل محسوسی افزایش یافته است.',
 
-                StrategicSignal::StrongMomentum
-                => $insights[] =
+                StrategicSignal::StrongMomentum => $insights[] =
                     'مومنتوم رشد همچنان قدرتمند و مثبت باقی مانده است.',
 
-                StrategicSignal::StrongAuthority
-                => $insights[] =
+                StrategicSignal::StrongAuthority => $insights[] =
                     'منابع معتبر و اثرگذار به صورت فعال این موضوع را پوشش می‌دهند.',
 
-                StrategicSignal::EarlyOpportunity
-                => $insights[] =
+                StrategicSignal::EarlyOpportunity => $insights[] =
                     'با وجود رشد مناسب، سطح رقابت هنوز پایین است.',
             };
         }

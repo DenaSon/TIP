@@ -1,4 +1,5 @@
 <?php
+
 namespace Domains\Topic\Services;
 
 use Domains\Topic\Models\Topic;
@@ -7,8 +8,7 @@ class TopicSourceDiversityService
 {
     public function calculate(
         Topic $topic
-    ): int
-    {
+    ): int {
 
         return $topic
             ->contents()

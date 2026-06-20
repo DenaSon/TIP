@@ -5,7 +5,7 @@ namespace Domains\Topic\Data;
 readonly class TopicProfileData
 {
     /**
-     * @param StrategicSignalData[] $signals
+     * @param  StrategicSignalData[]  $signals
      */
     public function __construct(
 
@@ -66,8 +66,7 @@ readonly class TopicProfileData
             'lifecycle' => $this->lifecycle->toArray(),
 
             'signals' => array_map(
-                fn (StrategicSignalData $signal)
-                => $signal->toArray(),
+                fn (StrategicSignalData $signal) => $signal->toArray(),
                 $this->signals
             ),
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Console\Commands;
 
 use Domains\Topic\Models\ContentTopicMatch;
@@ -18,9 +17,8 @@ class TopicsSuspiciousCommand extends Command
 
     public function handle(
         TopicAuditContextService $contextService,
-        TopicMatchAuditService   $auditService,
-    ): int
-    {
+        TopicMatchAuditService $auditService,
+    ): int {
 
         $contexts =
             $contextService->build();
@@ -41,7 +39,7 @@ class TopicsSuspiciousCommand extends Command
                 $context =
                     $contexts[$match->topic_id] ?? null;
 
-                if (!$context) {
+                if (! $context) {
                     return;
                 }
 
@@ -52,7 +50,7 @@ class TopicsSuspiciousCommand extends Command
                             context: $context,
                         );
 
-                if (!$audit->requiresReview) {
+                if (! $audit->requiresReview) {
                     return;
                 }
 

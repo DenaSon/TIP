@@ -9,14 +9,26 @@ readonly class TopicMatcher
 {
     public function __construct(
         private TopicKeywordRepository $repository,
-        private TextNormalizer $normalizer,
+        private TextNormalizer $textNormalizer,
+        private KeywordNormalizerService $keywordNormalizer,
+        private KeywordVariantService $variantService,
     ) {}
 
-    public function match(string $text): array
-    {
-        $text = $this->normalizer->normalize($text);
+    public function match(
+        string $text
+    ): array {
 
-        $topics = $this->repository->all();
+        $text =
+            $this->textNormalizer
+                ->normalize($text);
+
+        $text =
+            $this->keywordNormalizer
+                ->normalize($text);
+
+        $topics =
+            $this->repository
+                ->all();
 
         $results = [];
 
@@ -28,53 +40,82 @@ readonly class TopicMatcher
 
             foreach ($topic->keywords as $keyword) {
 
-                $keywordText =
-                    $this->normalizer->normalize(
-                        $keyword->keyword
-                    );
+                $normalizedKeyword =
+                    $this->keywordNormalizer
+                        ->normalize(
+                            $keyword->keyword
+                        );
 
-                if (
-                    str_contains(
-                        $text,
-                        $keywordText
-                    )
+                $variants =
+                    $this->variantService
+                        ->generate(
+                            $normalizedKeyword
+                        )
+                        ->variants;
+
+                $matched = false;
+
+                foreach (
+                    $variants as $variant
                 ) {
 
-                    $score +=
-                        $keyword->weight;
+                    if (
+                        ! str_contains(
+                            $text,
+                            $variant
+                        )
+                    ) {
+                        continue;
+                    }
 
-                    $matchedKeywords[] = [
+                    $matched = true;
 
-                        'keyword' => $keyword->keyword,
-
-                        'weight' => $keyword->weight,
-                    ];
+                    break;
                 }
+
+                if (! $matched) {
+                    continue;
+                }
+
+                $score +=
+                    $keyword->weight;
+
+                $matchedKeywords[] = [
+
+                    'keyword' => $keyword->keyword,
+
+                    'weight' => $keyword->weight,
+                ];
             }
 
             if (
-                $score >=
+                $score <
                 config(
                     'tip.topic_match_threshold',
                     5
                 )
             ) {
-
-                $results[] = [
-
-                    'topic_id' => $topic->id,
-
-                    'score' => $score,
-
-                    'matched_keywords' => $matchedKeywords,
-                ];
+                continue;
             }
+
+            $results[] = [
+
+                'topic_id' => $topic->id,
+
+                'score' => $score,
+
+                'matched_keywords' => $matchedKeywords,
+            ];
         }
 
         usort(
             $results,
-            fn ($a, $b) => $b['score']
-                <=> $a['score']
+            fn (
+                array $a,
+                array $b
+            ) => $b['score']
+                <=>
+                $a['score']
         );
 
         return $results;

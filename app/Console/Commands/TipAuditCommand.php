@@ -40,6 +40,7 @@ class TipAuditCommand extends Command
 
         return self::SUCCESS;
     }
+
     private function unassignedSources(): void
     {
         $rows = Content::query()
